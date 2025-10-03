@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 22:30:26 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/10/02 21:54:49 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/03 22:24:12 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include "../MAP/map.h"
 
 
 typedef struct s_redir
@@ -43,7 +44,7 @@ typedef struct s_cmd
    struct s_cmd   *next;
 } t_cmd;
 
-./minishell ls >> END -la < t | wc
+//./minishell ls >> END -la < t | wc
 
 //=========================LIBFT==========================
 
