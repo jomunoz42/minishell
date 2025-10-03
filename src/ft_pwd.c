@@ -1,40 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/02 21:15:00 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/10/03 23:20:58 by jomunoz          ###   ########.fr       */
+/*   Created: 2025/10/03 23:09:29 by jomunoz           #+#    #+#             */
+/*   Updated: 2025/10/03 23:26:25 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    print_command(t_cmd *cmd)
+int    ft_pwd()
 {
-    int i;
-    
-    i = 0;
-    while(cmd->args[i])
+    char    *path;
+
+    path = getcwd(NULL, 0);
+    if (path == NULL)
     {
-        printf("args[%d]: %s \n", i, cmd->args[i]);
-        i++;
+        perror("pwd error:");
+        return (1);
     }
+    printf("%s\n", path);
+    free(path);
+    return (0);
 }
 
-int main(int argc, char **argv)
-{
-    /* char *args[] = {"ls", "-la", NULL};
-    t_cmd cmd = {
-        .args=args,
-        .redir=NULL,
-        .next=NULL
-    };
-    print_command(&cmd); */
-    ft_pwd();
-}
+    // Possible Errors (errno)
 
-// ./minishell ls >> END -la < t | wc
+    // EINVAL: size is 0.
 
+    // ERANGE: buffer size is too small for the pathname.
+
+    // EACCES: permission denied to read a directory in the path.
+
+    // ENOMEM: insufficient memory (if dynamically allocating).

@@ -6,46 +6,37 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 22:30:02 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/10/02 21:39:41 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/03 21:17:11 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_echo(char **args)
+void	ft_echo(char **args)
 {
 	int i;
 	int j;
-	int n_exists;
+	bool n_option;
+	bool flag_over;	
 
-	i = 0;
-	j = 0;
-	n_exists = 0;
+	i = 1;
+	n_option = false;
+	flag_over = false;
 	while (args[i])
 	{
 		j = 0;
-		while (args[i][j])
+		if (ft_strncmp(&args[i][j], "-n", 2) == 0 && !flag_over)
+            n_option = true;
+		else
 		{
-			if ((ft_strncmp(&args[i][j], "-n", 3) == 0)
-				|| (ft_strncmp(&args[i][j], "-nn", 3) == 0))
-			{
-                n_exists = 1;
-				i++;
-				break ;
-			}
-			else
-			{
-				while(args[i][j])
-				{
-            		write(1, &args[i][j], 1);
-            		j++;
-				}
+			flag_over = true;
+			while(args[i][j])
+        		write(1, &args[i][j++], 1);
+			if (args[i + 1])
 				write(1, " ", 1);
-				i++;
-			}
 		}
+		i++;
 	}
-    if (n_exists)
+    if (!n_option)
         write(1, "\n", 1);
-    return (0);
 }

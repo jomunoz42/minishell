@@ -6,7 +6,11 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 22:30:26 by jomunoz           #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2025/10/03 22:24:12 by pbongiov         ###   ########.fr       */
+=======
+/*   Updated: 2025/10/03 23:24:54 by jomunoz          ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +30,19 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+<<<<<<< Updated upstream
 # include "../MAP/map.h"
 
+=======
+#include <stdbool.h>
+>>>>>>> Stashed changes
 
 typedef struct s_redir
 {
    char             **args;
    struct s_redir   *next;
    int              fd;
-} t_redir;
+}                   t_redir;
 
 
 typedef struct s_cmd
@@ -42,9 +50,12 @@ typedef struct s_cmd
    char           **args;
    t_redir        *redir;
    struct s_cmd   *next;
-} t_cmd;
+}                 t_cmd;
 
+<<<<<<< Updated upstream
 //./minishell ls >> END -la < t | wc
+=======
+>>>>>>> Stashed changes
 
 //=========================LIBFT==========================
 
@@ -52,6 +63,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 //========================BUILTINS========================
 
-int echo(char **args);
+int      echo(char **args);
+int      ft_pwd();
 
 #endif
