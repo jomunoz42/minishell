@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:32:49 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/09/05 16:38:36 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/10/04 17:47:00 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@ typedef struct s_map		t_map;
 typedef struct s_node		t_node;
 typedef struct s_map_extra	t_map_extra;
 
-struct						s_node
+typedef struct s_node
 {
 	char					*key;
 	char					*value;
-	t_node					*next;
-};
+	struct s_node			*next;
+	int						fd;
+}							t_node;
 
 struct						s_map
 {

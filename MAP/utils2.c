@@ -6,12 +6,13 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 15:22:03 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/09/05 16:53:44 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/10/04 17:48:22 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map.h"
 
+char	*ft_strdup(const char *s);
 void	__put(t_map_extra *this, char *key, char *value);
 char	*__get(t_map_extra *this, char *key);
 void	__remove(t_map_extra *this, char *key);
@@ -43,7 +44,7 @@ t_node	*create_node(t_map_extra *this, char *key, char *value)
 	node = malloc(sizeof(t_node));
 	if (!node)
 		return (NULL);
-	node->key = key;
+	node->key = ft_strdup(key);
 	node->value = value;
 	node->next = NULL;
 	return (node);

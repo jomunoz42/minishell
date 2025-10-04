@@ -3,14 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 22:12:46 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/10/02 21:20:02 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/04 16:17:05 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int ft_strlen(const char *s)
+{
+    if (!s || !*s)
+        return 0;
+    return (1 + ft_strlen(s + 1));
+}
+
+size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+{
+	size_t	i;
+
+	if (size == 0)
+		return (ft_strlen(src));
+	i = 0;
+	while (i < size - 1 && src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (ft_strlen(src));
+}
+
+char	*ft_strdup(const char *s)
+{
+	char	*copy;
+
+	copy = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
+	if (!copy)
+		return (NULL);
+	ft_strlcpy(copy, s, sizeof(s));
+	return (copy);
+}
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

@@ -6,22 +6,21 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 22:30:26 by jomunoz           #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2025/10/03 22:24:12 by pbongiov         ###   ########.fr       */
-=======
-/*   Updated: 2025/10/03 23:24:54 by jomunoz          ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2025/10/04 17:46:30 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "../MAP/map.h"
 # include <ctype.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
+# include <readline/readline.h>
 # include <stdarg.h>
+# include <stdbool.h>
 # include <stddef.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -30,12 +29,6 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-<<<<<<< Updated upstream
-# include "../MAP/map.h"
-
-=======
-#include <stdbool.h>
->>>>>>> Stashed changes
 
 typedef struct s_redir
 {
@@ -44,7 +37,6 @@ typedef struct s_redir
    int              fd;
 }                   t_redir;
 
-
 typedef struct s_cmd
 {
    char           **args;
@@ -52,18 +44,28 @@ typedef struct s_cmd
    struct s_cmd   *next;
 }                 t_cmd;
 
-<<<<<<< Updated upstream
 //./minishell ls >> END -la < t | wc
-=======
->>>>>>> Stashed changes
 
 //=========================LIBFT==========================
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 //========================BUILTINS========================
 
-int      echo(char **args);
-int      ft_pwd();
+int		echo(char **args);
+int		ft_pwd(void);
+
+//========================PARSING=========================
+
+void	parsing(char *input, t_map *map);
+void	free_double(char **arg);
+
+//=========================LIBFT==========================
+
+char	*ft_strdup(const char *s);
+int		ft_strlen(const char *s);
+char	*ft_itoa(int n);
+char	**ft_split(char const *s, char c);
+size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 
 #endif
