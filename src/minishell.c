@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 21:15:00 by jomunoz           #+#    #+#             */
 /*   Updated: 2025/10/04 19:29:24 by pbongiov         ###   ########.fr       */
@@ -32,7 +32,7 @@
 //    printf("Quarto argumento: %s\n", map->get(map, "4"));  
 // }
 
-int main(int argc, char **argv)
+int main(int argc, char **argv, char **env)
 {
     /* char *args[] = {"ls", "-la", NULL};
     t_cmd cmd = {

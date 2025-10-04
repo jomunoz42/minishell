@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 22:30:02 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/10/03 21:17:11 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/04 19:00:25 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_echo(char **args)
+void	ft_echo(char **args)  ///// HANDLE FD REDIRECTION
 {
 	int i;
 	int j;
