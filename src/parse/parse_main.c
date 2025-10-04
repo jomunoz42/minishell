@@ -20,18 +20,18 @@ int	quote_handler(char *input, int start)
 		input[j] = 127;
 	}
 	i = start;
-	while (input[i])
+	while (input[++i])
 	{
 		if (input[i] != ' ')
 			break;
-		input[i++] = 127;
+		input[i] = 127;
 	}
 	i = ft_strlen(input) - 1;
-	while (input[i])
+	while (input[--i])
 	{
 		if (input[i] != ' ')
 			break;
-		input[i--] = 127;
+		input[i] = 127;
 	}
 	return (j);
 }
