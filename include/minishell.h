@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 22:30:26 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/10/04 17:46:30 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/10/04 19:44:08 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <limits.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 # include <stdarg.h>
 # include <stdbool.h>
 # include <stddef.h>
@@ -57,7 +58,7 @@ int		ft_pwd(void);
 
 //========================PARSING=========================
 
-void	parsing(char *input, t_map *map);
+void	parsing(char *input);
 void	free_double(char **arg);
 
 //=========================LIBFT==========================

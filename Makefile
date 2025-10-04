@@ -6,7 +6,7 @@
 #    By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
-#    Updated: 2025/10/04 16:00:15 by pbongiov         ###   ########.fr        #
+#    Updated: 2025/10/04 19:16:16 by pbongiov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,6 @@ fclean: clean
 re: fclean all
 
 r:
-	make re && ./$(NAME)
+	make re && clear && ./$(NAME)
 
 .PHONY: all clean fclean re r

@@ -6,34 +6,66 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 15:25:08 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/04 16:13:05 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/10/04 19:48:41 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	parsing(char *input, t_map *map)
+int	quote_handler(char *input, int start)
+{
+	int j;
+	int i;
+	
+	j = start;
+	while (input[++j] != '"');
+	if (input[j] == '\0')
+	{
+		perror("1 quote");
+		exit(0);
+	}
+	else
+	{
+		input[start] = 127;
+		input[j] = 127;
+	}
+	i = start;
+	while (input[i])
+	{
+		if (input[i] != ' ')
+			break;
+		input[i++] = 127;
+	}
+	i = ft_strlen(input) - 1;
+	while (input[i])
+	{
+		if (input[i] != ' ')
+			break;
+		input[i--] = 127;
+	}
+	return (j);
+}
+
+void	parsing(char *input)
 {
 	int		i;
-	char	*s;
 	char	**arg;
 
 	i = 0;
-	arg = ft_split(input, '|');
+	if (!input)
+		return ;
+	while (input[i])
+	{
+		if (input[i] == '"')
+			i = quote_handler(input, i);
+		if (input[i] == ' ')
+			input[i] = 127;
+		i++;
+	}
+	arg = ft_split(input, 127);
 	if (!arg)
 		return ;
+	i = 0;
 	while (arg[i])
-	{
-		s = ft_itoa(i + 1);
-		fprintf(stderr, "%s\n", s);
-		if (!s)
-		{
-			free_double(arg);
-			return ;
-		}
-		map->put(map, s, arg[i++]);
-		free(s);
-	}
-	fprintf(stderr, "%s\n", map->get(map, "/1"));
-	free_double(arg);
+		printf("%s\n", arg[i++]);
 }
