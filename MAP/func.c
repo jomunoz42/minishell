@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   func.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:55:11 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/04 20:02:24 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/10/05 17:54:02 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*__get(t_map_extra *this, char *key)
 	current = this->head;
 	while (current)
 	{
-		if (key == current->key)
+		if (!ft_strcmp(key, current->key))
 			return (current->value);
 		current = current->next;
 	}

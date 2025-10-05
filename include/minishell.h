@@ -21,6 +21,12 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+typedef struct    s_built
+{
+   t_map          *env;
+   t_map          *export;
+}                 t_built;
+
 typedef struct s_redir
 {
    char             **args;
@@ -35,7 +41,7 @@ typedef struct s_cmd
    struct s_cmd   *next;
 }                 t_cmd;
 
-//./minishell ls >> END -la < t | wc
+//./minishell ls >> END cat < fd | wc
 
 //=========================LIBFT==========================
 
@@ -43,20 +49,24 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 //========================BUILTINS========================
 
-int		echo(char **args);
-int		ft_pwd(void);
+void	  ft_echo(char **args);
+void    ft_exit( /* STRUCT */ int status);
+int     ft_pwd(void);
+void    ft_env(char **env);
+void    ft_export(char **env, char *input);
 
 //========================PARSING=========================
 
-void	parsing(char *input);
-void	free_double(char **arg);
+void	   parsing(char *input);
+void	   free_double(char **arg);
 
 //=========================LIBFT==========================
 
-char	*ft_strdup(const char *s);
+char	   *ft_strdup(const char *s);
 int		ft_strlen(const char *s);
-char	*ft_itoa(int n);
-char	**ft_split(char const *s, char c);
+char	   *ft_itoa(int n);
+char	   **ft_split(char const *s, char c);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
+char	   *ft_strjoin(char const *s1, char const *s2);
 
 #endif

@@ -22,6 +22,8 @@
 //    printf("Quarto argumento: %s\n", map->get(map, "4"));  
 // }
 
+void    ft_unset(char **env);
+
 int main(int argc, char **argv, char **env)
 {
     /* char *args[] = {"ls", "-la", NULL};
@@ -39,9 +41,14 @@ int main(int argc, char **argv, char **env)
         input = readline("<minishell>: ");
         if (!ft_strncmp(input, "exit", sizeof(input)))
             break;
+        if (!ft_strncmp(input, "env", sizeof(input)))
+            ft_env(env);
+        // if (!ft_strncmp(input, "export", sizeof(input)))
+        //     ft_export(env, input);
+        // ft_unset(env);
         if (*input)
             add_history(input);
-        parsing(input);
+        //parsing(input);
         free(input);
     }
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:32:49 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/04 17:47:00 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/10/05 17:09:07 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ typedef struct s_node
 	char					*key;
 	char					*value;
 	struct s_node			*next;
-	int						fd;
 }							t_node;
 
 struct						s_map
