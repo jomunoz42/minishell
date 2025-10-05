@@ -45,18 +45,20 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 int		echo(char **args);
 int		ft_pwd(void);
+void     ft_exit(int status);
 
 //========================PARSING=========================
 
-void	parsing(char *input);
-void	free_double(char **arg);
+void	   parsing(char *input, char **env);
+void	   free_double(char **arg);
+int      get_absolute_path(char **env, char *cmd);
 
 //=========================LIBFT==========================
 
-char	*ft_strdup(const char *s);
+char	   *ft_strdup(const char *s);
 int		ft_strlen(const char *s);
-char	*ft_itoa(int n);
-char	**ft_split(char const *s, char c);
+char	   *ft_itoa(int n);
+char	   **ft_split(char const *s, char c);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 
 #endif

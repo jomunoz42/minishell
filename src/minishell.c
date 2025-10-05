@@ -41,7 +41,7 @@ int main(int argc, char **argv, char **env)
             break;
         if (*input)
             add_history(input);
-        parsing(input);
+        parsing(input, env);
         free(input);
     }
 }
