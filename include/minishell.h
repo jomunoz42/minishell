@@ -21,8 +21,16 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+typedef enum redir_type
+{
+   HDOC,
+   APP,
+   NONE,
+} t_type;
+
 typedef struct s_redir
 {
+
    char             **args;
    struct s_redir   *next;
    int              fd;
@@ -49,7 +57,7 @@ void     ft_exit(int status);
 
 //========================PARSING=========================
 
-void	   parsing(char *input, char **env);
+void	   parsing(char *input, t_cmd *all);
 void	   free_double(char **arg);
 int      get_absolute_path(char **env, char *cmd);
 

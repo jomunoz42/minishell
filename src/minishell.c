@@ -32,6 +32,7 @@ int main(int argc, char **argv, char **env)
     };
     print_command(&cmd);
     ft_pwd();*/
+    t_cmd all;
     char *input;
     
     while (1)
@@ -41,7 +42,7 @@ int main(int argc, char **argv, char **env)
             break;
         if (*input)
             add_history(input);
-        parsing(input, env);
+        parsing(input, &all);
         free(input);
     }
 }
