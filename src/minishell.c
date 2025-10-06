@@ -35,17 +35,24 @@ int main(int argc, char **argv, char **env)
     print_command(&cmd);
     ft_pwd();*/
     char *input;
-    
+    t_built *built;
+
+    built = malloc(sizeof(t_built));
+    if (!built)
+        ft_exit(1);
     while (1)
     {
         input = readline("<minishell>: ");
         if (!ft_strncmp(input, "exit", sizeof(input)))
             break;
+        // if (!ft_strncmp(input, "echo", sizeof(input)))
+        //     ft_env()
         if (!ft_strncmp(input, "env", sizeof(input)))
-            ft_env(env);
-        // if (!ft_strncmp(input, "export", sizeof(input)))
-        //     ft_export(env, input);
-        // ft_unset(env);
+            ft_env(built, env);
+        if (!ft_strncmp(input, "export", sizeof(input)))
+            ft_export(built, env);
+        // if (!ft_strncmp(input, "unset", sizeof(input)))
+        //     ft_unset();
         if (*input)
             add_history(input);
         //parsing(input);

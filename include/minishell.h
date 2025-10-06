@@ -50,10 +50,12 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 //========================BUILTINS========================
 
 void	  ft_echo(char **args);
-void    ft_exit( /* STRUCT */ int status);
+
 int     ft_pwd(void);
-void    ft_env(char **env);
-void    ft_export(char **env, char *input);
+void    ft_export(t_built *built, char **env);
+
+void    ft_env(t_built *built, char **env);
+void    ft_exit( /* STRUCT */ int status);
 
 //========================PARSING=========================
 
@@ -68,5 +70,7 @@ char	   *ft_itoa(int n);
 char	   **ft_split(char const *s, char c);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	   *ft_strjoin(char const *s1, char const *s2);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strcmp(const char *s1, const char *s2);
 
 #endif
