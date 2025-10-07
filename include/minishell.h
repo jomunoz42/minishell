@@ -21,12 +21,12 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-typedef enum redir_type
-{
-   HDOC,
-   APP,
-   NONE,
-} t_type;
+// typedef enum redir_type
+// {
+//    HDOC,
+//    APP,
+//    NONE,
+// } t_type;
 
 typedef struct s_redir
 {
@@ -42,6 +42,12 @@ typedef struct s_cmd
    t_redir        *redir;
    struct s_cmd   *next;
 }                 t_cmd;
+
+typedef struct s_list
+{
+   t_cmd *head;
+   t_cmd *tail;
+} t_list;
 
 //./minishell ls >> END -la < t | wc
 

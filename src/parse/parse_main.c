@@ -28,6 +28,7 @@ void	revert_quote(char **line)
 	int	i;
 	int	j;
 
+	i = 0;
 	while (line[i])
 	{
 		j = 0;
@@ -43,16 +44,71 @@ void	revert_quote(char **line)
 	}
 }
 
-void put_in(char **new, t_cmd *all)
+t_cmd	*new_node(char **new)
 {
-	
+	int		i;
+	t_cmd	*node;
+
+	if (!new || !*new)
+		ft_exit(1);
+	i = 0;
+	node = malloc(sizeof(t_cmd));
+	if (!node)
+		ft_exit(1);
+	while(new[i])
+		i++;
+	node->args = malloc(sizeof(char *) * (i + 1));
+	if (!node->args)
+		ft_exit(1);
+	i = 0;
+	while (new[i])
+	{
+		node->args[i] = ft_strdup(new[i]);
+		if (!node->args)
+			ft_exit(1);
+		i++;
+	}
+	node->redir = NULL;
+	node->next = NULL;
+	return (node);
 }
 
-void	parsing(char *input, t_cmd *all)
+void	put_in(char **new, t_cmd *head)
+{
+	t_cmd	*node;
+	t_cmd	*current;
+
+	if (!new || !*new || !head)
+		ft_exit(1);
+	node = new_node(new);
+	current = head;
+	while (current->next)
+		current = current->next;
+	current->next = node;
+}
+
+void print_struct(t_cmd *head)
+{
+	t_cmd *node;
+	int i;
+
+	node = head;
+	while (node)
+	{
+		i = 0;
+		while (node->args && node->args[i])
+			printf("ARGS: %s\n", node->args[i++]);
+		printf("==========================\n");
+		node = node->next;
+	}
+}
+
+void	parsing(char *input, t_cmd *head)
 {
 	int		i;
 	char	**line;
 	char	**args;
+	int		j;
 
 	if (!input)
 		ft_exit(1);
@@ -66,10 +122,12 @@ void	parsing(char *input, t_cmd *all)
 		args = ft_split(line[i], ' ');
 		if (!args)
 			ft_exit(1);
-		int	j = 0;
+		j = 0;
 		revert_quote(args);
-		put_in(args, all);
+		put_in(args, head);
+		free_double(args);
 		i++;
 	}
-	//revert_quote(line);
+	free_double(line);
+	print_struct(head);
 }
