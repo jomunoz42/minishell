@@ -32,7 +32,7 @@ char	*ft_strdup(const char *s)
 	copy = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
 	if (!copy)
 		return (NULL);
-	ft_strlcpy(copy, s, sizeof(s));
+	ft_strlcpy(copy, s, ft_strlen(s) + 1);
 	return (copy);
 }
 

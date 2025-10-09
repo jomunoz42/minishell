@@ -66,6 +66,7 @@ void     ft_exit(int status);
 void	   parsing(char *input, t_cmd *all);
 void	   free_double(char **arg);
 int      get_absolute_path(char **env, char *cmd);
+t_cmd	   *new_head();
 
 //=========================LIBFT==========================
 
