@@ -24,7 +24,12 @@
 typedef struct    s_built
 {
    t_map          *env;
+   t_map          *env_exported;
    t_map          *export;
+   t_map          *exported;
+   int            export_len;
+   int            exported_len;
+   char           **input;
 }                 t_built;
 
 typedef struct s_redir
@@ -53,9 +58,16 @@ void	  ft_echo(char **args);
 
 int     ft_pwd(void);
 void    ft_export(t_built *built, char **env);
-
+void    ft_unset(t_built *built);
 void    ft_env(t_built *built, char **env);
 void    ft_exit( /* STRUCT */ int status);
+
+//==========BUILTINS_UTILS=========
+
+int   len_after_equal(char *vars);
+int   many_equals(char *vars);
+void  remove_extra_vars(t_built *built);
+int   count_arguments(char **input);
 
 //========================PARSING=========================
 

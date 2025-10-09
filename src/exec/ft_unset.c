@@ -1,17 +1,23 @@
 
 #include "minishell.h"
 
-void    ft_unset(char **env)
+void    ft_unset(t_built *built)
 {
-    t_map *m;
-    char **str;
-    int i = 0;
+    int i;
 
-    m = new_map();
-
-    m->put(m, "batata", "abc");
-    m->put(m, "batata1", "abc1");
-    str = m->to_str(m);
-    while (str[i])
-        printf("%s\n", str[i++]);
+    i = 1;
+    // while(built->input[i])
+    // {
+    //         printf("%s\n", built->input[i]);
+    //         i++;
+    // }
+    if (built->exported)
+    {
+        while (built->input[i])
+        {
+            built->exported->remove(built->exported, built->input[i]);
+            built->exported_len--;
+            i++;
+        }
+    }
 }

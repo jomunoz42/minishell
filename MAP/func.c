@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:55:11 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/05 17:54:02 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/09 22:26:20 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ void	__remove(t_map_extra *this, char *key)
 				prev->next = node->next;
 			else
 				this->head = node->next;
+			if (node->key)
+				free(node->key);
+            if (node->value)
+				free(node->value);
 			free(node);
 			this->size--;
 			return ;

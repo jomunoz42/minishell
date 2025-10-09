@@ -22,8 +22,6 @@
 //    printf("Quarto argumento: %s\n", map->get(map, "4"));  
 // }
 
-void    ft_unset(char **env);
-
 int main(int argc, char **argv, char **env)
 {
     /* char *args[] = {"ls", "-la", NULL};
@@ -34,7 +32,7 @@ int main(int argc, char **argv, char **env)
     };
     print_command(&cmd);
     ft_pwd();*/
-    char *input;
+    char    *input;
     t_built *built;
 
     built = malloc(sizeof(t_built));
@@ -43,16 +41,19 @@ int main(int argc, char **argv, char **env)
     while (1)
     {
         input = readline("<minishell>: ");
-        if (!ft_strncmp(input, "exit", sizeof(input)))
+        built->input = ft_split(input, ' ');
+        if (!ft_strncmp(input, "exit", 4))
             break;
-        // if (!ft_strncmp(input, "echo", sizeof(input)))
-        //     ft_env()
-        if (!ft_strncmp(input, "env", sizeof(input)))
+        // if (!ft_strncmp(input, "echo", 4))
+        //      ft_echo();
+        if (!ft_strncmp(input, "pwd", 3))
+             ft_pwd();
+        if (!ft_strncmp(input, "env", 3))
             ft_env(built, env);
-        if (!ft_strncmp(input, "export", sizeof(input)))
+        if (!ft_strncmp(input, "export", 6))
             ft_export(built, env);
-        // if (!ft_strncmp(input, "unset", sizeof(input)))
-        //     ft_unset();
+        if (!ft_strncmp(input, "unset", 5))
+            ft_unset(built);
         if (*input)
             add_history(input);
         //parsing(input);
