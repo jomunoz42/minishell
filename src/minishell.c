@@ -22,6 +22,21 @@
 //    printf("Quarto argumento: %s\n", map->get(map, "4"));  
 // }
 
+void free_list(t_cmd *all)
+{
+    t_cmd *current;
+
+    current = all->next;
+    while (current)
+    {
+        if (all->args)
+            free_double(all->args);
+        free(all);
+        all = current;
+        current = current->next;
+    }
+}
+
 int main(int argc, char **argv, char **env)
 {
     /* char *args[] = {"ls", "-la", NULL};
@@ -32,6 +47,7 @@ int main(int argc, char **argv, char **env)
     };
     print_command(&cmd);
     ft_pwd();*/
+    t_cmd *all;
     char *input;
     
     while (1)
@@ -41,9 +57,15 @@ int main(int argc, char **argv, char **env)
             break;
         if (*input)
             add_history(input);
-        parsing(input);
+        all = new_head();
+        if (!all)
+            break;
+        parsing(input, all);
         free(input);
+        free_list(all);
     }
+    rl_clear_history();
+    free(input);
 }
 
 // ./minishell ls >> END -la < t | wc

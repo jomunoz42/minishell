@@ -6,7 +6,7 @@
 #    By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
-#    Updated: 2025/10/04 19:16:16 by pbongiov         ###   ########.fr        #
+#    Updated: 2025/10/07 18:00:39 by pbongiov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,5 +40,14 @@ re: fclean all
 
 r:
 	make re && clear && ./$(NAME)
+
+v:
+	make re && clear && valgrind ./$(NAME)
+
+vl:
+	make re && clear && valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
+
+vc:
+	make re && clear && valgrind --track-origins=yes ./$(NAME)
 
 .PHONY: all clean fclean re r
