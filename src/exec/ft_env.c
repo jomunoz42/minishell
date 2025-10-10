@@ -2,42 +2,29 @@
 
 #include "minishell.h"
 
-void    ft_env(t_built *built, char **env)
+void    copy_env(t_map *map, char **env)
 {
-    char    **vars;
-    int     i;
+    static char *args[2];
+    int         j;
+    int         i;
 
-    built->env = new_map();
-    if(!built->env)
-        ft_exit(1);
     i = -1;
     while (env[++i])
     {
-        vars = ft_split(env[i], '=');
-        if (!vars)
-            ft_exit(1);
-        if (strncmp("LS_COLORS", env[i], 9) == 0)
-            built->env->put(built->env, vars[0], &env[i][10]);
-        else if (vars[1] && vars[1][0] != '\0')
-            built->env->put(built->env, vars[0], vars[1]);
-        free_double(vars);
+        j = length_of_equal(env[i]);
+        args[0] = ft_substr(env[i], 0, j++);
+        args[1] = ft_substr(env[i], j, (ft_strlen(env[i]) - j));
+        map->put(map, args[0], args[1]);
     }
-    vars = built->env->to_str(built->env);
-    i = 0;
-    while(vars[i])
-        printf("%s\n", vars[i++]);
 }
 
-/* 
-    t_map *m;
-    char **str;
-    int i = 0;
+void    ft_env(t_map *env)
+{
+    const char  **vars;
+    int         i;
 
-    m = new_map();
-
-    m->put(m, "batata", "abc");
-    m->put(m, "batata1", "abc1");
-    str = m->to_str(m);
-    while (str[i])
-        printf("%s\n", str[i++]);
- */
+    i = 0;
+    vars = env->to_str(env);
+    while(vars && vars[i])
+        printf("%s\n", vars[i++]);
+}

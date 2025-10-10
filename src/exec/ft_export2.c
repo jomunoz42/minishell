@@ -14,6 +14,18 @@ int len_after_equal(char *vars)
     return (i);
 }
 
+int length_of_equal(char *vars)
+{
+    int i;
+
+    i = 0;
+    if (!vars)
+        return(0);
+    while(vars[i] && vars[i] != '=')
+        i++;
+    return (i);
+}
+
 int many_equals(char *vars)
 {
     int count;
@@ -35,15 +47,15 @@ int many_equals(char *vars)
         return (0);
 }
 
-void    remove_extra_vars(t_built *built)
-{
-    built->export->remove(built->export, "_");
-    built->export->remove(built->export, "MAKEFLAGS");
-    built->export->remove(built->export, "MAKELEVEL");
-    built->export->remove(built->export, "MAKE_TERMERR");
-    built->export->remove(built->export, "MAKE_TERMOUT");
-    built->export->remove(built->export, "MFLAGS");
-}
+// void    remove_extra_vars(t_built *built)
+// {
+//     built->export->remove(built->export, "_");
+//     // built->export->remove(built->export, "MAKEFLAGS");
+//     // built->export->remove(built->export, "MAKELEVEL");
+//     // built->export->remove(built->export, "MAKE_TERMERR");
+//     // built->export->remove(built->export, "MAKE_TERMOUT");
+//     // built->export->remove(built->export, "MFLAGS");
+// }
 
 int count_arguments(char **input)
 {

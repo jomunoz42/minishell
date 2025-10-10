@@ -8,140 +8,46 @@ static void print_export(char **vars, int length)
     int     i;
     int     j;
 
-    i = 0;
+    i = -1;
     if (!vars)
         return ;
-    quote_flag = false;
-    while(i < length)
+    while(++i < length)
     {
         j = 0;
         quote_flag = false;
-        write(1, "declare -x ", 11);
+        printf("declare -x ");
         while(vars[i][j])
         {
-            write(1, &vars[i][j], 1);
+            printf("%c", vars[i][j]);
             if (vars[i][j] == '=' && vars[i][j + 1] && !quote_flag)
             {
                 quote_flag = true;
-                write(1, "\"", 1);
+                printf("\"");
             }
             j++;
         }
         if (quote_flag)
-            write(1, "\"", 1);
-        write(1, "\n", 1);
-        i++;
+            printf("\"");
+        printf("\n");
     }
 }
 
-static char  **sort_export(char **vars, int length)
+int  sort_export(t_node *a, t_node *b)
 {
-    int     i;
-    bool    swapped;
-    char    *temp;
-
-    swapped = 1;
-    while(swapped)
-    {
-        i = 0;
-        swapped = 0;
-        while(i < length - 1)
-        {
-            if (ft_strcmp(vars[i], vars[i + 1]) > 0)
-            {
-                temp = vars[i];
-                vars[i] = vars[i + 1];
-                vars[i + 1] = temp;
-                swapped = 1;
-            }
-            i++;
-        }
-    }
-    return (vars);
+    if (!a || !b)
+        return (0);
+    return (ft_strcmp(a->key, b->key));
 }
 
-char    **build_export(t_built *built, char **env)
+void    ft_export(t_cmd *cmd, t_map *env)
 {
-    char    **vars;
-    int     i;
+    const char  **vars;
+    int         i;
 
-    built->export = new_map();
-    if(!built->export)
-        ft_exit(1);
-    i = -1;
-    while (env[++i])
-    {
-        vars = ft_split(env[i], '=');
-        if (!vars)
-            ft_exit(1);
-        if (many_equals(env[i]))
-            built->export->put(built->export, vars[0], &env[i][len_after_equal(env[i])]);
-        else
-            built->export->put(built->export, vars[0], vars[1]);
-        free_double(vars);
-    }
-    remove_extra_vars(built);
-    vars = built->export->to_str(built->export);
-    built->export_len = 0;
-    while(vars[built->export_len])
-        built->export_len++;
-    return (vars);
-}
-
-static void    build_exported(t_built *built)
-{
-    char    **vars;
-    int     i;
-
-    if(!built->exported)
-    {
-        built->exported = new_map();
-        if(!built->exported)
-            ft_exit(1);
-    }
-    i = 1;
-    while (built->input[i])
-    {
-        vars = ft_split(built->input[i], '=');
-        if (many_equals(built->input[i]))
-            built->exported->put(built->exported, vars[0], &built->input[i][len_after_equal(vars[1])]);
-        else
-            built->exported->put(built->exported, vars[0], vars[1]);
-        free_double(vars);
-        i++;
-    }
-    vars = built->exported->to_str(built->exported);
-    built->exported_len = 0;
-    while(vars[built->exported_len])
-        built->exported_len++;
-}
-
-void    ft_export(t_built *built, char **env) //  +=   &&  print with = && env exports
-{
-    char    **export;
-    char    **exported;
-
-    export = NULL;
-    exported = NULL;
-    if (!built->export)
-        export = build_export(built, env);
-    else
-        export = built->export->to_str(built->export);
-    export = sort_export(export, built->export_len);
-    if (count_arguments(built->input) > 1)
-        build_exported(built);
-    else
-    {
-        print_export(export, built->export_len);
-        if (built->exported)
-        {
-            exported = built->exported->to_str(built->exported);
-            exported = sort_export(exported, built->exported_len);
-            print_export(exported, built->exported_len);
-        }
-    }
-    // free_double(export);
-    // free_double(exported);
+    i = 0;
+    env->sort = sort_export;
+    vars = env->to_str(env);
+    print_export(vars, count_arguments(vars));
 }
 
 /* 

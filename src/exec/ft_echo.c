@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-void	ft_echo(char **args)  ///// HANDLE FD REDIRECTION
+void	ft_echo(t_cmd *cmd)  ///// HANDLE FD REDIRECTION
 {
 	int i;
 	int j;
@@ -12,17 +12,17 @@ void	ft_echo(char **args)  ///// HANDLE FD REDIRECTION
 	i = 1;
 	n_option = false;
 	flag_over = false;
-	while (args[i])
+	while (cmd->args[i])
 	{
 		j = 0;
-		if (ft_strncmp(&args[i][j], "-n", 2) == 0 && !flag_over)
+		if (ft_strncmp(&cmd->args[i][j], "-n", 2) == 0 && !flag_over)
             n_option = true;
 		else
 		{
 			flag_over = true;
-			while(args[i][j])
-        		write(1, &args[i][j++], 1);
-			if (args[i + 1])
+			while(cmd->args[i][j])
+        		write(1, &cmd->args[i][j++], 1);
+			if (cmd->args[i + 1])
 				write(1, " ", 1);
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 15:22:03 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/05 18:07:20 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/10 21:09:49 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*ft_strdup(const char *s);
 void	__put(t_map_extra *this, char *key, char *value);
 char	*__get(t_map_extra *this, char *key);
 void	__remove(t_map_extra *this, char *key);
-char	**to_str(t_map_extra *this);
+const char	**to_str(t_map_extra *this);
 void	__destroy(t_map_extra *this);
 
 t_map	*new_map(void)
@@ -29,10 +29,13 @@ t_map	*new_map(void)
 	new->size = 0;
 	new->head = NULL;
 	new->tail = NULL;
+	new->is_change = 1;
+	new->str = NULL;
 	new->put = __put;
 	new->get = __get;
 	new->remove = __remove;
 	new->to_str = to_str;
+	new->sort = NULL;
 	new->destroy = __destroy;
 	return ((t_map *)new);
 }
@@ -44,8 +47,8 @@ t_node	*create_node(t_map_extra *this, char *key, char *value)
 	node = malloc(sizeof(t_node));
 	if (!node)
 		return (NULL);
-	node->key = ft_strdup(key);
-	node->value = ft_strdup(value);
+	node->key = key;
+	node->value = value;
 	node->next = NULL;
 	return (node);
 }

@@ -6,15 +6,16 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:55:11 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/09 22:26:20 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/10 21:33:52 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map.h"
 
 int		ft_strcmp(const char *str1, const char *str2);
-char	**to_str_util(char **str, t_node *node);
+char	**to_str_util(t_map *this, char **str, t_node *node);
 t_node	*create_node(t_map_extra *this, char *key, char *value);
+void	free_s(char **str);
 
 void	__put(t_map_extra *this, char *key, char *value)
 {
@@ -23,23 +24,25 @@ void	__put(t_map_extra *this, char *key, char *value)
 	if (!key)
 		return ;
 	node = this->head;
+	this->is_change = 1;
 	while (node)
 	{
 		if (ft_strcmp(node->key, key) == 0)
 		{
+			free(node->value);
+			free(key);
 			node->value = value;
 			return ;
 		}
 		node = node->next;
 	}
 	node = create_node(this, key, value);
-	if (!node)
+	if (++this->size && !node)
 		return ;
 	if (!this->head)
 		this->head = node;
 	else
 		this->tail->next = node;
-	this->size++;
 	this->tail = node;
 }
 
@@ -68,14 +71,13 @@ void	__remove(t_map_extra *this, char *key)
 	{
 		if (ft_strcmp(node->key, key) == 0)
 		{
+			this->is_change = 1;
 			if (prev)
 				prev->next = node->next;
 			else
 				this->head = node->next;
-			if (node->key)
-				free(node->key);
-            if (node->value)
-				free(node->value);
+			free(node->key);
+			free(node->value);
 			free(node);
 			this->size--;
 			return ;
@@ -85,20 +87,17 @@ void	__remove(t_map_extra *this, char *key)
 	}
 }
 
-char	**to_str(t_map_extra *this)
+const char	**to_str(t_map_extra *this)
 {
-	char	**str;
-
-	str = malloc(sizeof(char *) * (this->size + 1));
-	if (!str)
+	if (this->is_change == 0)
+		return ((const char **)this->str);
+	this->is_change = 0;
+	free_s(this->str);
+	this->str = malloc(sizeof(char *) * (this->size + 1));
+	if (!this->str)
 		return (NULL);
-	str = to_str_util(str, this->head);
-	if (!str[0])
-	{
-		free(str);
-		return (NULL);
-	}
-	return (str);
+	this->str = to_str_util(this, this->str, this->head);
+	return ((const char **)this->str);
 }
 
 void	__destroy(t_map_extra *this)
@@ -112,9 +111,12 @@ void	__destroy(t_map_extra *this)
 	while (node)
 	{
 		next = node->next;
+		free(node->key);
+		free(node->value);
 		free(node);
 		node = next;
 	}
+	free_s(this->str);
 	free(this);
 	return ;
 }
