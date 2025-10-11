@@ -16,14 +16,19 @@ void	free_double(char **arg)
 void quote_handler(char *input)
 {
 	int i;
+	int quote;
 	bool flag;
 
 	i = 0;
+	quote = 0;
 	flag = false;
 	while (input[i])
 	{
-		if (input[i] == '"')
+		if (input[i++] == '"')
+		{
 			flag = !flag;
+			quote++;
+		}
 		if (flag)
 		{
 			if (input[i] == '|')
@@ -31,14 +36,9 @@ void quote_handler(char *input)
 			else if (input[i] == ' ')
 				input[i] = 8;
 		}
-		else if (!flag && input[i] == '<')
-			input[i] = 7;
-		else if (!flag && input[i] == '>')
-			input[i] = 6;
-		if (input[i] == '"')
-			input[i] = ' ';
-		i++;
 	}
+	if (quote % 2)
+		error_exit("Open Quotes");
 }
 
 void revert_quote(char **line)
@@ -60,62 +60,4 @@ void revert_quote(char **line)
 		}
 		i++;
 	}
-}
-
-int check_redir(char *str)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '<' || str[i] == '>')
-			return(1);
-		i++;
-	}
-	return (0);
-}
-
-void revert_redir(char **str)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (str[i])
-	{
-		j = 0;
-		while (str[i][j])
-		{
-			if (str[i][j] == 7)
-				str[i][j] = '<';
-			else if (str[i][j] == 6)
-				str[i][j] = '>';
-			j++;
-		}
-		i++;
-	}
-}
-
-t_redir *find_redir(t_cmd *node)
-{
-	int i;
-	t_redir *redir;
-
-	i = 0;
-	redir = NULL;
-	while (node->args[i])
-	{
-		revert_redir(node->args);
-		if (check_redir(node->args[i]))
-		{
-			redir = malloc(sizeof(t_redir));
-			if (!redir)
-				ft_exit(0);
-			redir->args[]
-		}
-		i++;
-	}
-	return (redir);
 }

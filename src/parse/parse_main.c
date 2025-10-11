@@ -16,12 +16,17 @@ void print_struct(t_cmd *head)
 	}
 }
 
+void error_exit(char *str, int i)
+{
+
+}
+
 void parsing(char *input, t_cmd *head)
 {
 	int i;
+	int j;
 	char **line;
 	char **args;
-	int j;
 
 	if (!input)
 		ft_exit(1);

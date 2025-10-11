@@ -61,16 +61,15 @@ void     ft_exit(int status);
 
 //========================PARSING=========================
 
-void	   parsing(char *input, t_cmd *all);
-void	   free_double(char **arg);
-int      get_absolute_path(char **env, char *cmd);
-t_cmd    *new_node(char **new);
 t_cmd	   *new_head();
-void     put_in(char **new, t_cmd *head);
 t_cmd    *new_node(char **new);
+void     put_in(char **new, t_cmd *head);
+void	   parsing(char *input, t_cmd *all);
 void     quote_handler(char *input);
 void     revert_quote(char **line);
-int      check_redir(char *str);
-t_redir     *find_redir(t_cmd *head);
+
+//=========================UTILS==========================
+
+void	   free_double(char **arg);
 
 #endif

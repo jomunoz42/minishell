@@ -24,7 +24,7 @@ t_cmd *new_node(char **new)
 			ft_exit(1);
 	}
 	node->args[i] = NULL;
-	node->redir = find_redir(node);
+	node->redir = NULL;
 	node->next = NULL;
 	return (node);
 }
