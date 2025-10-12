@@ -67,10 +67,8 @@ void    ft_exit(int status);
 //==========BUILTINS_UTILS=========
 
 int   length_of_equal(char *vars);
-int   len_after_equal(char *vars);
-int   many_equals(char *vars);
-// void  remove_extra_vars(t_built *built);
-int   count_arguments(char **input);
+int   is_there_equal(char *vars);
+int   is_there_value(char *vars);
 
 //========================PARSING=========================
 

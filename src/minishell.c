@@ -29,7 +29,7 @@ int     sort_export(t_node *a, t_node *b);
 static void    is_built_in(t_cmd *cmd, t_map *env)
 {
     if (!ft_strncmp(cmd->args[0], "exit", 5))
-        return ;
+        ft_exit(0);
     if (!ft_strncmp(cmd->args[0], "echo", 5))
         ft_echo(cmd);
     if (!ft_strncmp(cmd->args[0], "pwd", 4))
@@ -44,38 +44,32 @@ static void    is_built_in(t_cmd *cmd, t_map *env)
 
 int main(int argc, char **argv, char **environ)
 {
-    char *args[] = {"export", "-la", NULL};
-    t_cmd cmd = 
-    {
-        .args=args,
-        .redir=NULL,
-        .next=NULL
-    };
+    char *input;
+    // char *args[] = {"export", "-la", NULL};
+    // t_cmd cmd = 
+    // {
+    //     .args=args,
+    //     .redir=NULL,
+    //     .next=NULL
+    // };
+    t_cmd cmd;
     t_map *env;
 
     env = new_map();
     copy_env(env, environ);
+    
+    while (1)
+    {
+        input = readline("<minishell>: ");
+        cmd.args = ft_split(input, ' ');
 
-    is_built_in(&cmd, env);
+        is_built_in(&cmd, env);
 
+        if (*input)
+            add_history(input);
+        //parsing(input);
+        free(input);
+    }
     env->destroy(env);
-
-    // env->sort = sort_export;
-    // env->put(env, COPY("B"), COPY("HELLO B"));
-    // env->put(env, COPY("C"), COPY("HELLO C"));
-    // env->put(env, COPY("A"), COPY("HELLO A"));
-    // env->put(env, COPY("D"), COPY("HELLO D"));
-
-    // while (1)
-    // {
-    //     input = readline("<minishell>: ");
-
-
-
-    //     if (*input)
-    //         add_history(input);
-    //     //parsing(input);
-    //     free(input);
-    // }
 }
 

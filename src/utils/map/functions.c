@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   func.c                                             :+:      :+:    :+:   */
+/*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:55:11 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/10 21:33:52 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/12 22:28:48 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	__put(t_map_extra *this, char *key, char *value)
 		if (ft_strcmp(node->key, key) == 0)
 		{
 			free(node->value);
-			free(key);
+			// free(key); // see this
 			node->value = value;
 			return ;
 		}
@@ -76,10 +76,14 @@ void	__remove(t_map_extra *this, char *key)
 				prev->next = node->next;
 			else
 				this->head = node->next;
+			if (node == this->tail)
+                this->tail = prev;
 			free(node->key);
 			free(node->value);
 			free(node);
 			this->size--;
+			if (this->size == 0)
+                this->tail = NULL;
 			return ;
 		}
 		prev = node;
@@ -87,17 +91,17 @@ void	__remove(t_map_extra *this, char *key)
 	}
 }
 
-const char	**to_str(t_map_extra *this)
+char	**to_str(t_map_extra *this)
 {
 	if (this->is_change == 0)
-		return ((const char **)this->str);
+		return ((char **)this->str);
 	this->is_change = 0;
 	free_s(this->str);
 	this->str = malloc(sizeof(char *) * (this->size + 1));
 	if (!this->str)
 		return (NULL);
-	this->str = to_str_util(this, this->str, this->head);
-	return ((const char **)this->str);
+	this->str = to_str_util((void *)this, this->str, this->head);
+	return ((char **)this->str);
 }
 
 void	__destroy(t_map_extra *this)

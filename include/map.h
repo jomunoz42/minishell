@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:32:49 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/10 22:27:26 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/12 17:28:26 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,25 @@ struct						s_map
 {
 	void					(*put)(t_map *this, char *key, char *value);
 	void					(*remove)(t_map *this, char *key);
-	int						(*sort)(t_node *a, t_node *b);
 	char					*(*get)(t_map *this, char *key);
-	const char				**(*to_str)(t_map *this);
+	char					**(*to_str)(t_map *this);
 	void					(*destroy)(t_map *this);
+	int						size;
+	t_node					*head;
 };
 
 struct						s_map_extra
 {
 	void					(*put)(t_map_extra *this, char *key, char *value);
 	void					(*remove)(t_map_extra *this, char *key);
-	int						(*sort)(t_node *a, t_node *b);
 	char					*(*get)(t_map_extra *this, char *key);
-	const char				**(*to_str)(t_map_extra *this);
+	char					**(*to_str)(t_map_extra *this);
 	void					(*destroy)(t_map_extra *this);
 	int						size;
 	t_node					*head;
 	t_node					*tail;
 	char					**str;
-	int						is_change;
+	int						is_change; // ver uso disto
 };
 
 t_map						*new_map(void);

@@ -20,11 +20,11 @@ void    copy_env(t_map *map, char **env)
 
 void    ft_env(t_map *env)
 {
-    const char  **vars;
-    int         i;
+    char    **vars;
+    int     i;
 
     i = 0;
     vars = env->to_str(env);
-    while(vars && vars[i])
+    while(vars && vars[i] && is_there_value(vars[i]))
         printf("%s\n", vars[i++]);
 }
