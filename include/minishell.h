@@ -3,7 +3,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../MAP/map.h"
+# include "map.h"
 # include <ctype.h>
 # include <errno.h>
 # include <fcntl.h>
@@ -71,5 +71,6 @@ void     revert_quote(char **line);
 //=========================UTILS==========================
 
 void	   free_double(char **arg);
+void     error_exit(char *s);
 
 #endif

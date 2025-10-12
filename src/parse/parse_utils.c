@@ -13,22 +13,39 @@ void	free_double(char **arg)
     return ;
 }
 
+void quote_count(char *str)
+{
+	int single;
+	int doble;
+	int i;
+
+	i = 0;
+	single = 0;
+	doble = 0;
+	while (str[i])
+	{
+		if (str[i] == '"')
+			doble++;
+		else if (str[i] == '\'')
+			single++;
+		i++;
+	}
+	if (single % 2 || doble % 2)
+		error_exit("Open quotes");
+}
+
 void quote_handler(char *input)
 {
 	int i;
-	int quote;
 	bool flag;
 
 	i = 0;
-	quote = 0;
 	flag = false;
+	quote_count(input);
 	while (input[i])
 	{
 		if (input[i++] == '"')
-		{
 			flag = !flag;
-			quote++;
-		}
 		if (flag)
 		{
 			if (input[i] == '|')
@@ -37,8 +54,6 @@ void quote_handler(char *input)
 				input[i] = 8;
 		}
 	}
-	if (quote % 2)
-		error_exit("Open Quotes");
 }
 
 void revert_quote(char **line)

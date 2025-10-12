@@ -16,11 +16,6 @@ void print_struct(t_cmd *head)
 	}
 }
 
-void error_exit(char *str, int i)
-{
-
-}
-
 void parsing(char *input, t_cmd *head)
 {
 	int i;
