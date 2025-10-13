@@ -26,6 +26,7 @@ void parsing(char *input, t_cmd *head)
 	if (!input)
 		ft_exit(1);
 	quote_handler(input);
+	input = unlink_redir(input);
 	line = ft_split(input, '|');
 	if (!line)
 		ft_exit(1);

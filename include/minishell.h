@@ -42,6 +42,7 @@ typedef struct s_list
    t_cmd *tail;
 } t_list;
 
+//# define malloc(x) NULL;
 //./minishell ls >> END -la < t | wc
 
 //=========================LIBFT==========================
@@ -52,6 +53,7 @@ int		ft_strlen(const char *s);
 char	   *ft_itoa(int n);
 char	   **ft_split(char const *s, char c);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
+void	   *ft_memmove(void *dest, const void *src, size_t n);
 
 //========================BUILTINS========================
 
@@ -67,10 +69,12 @@ void     put_in(char **new, t_cmd *head);
 void	   parsing(char *input, t_cmd *all);
 void     quote_handler(char *input);
 void     revert_quote(char **line);
+char     *unlink_redir(char *str);
 
 //=========================UTILS==========================
 
 void	   free_double(char **arg);
-void     error_exit(char *s);
+void     error_exit(char *s, int code);
+char     *ft_realloc(char *str, int len);
 
 #endif

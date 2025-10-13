@@ -6,22 +6,21 @@ t_cmd *new_node(char **new)
 	t_cmd *node;
 
 	if (!new || !*new)
-		ft_exit(1);
+		return (NULL);
 	i = 0;
 	node = malloc(sizeof(t_cmd));
 	if (!node)
 		ft_exit(1);
-	while (new[i])
-		i++;
-	node->args = malloc(sizeof(char *) * (i + 1));
+	while (new[i++]);
+	node->args = malloc(sizeof(char *) * i);
 	if (!node->args)
-		ft_exit(1);
+		return (free(node), NULL);
 	i = -1;
 	while (new[++i])
 	{
 		node->args[i] = ft_strdup(new[i]);
-		if (!node->args)
-			ft_exit(1);
+		if (!node->args[i])
+			return (free(node), free_double(node->args), NULL);
 	}
 	node->args[i] = NULL;
 	node->redir = NULL;
@@ -37,6 +36,8 @@ void put_in(char **new, t_cmd *head)
 	if (!new || !*new || !head)
 		ft_exit(1);
 	node = new_node(new);
+	if (!node)
+		ft_exit(0);
 	current = head;
 	while (current->next)
 		current = current->next;

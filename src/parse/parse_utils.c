@@ -1,52 +1,44 @@
 #include "minishell.h"
 
-void	free_double(char **arg)
+void	quote_count(char *str)
 {
-	int i;
+	bool	single_flag;
+	bool	double_flag;
+	int		i;
 
 	i = 0;
-	if (!arg || !*arg)
-		return ;
-    while (arg[i])
-        free(arg[i++]);
-    free(arg);
-    return ;
-}
-
-void quote_count(char *str)
-{
-	int single;
-	int doble;
-	int i;
-
-	i = 0;
-	single = 0;
-	doble = 0;
+	single_flag = false;
+	double_flag = false;
 	while (str[i])
 	{
-		if (str[i] == '"')
-			doble++;
-		else if (str[i] == '\'')
-			single++;
+		if (str[i] == '"' && !single_flag)
+			double_flag = !double_flag;
+		else if (str[i] == '\'' && !double_flag)
+			single_flag = !single_flag;
 		i++;
 	}
-	if (single % 2 || doble % 2)
-		error_exit("Open quotes");
+	if (single_flag || double_flag)
+		error_exit("Open quotes", 8);
 }
 
-void quote_handler(char *input)
+void	quote_handler(char *input)
 {
-	int i;
-	bool flag;
+	int		i;
+	bool	s_flag;
+	bool	d_flag;
 
 	i = 0;
-	flag = false;
+	s_flag = false;
+	d_flag = false;
 	quote_count(input);
 	while (input[i])
 	{
-		if (input[i++] == '"')
-			flag = !flag;
-		if (flag)
+		if (input[i] == '"')
+			s_flag = !s_flag;
+		if (input[i] == '"')
+			d_flag = !d_flag;
+		i++;
+		if (s_flag || d_flag)
 		{
 			if (input[i] == '|')
 				input[i] = 127;
@@ -56,10 +48,10 @@ void quote_handler(char *input)
 	}
 }
 
-void revert_quote(char **line)
+void	revert_quote(char **line)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (line[i])
@@ -75,4 +67,49 @@ void revert_quote(char **line)
 		}
 		i++;
 	}
+}
+
+static char	*pos_redir(char *str, int i)
+{
+	str = ft_realloc(str, ft_strlen(str) + 2);
+	if (!str)
+		ft_exit(0);
+	ft_memmove(str + i + 1, str + i, ft_strlen(str + i) + 1);
+	str[i] = ' ';
+	return (str);
+}
+
+static char	*pre_redir(char *str, int i)
+{
+	str = ft_realloc(str, ft_strlen(str) + 2);
+	if (!str)
+		ft_exit(0);
+	ft_memmove(str + i, str + i - 1, ft_strlen(str + i - 1) + 1);
+	str[i] = ' ';
+	return (str);
+}
+
+char	*unlink_redir(char *str)
+{
+	int		i;
+	bool	flag;
+
+	i = 0;
+	flag = false;
+	while (str[i])
+	{
+		if (str[i] == '"')
+			flag = !flag;
+		if (!flag && (str[i] == '>' || str[i] == '<'))
+		{
+			if (i > 0 && str[i - 1] != ' ' && str[i - 1] != '\0')
+				str = pre_redir(str, i);
+			if (str[i] == str[i + 1])
+				i++;
+			if (str[i + 1] != ' ' && str[i + 1] != '\0')
+				str = pos_redir(str, i + 1);
+		}
+		i++;
+	}
+	return (str);
 }
