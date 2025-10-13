@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:32:49 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/04 17:47:00 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/10/12 17:28:26 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 typedef struct s_map		t_map;
 typedef struct s_node		t_node;
@@ -27,7 +28,6 @@ typedef struct s_node
 	char					*key;
 	char					*value;
 	struct s_node			*next;
-	int						fd;
 }							t_node;
 
 struct						s_map
@@ -37,6 +37,8 @@ struct						s_map
 	char					*(*get)(t_map *this, char *key);
 	char					**(*to_str)(t_map *this);
 	void					(*destroy)(t_map *this);
+	int						size;
+	t_node					*head;
 };
 
 struct						s_map_extra
@@ -49,7 +51,10 @@ struct						s_map_extra
 	int						size;
 	t_node					*head;
 	t_node					*tail;
+	char					**str;
+	int						is_change; // ver uso disto
 };
 
 t_map						*new_map(void);
+
 #endif

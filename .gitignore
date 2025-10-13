@@ -2,3 +2,9 @@
 *.o
 
 minishell
+
+minishell.c
+
+minishell.h
+
+info.txt

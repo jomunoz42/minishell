@@ -3,7 +3,7 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+         #
+#    By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
 #    Updated: 2025/10/13 18:19:47 by pbongiov         ###   ########.fr        #
@@ -17,7 +17,7 @@ CFLAGS = -Iinclude #-Wall -Wextra -Werror
 
 LDFLAGS = -lreadline
 
-SRC := $(shell find src/ MAP/ -name '*.c')
+SRC := $(shell find src/ -name '*.c')
 
 OBJ := $(patsubst src/%.c,obj/%.o,$(SRC))
 
