@@ -40,9 +40,7 @@ typedef struct s_cmd
 
 //========================BUILTINS========================
 
-void	   *ft_memmove(void *dest, const void *src, size_t n);
 void	  ft_echo(t_cmd *cmd);
-
 int     ft_pwd(void);
 void    ft_export(t_cmd *cmd, t_map *env);
 void    ft_unset(t_cmd *cmd, t_map *env);
@@ -54,6 +52,11 @@ void    ft_exit(int status);
 int   length_of_equal(char *vars);
 int   is_there_equal(char *vars);
 int   is_there_value(char *vars);
+
+//=======================EXECUTION========================
+
+void    copy_env(t_map *map, char **env);
+void    print_env(t_map *env);
 
 //========================PARSING=========================
 
@@ -68,6 +71,7 @@ char     *unlink_redir(char *str);
 //=========================UTILS==========================
 
 
+void	   *ft_memmove(void *dest, const void *src, size_t n);
 char	   *ft_strdup(const char *s);
 int		ft_strlen(const char *s);
 char	   *ft_itoa(int n);
