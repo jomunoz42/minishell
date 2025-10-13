@@ -25,15 +25,18 @@
 void free_list(t_cmd *all)
 {
     t_cmd *current;
+    t_cmd *next;
 
-    current = all->next;
+    if (!all)
+        return;
+    current = all;
     while (current)
     {
-        if (all->args)
-            free_double(all->args);
-        free(all);
-        all = current;
-        current = current->next;
+        next = current->next;
+        if (current->args)
+            free_double(current->args);
+        free(current);
+        current = next;
     }
 }
 
@@ -61,11 +64,11 @@ int main(int argc, char **argv, char **env)
         if (!all)
             break;
         parsing(input, all);
-        free(input);
+        //free(input);
         free_list(all);
     }
     rl_clear_history();
-    free(input);
+    //free(input);
 }
 
 // ./minishell ls >> END -la < t | wc

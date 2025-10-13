@@ -19,13 +19,14 @@ void print_struct(t_cmd *head)
 void parsing(char *input, t_cmd *head)
 {
 	int i;
+	int j;
 	char **line;
 	char **args;
-	int j;
 
 	if (!input)
 		ft_exit(1);
 	quote_handler(input);
+	input = unlink_redir(input);
 	line = ft_split(input, '|');
 	if (!line)
 		ft_exit(1);

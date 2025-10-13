@@ -1,50 +1,57 @@
 #include "minishell.h"
 
-void	free_double(char **arg)
+void	quote_count(char *str)
 {
-	int i;
+	bool	single_flag;
+	bool	double_flag;
+	int		i;
 
 	i = 0;
-	if (!arg || !*arg)
-		return ;
-    while (arg[i])
-        free(arg[i++]);
-    free(arg);
-    return ;
+	single_flag = false;
+	double_flag = false;
+	while (str[i])
+	{
+		if (str[i] == '"' && !single_flag)
+			double_flag = !double_flag;
+		else if (str[i] == '\'' && !double_flag)
+			single_flag = !single_flag;
+		i++;
+	}
+	if (single_flag || double_flag)
+		error_exit("Open quotes", 8);
 }
 
-void quote_handler(char *input)
+void	quote_handler(char *input)
 {
-	int i;
-	bool flag;
+	int		i;
+	bool	s_flag;
+	bool	d_flag;
 
 	i = 0;
-	flag = false;
+	s_flag = false;
+	d_flag = false;
+	quote_count(input);
 	while (input[i])
 	{
 		if (input[i] == '"')
-			flag = !flag;
-		if (flag)
+			s_flag = !s_flag;
+		if (input[i] == '"')
+			d_flag = !d_flag;
+		i++;
+		if (s_flag || d_flag)
 		{
 			if (input[i] == '|')
 				input[i] = 127;
 			else if (input[i] == ' ')
 				input[i] = 8;
 		}
-		else if (!flag && input[i] == '<')
-			input[i] = 7;
-		else if (!flag && input[i] == '>')
-			input[i] = 6;
-		if (input[i] == '"')
-			input[i] = ' ';
-		i++;
 	}
 }
 
-void revert_quote(char **line)
+void	revert_quote(char **line)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (line[i])
@@ -62,60 +69,47 @@ void revert_quote(char **line)
 	}
 }
 
-int check_redir(char *str)
+static char	*pos_redir(char *str, int i)
 {
-	int i;
-	int j;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '<' || str[i] == '>')
-			return(1);
-		i++;
-	}
-	return (0);
+	str = ft_realloc(str, ft_strlen(str) + 2);
+	if (!str)
+		ft_exit(0);
+	ft_memmove(str + i + 1, str + i, ft_strlen(str + i) + 1);
+	str[i] = ' ';
+	return (str);
 }
 
-void revert_redir(char **str)
+static char	*pre_redir(char *str, int i)
 {
-	int i;
-	int j;
+	str = ft_realloc(str, ft_strlen(str) + 2);
+	if (!str)
+		ft_exit(0);
+	ft_memmove(str + i, str + i - 1, ft_strlen(str + i - 1) + 1);
+	str[i] = ' ';
+	return (str);
+}
+
+char	*unlink_redir(char *str)
+{
+	int		i;
+	bool	flag;
 
 	i = 0;
+	flag = false;
 	while (str[i])
 	{
-		j = 0;
-		while (str[i][j])
+		if (str[i] == '"')
+			flag = !flag;
+		if (!flag && (str[i] == '>' || str[i] == '<'))
 		{
-			if (str[i][j] == 7)
-				str[i][j] = '<';
-			else if (str[i][j] == 6)
-				str[i][j] = '>';
-			j++;
+			if (i > 0 && str[i - 1] != ' ' && str[i - 1] != '\0')
+				str = pre_redir(str, i);
+			if (str[i] == str[i + 1])
+				i++;
+			if (str[i + 1] != ' ' && str[i + 1] != '\0')
+				str = pos_redir(str, i + 1);
 		}
 		i++;
 	}
-}
-
-t_redir *find_redir(t_cmd *node)
-{
-	int i;
-	t_redir *redir;
-
-	i = 0;
-	redir = NULL;
-	while (node->args[i])
-	{
-		revert_redir(node->args);
-		if (check_redir(node->args[i]))
-		{
-			redir = malloc(sizeof(t_redir));
-			if (!redir)
-				ft_exit(0);
-			redir->args[]
-		}
-		i++;
-	}
-	return (redir);
+	return (str);
 }
