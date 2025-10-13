@@ -21,22 +21,10 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-//    t_built *built;
-
-//    built = malloc(sizeof(t_built));
-//    if (!built)
-//       ft_exit(1);
-
-// typedef struct    s_built
-// {
-//    t_map          *env;
-//    t_map          *env_exported;
-//    t_map          *export;
-//    t_map          *exported;
-//    int            export_len;
-//    int            exported_len;
-//    char           **input;
-// }                 t_built;
+typedef struct s_exec
+{
+   int         env_len;
+}              t_exec;
 
 typedef struct s_redir
 {
@@ -57,10 +45,10 @@ typedef struct s_cmd
 //========================BUILTINS========================
 
 void	  ft_echo(t_cmd *cmd);
-
+void	  ft_cd(t_cmd *cmd);
 int     ft_pwd(void);
-void    ft_export(t_cmd *cmd, t_map *env);
-void    ft_unset(t_cmd *cmd, t_map *env);
+void    ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
+void    ft_unset(t_cmd *cmd, t_map *env, t_exec *exec);
 void    ft_env(t_map *env);
 void    ft_exit(int status);
 
@@ -88,6 +76,8 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_strcmp(const char *s1, const char *s2);
 char	   *ft_substr(char const *s, unsigned int start, size_t len);
 void	   *ft_calloc(size_t nmemb, size_t size);
+void	   ft_putchar_fd(char c, int fd);
+void	   ft_putstr_fd(char *s, int fd);
 
 #define COPY ft_strdup
 

@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-void    copy_env(t_map *map, char **env)
+void    copy_env(t_map *map, char **env, t_exec *exec)
 {
     static char *args[2];
     int         j;
@@ -16,6 +16,7 @@ void    copy_env(t_map *map, char **env)
         args[1] = ft_substr(env[i], j, (ft_strlen(env[i]) - j));
         map->put(map, args[0], args[1]);
     }
+    exec->env_len = i;
 }
 
 void    ft_env(t_map *env)

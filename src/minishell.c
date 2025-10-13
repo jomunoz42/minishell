@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-void    copy_env(t_map *map, char **env);
+void    copy_env(t_map *map, char **env, t_exec *exec);
 void    print_env(t_map *env);
 int     sort_export(t_node *a, t_node *b);
 
@@ -26,10 +26,12 @@ int     sort_export(t_node *a, t_node *b);
 //    printf("Quarto argumento: %s\n", map->get(map, "4"));  
 // }
 
-static void    is_built_in(t_cmd *cmd, t_map *env)
+static void    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
 {
     if (!ft_strncmp(cmd->args[0], "exit", 5))
-        ft_exit(0);
+        ft_exit(0);        
+    if (!ft_strncmp(cmd->args[0], "cd", 3))
+        ft_cd(cmd);
     if (!ft_strncmp(cmd->args[0], "echo", 5))
         ft_echo(cmd);
     if (!ft_strncmp(cmd->args[0], "pwd", 4))
@@ -37,9 +39,9 @@ static void    is_built_in(t_cmd *cmd, t_map *env)
     if (!ft_strncmp(cmd->args[0], "env", 4))
         ft_env(env);
     if (!ft_strncmp(cmd->args[0], "export", 7))
-        ft_export(cmd, env);
+        ft_export(cmd, env, exec);
     if (!ft_strncmp(cmd->args[0], "unset", 6))
-        ft_unset(cmd, env);
+        ft_unset(cmd, env, exec);
 }
 
 int main(int argc, char **argv, char **environ)
@@ -52,18 +54,21 @@ int main(int argc, char **argv, char **environ)
     //     .redir=NULL,
     //     .next=NULL
     // };
-    t_cmd cmd;
-    t_map *env;
+    t_cmd  cmd;
+    t_exec *exec;
+    t_map  *env;
 
+    exec = malloc(sizeof(t_exec));
+    if (!exec)
+        ft_exit(1);
     env = new_map();
-    copy_env(env, environ);
-    
+    copy_env(env, environ, exec);
     while (1)
     {
         input = readline("<minishell>: ");
         cmd.args = ft_split(input, ' ');
 
-        is_built_in(&cmd, env);
+        is_built_in(&cmd, env, exec);
 
         if (*input)
             add_history(input);
@@ -72,4 +77,3 @@ int main(int argc, char **argv, char **environ)
     }
     env->destroy(env);
 }
-
