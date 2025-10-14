@@ -31,7 +31,7 @@ static void    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
     if (!ft_strncmp(cmd->args[0], "exit", 5))
         ft_exit(0);        
     if (!ft_strncmp(cmd->args[0], "cd", 3))
-        ft_cd(cmd);
+        ft_cd(cmd, env);
     if (!ft_strncmp(cmd->args[0], "echo", 5))
         ft_echo(cmd);
     if (!ft_strncmp(cmd->args[0], "pwd", 4))

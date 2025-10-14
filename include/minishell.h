@@ -45,7 +45,7 @@ typedef struct s_cmd
 //========================BUILTINS========================
 
 void	  ft_echo(t_cmd *cmd);
-void	  ft_cd(t_cmd *cmd);
+int	  ft_cd(t_cmd *cmd, t_map *env);
 int     ft_pwd(void);
 void    ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
 void    ft_unset(t_cmd *cmd, t_map *env, t_exec *exec);
