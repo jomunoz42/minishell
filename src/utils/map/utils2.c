@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 15:22:03 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/04 17:48:22 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/10/11 18:06:41 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ t_map	*new_map(void)
 	new->size = 0;
 	new->head = NULL;
 	new->tail = NULL;
+	new->is_change = 1;
+	new->str = NULL;
 	new->put = __put;
 	new->get = __get;
 	new->remove = __remove;
@@ -44,7 +46,7 @@ t_node	*create_node(t_map_extra *this, char *key, char *value)
 	node = malloc(sizeof(t_node));
 	if (!node)
 		return (NULL);
-	node->key = ft_strdup(key);
+	node->key = key;
 	node->value = value;
 	node->next = NULL;
 	return (node);

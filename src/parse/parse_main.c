@@ -43,5 +43,4 @@ void parsing(char *input, t_cmd *head)
 		i++;
 	}
 	free_double(line);
-	print_struct(head);
 }

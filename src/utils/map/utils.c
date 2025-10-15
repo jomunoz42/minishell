@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 22:33:05 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/04 17:48:03 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/10/12 19:17:01 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map.h"
 
 void	free_s(char **str);
+char	*ft_strdup(const char *s);
 
 static size_t	ft_strlen(const char *str)
 {
@@ -81,7 +82,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-char	**to_str_util(char **str, t_node *node)
+char	**to_str_util(t_map *this, char **str, t_node *node)
 {
 	int		i;
 	char	*tmp;

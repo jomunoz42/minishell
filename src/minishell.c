@@ -1,7 +1,6 @@
-
-
 #include "minishell.h"
 
+void print_struct(t_cmd *head);
 // void    print_command(t_cmd *cmd)
 // {
 //     int i;
@@ -22,6 +21,24 @@
 //    printf("Quarto argumento: %s\n", map->get(map, "4"));  
 // }
 
+static void    is_built_in(t_cmd *cmd, t_map *env)
+{
+    if (!cmd || !cmd->args)
+        return;
+    if (!ft_strncmp(cmd->args[0], "exit", 5))
+        ft_exit(0);
+    else if (!ft_strncmp(cmd->args[0], "echo", 5))
+        ft_echo(cmd);
+    else if (!ft_strncmp(cmd->args[0], "pwd", 4))
+        ft_pwd();
+    else if (!ft_strncmp(cmd->args[0], "env", 4))
+        ft_env(env);
+    else if (!ft_strncmp(cmd->args[0], "export", 7))
+        ft_export(cmd, env);
+    else if (!ft_strncmp(cmd->args[0], "unset", 6))
+        ft_unset(cmd, env);
+}
+
 void free_list(t_cmd *all)
 {
     t_cmd *current;
@@ -40,36 +57,28 @@ void free_list(t_cmd *all)
     }
 }
 
-int main(int argc, char **argv, char **env)
+int main(int argc, char **argv, char **environ)
 {
-    /* char *args[] = {"ls", "-la", NULL};
-    t_cmd cmd = {
-        .args=args,
-        .redir=NULL,
-        .next=NULL
-    };
-    print_command(&cmd);
-    ft_pwd();*/
-    t_cmd *all;
     char *input;
-    
+    t_cmd *cmd;
+    t_map *env;
+
+    env = new_map();
+    copy_env(env, environ);
     while (1)
     {
         input = readline("<minishell>: ");
-        if (!ft_strncmp(input, "exit", sizeof(input)))
-            break;
         if (*input)
-            add_history(input);
-        all = new_head();
-        if (!all)
+        add_history(input);
+        cmd = new_head();
+        if (!cmd)
             break;
-        parsing(input, all);
-        //free(input);
-        free_list(all);
+        parsing(input, cmd);
+        //print_struct(cmd);
+        is_built_in(cmd->next, env);
+        free_list(cmd);
     }
     rl_clear_history();
-    //free(input);
+    env->destroy(env);
 }
-
-// ./minishell ls >> END -la < t | wc
 

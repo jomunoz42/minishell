@@ -36,30 +36,27 @@ typedef struct s_cmd
    struct s_cmd   *next;
 }                 t_cmd;
 
-typedef struct s_list
-{
-   t_cmd *head;
-   t_cmd *tail;
-} t_list;
-
-//# define malloc(x) NULL;
-//./minishell ls >> END -la < t | wc
-
-//=========================LIBFT==========================
-
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-char	   *ft_strdup(const char *s);
-int		ft_strlen(const char *s);
-char	   *ft_itoa(int n);
-char	   **ft_split(char const *s, char c);
-size_t	ft_strlcpy(char *dest, const char *src, size_t size);
-void	   *ft_memmove(void *dest, const void *src, size_t n);
+//./minishell ls >> END cat < fd | wc
 
 //========================BUILTINS========================
 
-int		echo(char **args);
-int		ft_pwd(void);
-void     ft_exit(int status);
+void	  ft_echo(t_cmd *cmd);
+int     ft_pwd(void);
+void    ft_export(t_cmd *cmd, t_map *env);
+void    ft_unset(t_cmd *cmd, t_map *env);
+void    ft_env(t_map *env);
+void    ft_exit(int status);
+
+//==========BUILTINS_UTILS=========
+
+int   length_of_equal(char *vars);
+int   is_there_equal(char *vars);
+int   is_there_value(char *vars);
+
+//=======================EXECUTION========================
+
+void    copy_env(t_map *map, char **env);
+void    print_env(t_map *env);
 
 //========================PARSING=========================
 
@@ -73,8 +70,22 @@ char     *unlink_redir(char *str);
 
 //=========================UTILS==========================
 
+
+void	   *ft_memmove(void *dest, const void *src, size_t n);
+char	   *ft_strdup(const char *s);
+int		ft_strlen(const char *s);
+char	   *ft_itoa(int n);
+char	   **ft_split(char const *s, char c);
+size_t	ft_strlcpy(char *dest, const char *src, size_t size);
+char	   *ft_strjoin(char const *s1, char const *s2);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strcmp(const char *s1, const char *s2);
+char	   *ft_substr(char const *s, unsigned int start, size_t len);
+void	   *ft_calloc(size_t nmemb, size_t size);
 void	   free_double(char **arg);
 void     error_exit(char *s, int code);
 char     *ft_realloc(char *str, int len);
+
+#define COPY ft_strdup
 
 #endif
