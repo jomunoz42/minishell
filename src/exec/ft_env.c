@@ -19,7 +19,7 @@ void    copy_env(t_map *map, char **env, t_exec *exec)
     exec->env_len = i;
 }
 
-void    ft_env(t_map *env)
+void    ft_env(t_map *env)  /////      WHY NO PRINT EXPORTED???????
 {
     char    **vars;
     int     i;

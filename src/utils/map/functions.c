@@ -6,12 +6,13 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:55:11 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/12 22:28:48 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/15 22:38:41 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map.h"
 
+char	*ft_strdup(const char *s);
 int		ft_strcmp(const char *str1, const char *str2);
 char	**to_str_util(t_map *this, char **str, t_node *node);
 t_node	*create_node(t_map_extra *this, char *key, char *value);
@@ -30,8 +31,9 @@ void	__put(t_map_extra *this, char *key, char *value)
 		if (ft_strcmp(node->key, key) == 0)
 		{
 			free(node->value);
-			// free(key); // see this
-			node->value = value;
+			// free(key);   // check this in the future
+			node->value = ft_strdup(value); 
+			// Meti o dup aqui (esta merda resolveu a cena do env fodido)
 			return ;
 		}
 		node = node->next;

@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 15:22:03 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/11 18:06:41 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/15 22:13:01 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_node	*create_node(t_map_extra *this, char *key, char *value)
 	if (!node)
 		return (NULL);
 	node->key = key;
-	node->value = value;
+	node->value = ft_strdup(value);  // Meti o ft_strdup aqui
 	node->next = NULL;
 	return (node);
 }

@@ -57,6 +57,9 @@ void    ft_exit(int status);
 int   length_of_equal(char *vars);
 int   is_there_equal(char *vars);
 int   is_there_value(char *vars);
+int   goes_home(t_cmd *cmd, t_map *env, char *current_pwd);
+int   goes_up(t_cmd *cmd, t_map *env, char *current_pwd);
+int   goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd);
 
 //========================PARSING=========================
 
