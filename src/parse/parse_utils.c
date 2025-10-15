@@ -89,9 +89,29 @@ static char	*pre_redir(char *str, int i)
 	return (str);
 }
 
+int count_redir(char *str)
+{
+	int i = 0;
+
+	if (str[i] == '<')
+	{
+		while (str[i++] == '<')
+		if (i > 2)
+			return (0);
+	}
+	else if (str[i] == '>')
+	{
+		while (str[i++] == '>')
+		if (i > 2)
+			return (0);
+	}
+	return (1);
+}
+
 char	*unlink_redir(char *str)
 {
 	int		i;
+	char 	c;
 	bool	flag;
 
 	i = 0;
@@ -102,6 +122,9 @@ char	*unlink_redir(char *str)
 			flag = !flag;
 		if (!flag && (str[i] == '>' || str[i] == '<'))
 		{
+			c = str[i];
+			if (!count_redir(str + i))
+				while(str[i++] == c);
 			if (i > 0 && str[i - 1] != ' ' && str[i - 1] != '\0')
 				str = pre_redir(str, i);
 			if (str[i] == str[i + 1])

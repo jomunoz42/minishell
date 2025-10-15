@@ -74,7 +74,7 @@ int main(int argc, char **argv, char **environ)
         if (!cmd)
             break;
         parsing(input, cmd);
-        //print_struct(cmd);
+        print_struct(cmd);
         is_built_in(cmd->next, env);
         free_list(cmd);
     }
