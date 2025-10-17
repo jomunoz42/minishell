@@ -2,10 +2,6 @@
 
 #include "minishell.h"
 
-void    copy_env(t_map *map, char **env, t_exec *exec);
-void    print_env(t_map *env);
-int     sort_export(t_node *a, t_node *b);
-
 // void    print_command(t_cmd *cmd)
 // {
 //     int i;
@@ -28,14 +24,16 @@ int     sort_export(t_node *a, t_node *b);
 
 static void    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
 {
+    if (!cmd || !cmd->args[0])
+        return ;
     if (!ft_strncmp(cmd->args[0], "exit", 5))
         ft_exit(0);        
     if (!ft_strncmp(cmd->args[0], "cd", 3))
         ft_cd(cmd, env);
     if (!ft_strncmp(cmd->args[0], "echo", 5))
-        ft_echo(cmd);
+        ft_echo(cmd, env);
     if (!ft_strncmp(cmd->args[0], "pwd", 4))
-        ft_pwd();
+        ft_pwd(env);
     if (!ft_strncmp(cmd->args[0], "env", 4))
         ft_env(env);
     if (!ft_strncmp(cmd->args[0], "export", 7))
@@ -58,10 +56,10 @@ int main(int argc, char **argv, char **environ)
     t_exec *exec;
     t_map  *env;
 
+    env = new_map();
     exec = malloc(sizeof(t_exec));
     if (!exec)
         ft_exit(1);
-    env = new_map();
     copy_env(env, environ, exec);
     while (1)
     {
@@ -69,6 +67,7 @@ int main(int argc, char **argv, char **environ)
         cmd.args = ft_split(input, ' ');
 
         is_built_in(&cmd, env, exec);
+        execute_command(&cmd, env, exec);
 
         if (*input)
             add_history(input);

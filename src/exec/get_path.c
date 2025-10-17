@@ -2,24 +2,7 @@
 
 #include "minishell.h"
 
-/* static char	*get_path(char **env)
-{
-	char	*str;
-	int		i;
-
-	str = NULL;
-	i = -1;
-	while (env[++i])
-	{
-		if (ft_strnstr(env[i], "PATH=", 5))
-			str = env[i];
-	}
-	if (!*env)
-		str = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
-	return (str);
-}
-
-char	*get_absolute_path(char **env, char *cmd)
+char	*get_absolute_path(t_map *env, char *cmd)
 {
 	char	**dirs;
 	char	*path;
@@ -31,9 +14,9 @@ char	*get_absolute_path(char **env, char *cmd)
 		return ("");
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
-	str = get_path(env);
-	if (str == NULL)
-		return (NULL);
+	str = env->get(env, "PATH");
+	if (!str || str[0] == '\0')
+		return (NULL);  // check error here or after
 	i = -1;
 	dirs = ft_split(str, ':');
 	while (dirs[++i])
@@ -46,4 +29,4 @@ char	*get_absolute_path(char **env, char *cmd)
 		free(path);
 	}
 	return (free_double(dirs), NULL);
-} */
+}

@@ -79,3 +79,19 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	}
 	return (d);
 }
+
+char	*ft_strrchr(const char *s, int c)
+{
+	int		length;
+
+	length = 0;
+	while (s[length] != '\0')
+		length++;
+	while (length >= 0)
+	{
+		if (s[length] == (char)c)
+			return ((char *)&s[length]);
+		length--;
+	}
+	return (NULL);
+}

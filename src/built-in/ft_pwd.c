@@ -2,18 +2,26 @@
 
 #include "minishell.h"
 
-int    ft_pwd()
+int    ft_pwd(t_map *env)
 {
     char    *path;
 
     path = getcwd(NULL, 0);
     if (path == NULL)
     {
-        perror("pwd error:");
-        return (1);
+        path = env->get(env, "PWD");
+        if (!path || path[0] == '\0')
+        {
+            fprintf(stderr, "bash: pwd: error retrieving current directory: getcwd: %s\n", strerror(errno));
+            return (1);
+        }
+        printf("%s\n", path);
     }
-    printf("%s\n", path);
-    free(path);
+    else
+    {
+        printf("%s\n", path);
+        free(path);
+    }
     return (0);
 }
 
