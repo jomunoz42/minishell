@@ -1,25 +1,6 @@
 #include "minishell.h"
 
 void print_struct(t_cmd *head);
-// void    print_command(t_cmd *cmd)
-// {
-//     int i;
-    
-//     i = 0;
-//     while(cmd->args[i])
-//     {
-//         printf("args[%d]: %s \n", i, cmd->args[i]);
-//         i++;
-//     }
-// }
-
-// void print_list(t_map *map)
-// {
-//    printf("Primeiro argumento: %s\n", map->get(map, "1"));
-//    printf("Segundo argumento: %s\n", map->get(map, "2")); 
-//    printf("Terceiro argumento: %s\n", map->get(map, "3")); 
-//    printf("Quarto argumento: %s\n", map->get(map, "4"));  
-// }
 
 static void    is_built_in(t_cmd *cmd, t_map *env)
 {
@@ -70,12 +51,10 @@ int main(int argc, char **argv, char **environ)
         input = readline("<minishell>: ");
         if (*input)
         add_history(input);
-        cmd = new_head();
-        if (!cmd)
-            break;
-        parsing(input, cmd);
+        cmd = NULL;
+        cmd = parsing(input, cmd);
         print_struct(cmd);
-        is_built_in(cmd->next, env);
+        is_built_in(cmd, env);
         free_list(cmd);
     }
     rl_clear_history();

@@ -28,31 +28,24 @@ t_cmd *new_node(char **new)
 	return (node);
 }
 
-void put_in(char **new, t_cmd *head)
+t_cmd *put_in(char **new, t_cmd *head)
 {
 	t_cmd *node;
 	t_cmd *current;
 
-	if (!new || !*new || !head)
+	if (!new || !*new)
 		ft_exit(1);
-	node = new_node(new);
-	if (!node)
-		ft_exit(0);
-	current = head;
-	while (current->next)
-		current = current->next;
-	current->next = node;
-}
-
-t_cmd *new_head()
-{
-	t_cmd *head;
-
-	head = malloc(sizeof(t_cmd));
 	if (!head)
-		return (NULL);
-	head->args = NULL;
-	head->next = NULL;
-	head->redir = NULL;
+		head = new_node(new);
+	else
+	{
+		node = new_node(new);
+		if (!node)
+			ft_exit(0);
+		current = head;
+		while (current->next)
+			current = current->next;
+		current->next = node;
+	}
 	return (head);
 }
