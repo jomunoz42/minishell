@@ -64,7 +64,7 @@ t_cmd	   *new_head();
 t_cmd    *new_node(char **new);
 t_cmd    *put_in(char **new, t_cmd *head);
 t_cmd	   *parsing(char *input, t_cmd *all);
-void     quote_handler(char *input);
+int     quote_handler(char *input);
 void     revert_quote(char **line);
 char     *unlink_redir(char *str);
 int      count_redir(char *str);

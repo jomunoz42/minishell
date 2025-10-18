@@ -24,6 +24,7 @@ void free_list(t_cmd *all)
 {
     t_cmd *current;
     t_cmd *next;
+    t_redir *next_redir;
 
     if (!all)
         return;
@@ -33,6 +34,18 @@ void free_list(t_cmd *all)
         next = current->next;
         if (current->args)
             free_double(current->args);
+        while (current->redir)
+        {
+            next_redir = current->redir->next;
+            if (current->redir->args)
+            {
+                free(current->redir->args[0]);
+                free(current->redir->args[1]);
+            }
+            if (current->redir)
+                free(current->redir);
+            current->redir = next_redir;
+        }
         free(current);
         current = next;
     }
@@ -45,7 +58,7 @@ int main(int argc, char **argv, char **environ)
     t_map *env;
 
     env = new_map();
-    copy_env(env, environ);
+    //copy_env(env, environ);
     while (1)
     {
         input = readline("<minishell>: ");
@@ -53,6 +66,11 @@ int main(int argc, char **argv, char **environ)
         add_history(input);
         cmd = NULL;
         cmd = parsing(input, cmd);
+        if (!cmd)
+        {
+            free_list(cmd);
+            break;
+        }
         print_struct(cmd);
         is_built_in(cmd, env);
         free_list(cmd);

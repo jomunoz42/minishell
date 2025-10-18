@@ -33,15 +33,13 @@ t_cmd *put_in(char **new, t_cmd *head)
 	t_cmd *node;
 	t_cmd *current;
 
-	if (!new || !*new)
-		ft_exit(1);
 	if (!head)
 		head = new_node(new);
 	else
 	{
 		node = new_node(new);
 		if (!node)
-			ft_exit(0);
+			return (NULL);
 		current = head;
 		while (current->next)
 			current = current->next;

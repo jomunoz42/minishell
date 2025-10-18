@@ -1,37 +1,42 @@
 #include "minishell.h"
 
+
 void print_struct(t_cmd *head)
 {
-	t_cmd *node;
-	int i;
+    t_cmd *node = head;
+    int i;
 
-	node = head;
-	while (node)
-	{
-		i = 0;
-		printf("==========================\n");
-		while (node->args && node->args[i])
-			printf("ARGS: %s\n", node->args[i++]);
-		printf("==========================\n");
-		if (node->redir)
-		{
-			printf("==========================\n");
-			while (node->redir)
-			{
-				i = 0;
-				while (node->redir->args[i])
-				{
-					printf("REDIR: %s\n", node->redir->args[i++]);
-					printf("==========================\n");\
-				}
-				node->redir = node->redir->next;
-			}
-		}
-		node = node->next;
-	}
+    while (node)
+    {
+        printf("======== COMANDO =========\n");
+        i = 0;
+        if (node->args)
+        {
+            while (node->args[i])
+                printf("ARGS: %s\n", node->args[i++]);
+        }
+        if (node->redir)
+        {
+            t_redir *redir_node = node->redir;
+
+            while (redir_node)
+            {
+                printf("----- REDIRECIONAMENTO ----\n");
+                i = 0;
+                if (redir_node->args)
+                {
+                    while (i < 2)
+                        printf("REDIR: %s\n", redir_node->args[i++]);
+                }
+                redir_node = redir_node->next;
+            }
+        }
+        printf("==========================\n\n");
+        node = node->next;
+    }
 }
 
-void	check_sintax(t_cmd *head)
+int	check_sintax(t_cmd *head)
 {
 	int i;
 	t_cmd *node;
@@ -43,11 +48,12 @@ void	check_sintax(t_cmd *head)
 		while (node->args[i])
 		{
 			if (count_redir(node->args[i]))
-				error_exit("Sintax error", 22);
+				return(printf("minishell: syntax error near unexpected token\n"), 0);
 			i++;
 		}
 		node = node->next;
 	}
+	return (1);
 }
 
 t_redir *new_redir(t_cmd *head, int i)
@@ -56,9 +62,13 @@ t_redir *new_redir(t_cmd *head, int i)
 
 	new = malloc(sizeof(t_redir));
 	if (!new)
-		return NULL;
+		return (NULL);
 	new->args[0] = ft_strdup(head->args[i]);
+	if (!new->args[0])
+		return (NULL);
 	new->args[1] = ft_strdup(head->args[i + 1]);
+	if (!new->args[1])
+		return (free(new->args[0]), NULL);
 	new->next = NULL;
 	new->fd = 0;
 	return (new);
@@ -74,7 +84,7 @@ int arr_count(char **arr)
 	return (i);
 }
 
-void remove_redir(t_cmd *head, int i)
+int remove_redir(t_cmd *head, int i)
 {
 	int len;
 	char **tmp;
@@ -83,10 +93,11 @@ void remove_redir(t_cmd *head, int i)
 	free(head->args[i]);
 	free(head->args[i + 1]);
 	ft_memmove(&head->args[i], &head->args[i + 2], (len - i - 1) * sizeof(char *));
-	tmp = realloc(head->args, (len - 2) * sizeof(char *));
+	tmp = realloc(head->args, (len - 1) * sizeof(char *));
 	if (!tmp)
-		ft_exit(1);
+		return (0);
 	head->args = tmp;
+	return (1);
 }
 
 t_redir *redir_start(t_cmd *head, int i)
@@ -95,22 +106,28 @@ t_redir *redir_start(t_cmd *head, int i)
 	t_redir *current;
 
 	if (!head->redir)
+	{
 		head->redir = new_redir(head, i);
+		if (!head->redir)
+			return (NULL);
+		node = head->redir;
+	}
 	else
 	{
 		node = new_redir(head, i);
 		if (!node)
-			ft_exit(0);
+			return (NULL);
 		current = head->redir;
 		while(current->next)
 			current = current->next;
 		current->next = node;
 	}
-	remove_redir(head, i);
-	return (head->redir);
+	if (!remove_redir(head, i))
+		return (NULL);
+	return (node);
 }
 
-void	init_redir(t_cmd *head)
+int	init_redir(t_cmd *head)
 {
 	int i;
 	t_cmd *node;
@@ -124,13 +141,16 @@ void	init_redir(t_cmd *head)
 			if (node->args[i][0] == '>' || node->args[i][0] == '<')
 			{
 				if (!node->args[i + 1])
-					return ;
-				node->redir = redir_start(node, i);
+					return (1);
+				if (!redir_start(node, i))
+					return (0);
+				continue;
 			}
 			i++;
 		}
 		node = node->next;
 	}
+	return (1);
 }
 
 t_cmd *parsing(char *input, t_cmd *head)
@@ -140,27 +160,30 @@ t_cmd *parsing(char *input, t_cmd *head)
 	char **line;
 	char **args;
 
-	if (!input)
-		ft_exit(1);
-	quote_handler(input);
+	if (!input || !quote_handler(input))
+		return (NULL);
 	input = unlink_redir(input);
+	if (!input)
+		return (NULL);
 	line = ft_split(input, '|');
 	if (!line)
-		ft_exit(1);
+		return (perror("Allocation Error"), NULL);
 	i = 0;
 	while (line[i])
 	{
 		args = ft_split(line[i], ' ');
 		if (!args)
-			ft_exit(1);
+			return (free_double(line), perror("Allocation Error"), NULL);
 		j = 0;
 		revert_quote(args);
 		head = put_in(args, head);
 		free_double(args);
+		if (!head)
+			return (free_double(line), perror("Allocation Error"), NULL);
 		i++;
 	}
-	init_redir(head);
-	check_sintax(head);
+	if (!init_redir(head) || !check_sintax(head))
+		return(free_double(line), NULL);
 	free_double(line);
 	return (head);
 }
