@@ -110,3 +110,8 @@ void	ft_export(t_cmd *cmd, t_map *env, t_exec *x)
 		print_export(sort_vars(sort_vars(copy, 0, x->env_len), x->env_len, i));
 	}
 }
+
+//         STILL NEED TO DO
+
+//         a=$PATH     gives a the value of PATH
+//         a='$PATH'   gives a the name of the variable

@@ -65,10 +65,8 @@ int main(int argc, char **argv, char **environ)
     {
         input = readline("<minishell>: ");
         cmd.args = ft_split(input, ' ');
-
         is_built_in(&cmd, env, exec);
         execute_command(&cmd, env, exec);
-
         if (*input)
             add_history(input);
         //parsing(input);

@@ -65,33 +65,59 @@
 // 	}
 // }
 
+static void infile_and_outfile(t_cmd *cmd, t_exec *exec)
+{
+	exec->infile = open(      , O_RDONLY);
+	if (exec->infile == -1)
+		// handling_errors(      , exec, 1);
+	exec->outfile = open(, O_CREAT | O_WRONLY | O_TRUNC,
+			0644);
+	if (exec->outfile == -1)
+		// handling_errors(     , exec, 2);
+}
+
+static void waiting_proccesses(t_exec *exec)
+{
+	int i;
+
+	i = 0;
+	while (i < exec->cmd_number)
+	{
+		if (i == exec->cmd_number - 1)
+			waitpid(exec->process_id[i], &exec->status, 0);
+		else
+			waitpid(exec->process_id[i], NULL, 0);
+		i++;
+	}
+	free(exec->process_id);
+}
+
 void	create_children(t_cmd *cmd, t_map *env, t_exec *exec, int i)
 {
-
 	char	*path;
 
 	exec->process_id[i] = fork();
-	if (!exec->process_id[i] == -1)
+	// if (!exec->process_id[exec->cmd_number] == -1)
 		// handling_errors(argv, exec, 4);
 	if (exec->process_id[i] == 0)
 	{
-		dup2(exec->in, 0);
-		close(exec->in);
-		dup2(exec->out, 1);
-		close(exec->out);
-		if (exec->infile != -1)
-			close(exec->infile);
-		if (exec->outfile != -1)
-			close(exec->outfile);
+		// dup2(exec->in, 0);
+		// close(exec->in);
+		// dup2(exec->out, 1);
+		// close(exec->out);
+		// if (exec->infile != -1)
+		// 	close(exec->infile);
+		// if (exec->outfile != -1)
+		// 	close(exec->outfile);
 		path = get_absolute_path(env, cmd->args[0]);
 		if (path)
 			execve(path, cmd->args, env->to_str(env));
-		handle_path_not_found(path, cmd);
+		handle_path_not_found(path, cmd->args);
 	}
-	if (!(exec->child == 1))
-		close(exec->in);
-	close(exec->out);
-	exec->child++;
+	// if (exec->in)
+	// 	close(exec->in);
+	// if (exec->out != 1)
+	// 	close(exec->out != 1);
 }
 
 void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
@@ -99,7 +125,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	int i;
 
 	i = 0;
-	exec->cmd_number =  count_arguments(cmd->args);
+	exec->cmd_number = 1/* ft_lstsize(cmd) */;
 	exec->process_id = malloc(sizeof(pid_t) * exec->cmd_number);
     if (!exec->process_id)
         ft_exit(1);
@@ -118,9 +144,5 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 		// exec->in = exec->pipefd[0];
 		i++;
 	}
-	i = 1;
-	while (i < exec->cmd_number)
-		waitpid(exec->process_id[i++], NULL, 0);
-	waitpid(exec->process_id[i], &exec->status, 0);
-	free(exec->process_id);
+	waiting_proccesses(exec);
 }
