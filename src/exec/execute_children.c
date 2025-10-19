@@ -86,36 +86,37 @@ static void waiting_proccesses(t_exec *exec, t_cmd *cmd)
 			waitpid(cmd->pid, &exec->status, 0);
 		else
 			waitpid(cmd->pid, NULL, 0);
+		cmd = cmd->next;
 	}
 }
 
 void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 {
-	char	*path;
-
 	cmd->pid = fork();
-	// if (!exec->process_id[exec->cmd_number] == -1)
-		// handling_errors(argv, exec, 4);
+	if (cmd->pid == -1)
+		handling_errors(cmd, exec, 4);
 	if (cmd->pid == 0)
 	{
-		// dup2(exec->in, 0);
-		// close(exec->in);
-		// dup2(exec->out, 1);
-		// close(exec->out);
+		dup2(exec->in, 0);
+		close(exec->in);
+		dup2(exec->out, 1);
+		close(exec->out);
+		// if (exec->pipefd[0])
+		// 	close(exec->pipefd[0]);
 		// if (exec->infile != -1)
 		// 	close(exec->infile);
 		// if (exec->outfile != -1)
 		// 	close(exec->outfile);
-		path = get_absolute_path(env, cmd->args[0]);
-		if (path)
-			execve(path, cmd->args, env->to_str(env));
-		handle_path_not_found(path, cmd->args);
+		execve(cmd->args[0], cmd->args, env->to_str(env));
+		// handle_path_not_found(cmd->args[0], cmd->args);
 	}
-	// if (exec->in)
-	// 	close(exec->in);
-	// if (exec->out != 1)
-	// 	close(exec->out != 1);
+	if (exec->in)
+		close(exec->in);
+	if (exec->out)
+		close(exec->out);
 }
+
+
 
 void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 {
@@ -126,15 +127,14 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	while (temp)
 	{
 		exec->out = dup(1);
-		// if (argv[exec->index + 2])
-		// {
-		// 	// if (pipe(exec->pipefd) == -1)
-		// 	// 	handling_errors(argv, exec, 3);
-		// 	pipe(exec->pipefd);
-		// 	exec->out = exec->pipefd[1];
-		// }
-		create_children(cmd, env, exec);
-		// exec->in = exec->pipefd[0];
+		if (temp->next)
+		{
+			if (pipe(exec->pipefd) == -1)
+				handling_errors(temp, exec, 3);
+			exec->out = exec->pipefd[1];
+		}
+		create_children(temp, env, exec);
+		exec->in = exec->pipefd[0];
 		temp = temp->next;
 	}
 	waiting_proccesses(exec, cmd);

@@ -12,8 +12,6 @@ int	ft_echo(t_cmd *cmd, t_map *env)  ///// HANDLE FD REDIRECTION
 	i = 1;
 	n_option = false;
 	flag_over = false;
-	if (cmd->args[i] && cmd->args[i][0] == '$')
-		return (printf("%s\n", env->get(env, &cmd->args[i][i])), 0);
 	while (cmd->args[i])
 	{
 		j = 0;

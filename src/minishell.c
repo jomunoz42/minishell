@@ -49,9 +49,9 @@ void free_list(t_cmd *all)
 int main(int argc, char **argv, char **environ)
 {    
     static t_exec exec;
-    char *input;
-    t_map  *env;
-    t_cmd  *cmd;
+    t_map         *env;
+    t_cmd         *cmd;
+    char          *input;
 
     env = new_map();
     copy_env(env, environ, &exec);
@@ -60,14 +60,14 @@ int main(int argc, char **argv, char **environ)
         input = readline("<minishell>: ");
         if (*input)
             add_history(input);
-        cmd = parsing(input, NULL);
+        cmd = parsing(input, NULL, env);
         free(input);
         if (cmd)
         {
             //print_struct(cmd);  
             if (!ft_strncmp(cmd->args[0], "exit", 4))
                 break;
-            //execute_command(cmd, env, &exec);
+            execute_command(cmd, env, &exec);
         }
         free_list(cmd);
     }

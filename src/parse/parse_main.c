@@ -171,7 +171,7 @@ int is_empty(char *input)
 	return (flag == true);
 }
 
-t_cmd *parsing(char *input, t_cmd *head)
+t_cmd *parsing(char *input, t_cmd *head, t_map *env)
 {
 	int i;
 	int j;
@@ -194,7 +194,7 @@ t_cmd *parsing(char *input, t_cmd *head)
 			return (free_double(line), perror("Allocation Error"), NULL);
 		j = 0;
 		revert_quote(args);
-		head = put_in(args, head);
+		head = put_in(args, head, env);
 
 		if (!head)
 			return (free_double(line), perror("Allocation Error"), NULL);

@@ -10,13 +10,11 @@ char	*get_absolute_path(t_map *env, char *cmd)
 	char	*str;
 	int		i;
 
-	if (ft_strncmp(cmd, "", 1) == 0)
-		return ("");
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
 	str = env->get(env, "PATH");
 	if (!str || str[0] == '\0')
-		return (NULL);  // check error here or after
+		return (cmd);
 	i = -1;
 	dirs = ft_split(str, ':');
 	while (dirs[++i])
@@ -24,8 +22,8 @@ char	*get_absolute_path(t_map *env, char *cmd)
 		temp = ft_strjoin_free(dirs[i], "/");
 		path = ft_strjoin_free(temp, cmd);
 		if (access(path, X_OK) == 0)
-			return (path);
+			return (free(cmd), path);
 		free(path);
 	}
-	return (NULL);
+	return (cmd);
 }

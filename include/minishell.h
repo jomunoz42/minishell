@@ -28,8 +28,9 @@ typedef struct s_exec
 	int				in;
 	int				out;
 	int				pipefd[2];
-	int				eof_no_limiter;
 	int				status;
+
+	int				eof_no_limiter;
 
 	int				env_len;
 }					t_exec;
@@ -64,15 +65,17 @@ void				ft_exit(int status);
 //=======================EXECUTION========================
 
 void				handle_path_not_found(char *path, char **cmd);
+void				handling_errors(t_cmd *cmd, t_exec *exec, int error_id);
 char				*get_absolute_path(t_map *env, char *cmd);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
+void				close_everything(t_exec *exec);
 
 //========================PARSING=========================
 
 t_cmd				*new_head(void);
-t_cmd				*new_node(char **new);
-t_cmd				*put_in(char **new, t_cmd *head);
-t_cmd				*parsing(char *input, t_cmd *all);
+t_cmd				*new_node(char **new, t_map *env);
+t_cmd 				*put_in(char **new, t_cmd *head, t_map *env);
+t_cmd 				*parsing(char *input, t_cmd *head, t_map *cmd);
 int					quote_handler(char *input);
 void				revert_quote(char **line);
 char				*unlink_redir(char *str);
