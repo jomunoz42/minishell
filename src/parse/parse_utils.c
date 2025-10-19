@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	quote_count(char *str)
+int	quote_count(char *str)
 {
 	bool	single_flag;
 	bool	double_flag;
@@ -18,10 +18,11 @@ void	quote_count(char *str)
 		i++;
 	}
 	if (single_flag || double_flag)
-		error_exit("Open quotes", 8);
+		return (perror("Oprn Quotes"), 0);
+	return (1);
 }
 
-void	quote_handler(char *input)
+int	quote_handler(char *input)
 {
 	int		i;
 	bool	s_flag;
@@ -30,7 +31,8 @@ void	quote_handler(char *input)
 	i = 0;
 	s_flag = false;
 	d_flag = false;
-	quote_count(input);
+	if (!quote_count(input))
+		return (0);
 	while (input[i])
 	{
 		if (input[i] == '"')
@@ -46,6 +48,7 @@ void	quote_handler(char *input)
 				input[i] = 8;
 		}
 	}
+	return (1);
 }
 
 void	revert_quote(char **line)
@@ -71,9 +74,12 @@ void	revert_quote(char **line)
 
 static char	*pos_redir(char *str, int i)
 {
-	str = ft_realloc(str, ft_strlen(str) + 2);
-	if (!str)
-		ft_exit(0);
+	char *tmp;
+
+	tmp = realloc(str, ft_strlen(str) + 2);
+	if (!tmp)
+		return (free(str), NULL);
+	str = tmp;
 	ft_memmove(str + i + 1, str + i, ft_strlen(str + i) + 1);
 	str[i] = ' ';
 	return (str);
@@ -83,10 +89,20 @@ static char	*pre_redir(char *str, int i)
 {
 	str = ft_realloc(str, ft_strlen(str) + 2);
 	if (!str)
-		ft_exit(0);
+		return (NULL);
 	ft_memmove(str + i, str + i - 1, ft_strlen(str + i - 1) + 1);
 	str[i] = ' ';
 	return (str);
+}
+
+int count_redir(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] == '<' || str[i] == '>')
+		i++;
+	return (i > 2);
 }
 
 char	*unlink_redir(char *str)
@@ -104,10 +120,14 @@ char	*unlink_redir(char *str)
 		{
 			if (i > 0 && str[i - 1] != ' ' && str[i - 1] != '\0')
 				str = pre_redir(str, i);
-			if (str[i] == str[i + 1])
+			if (!str)
+				return (NULL);
+			while (str[i] == str[i + 1])
 				i++;
 			if (str[i + 1] != ' ' && str[i + 1] != '\0')
 				str = pos_redir(str, i + 1);
+			if (!str)
+				return (NULL);
 		}
 		i++;
 	}

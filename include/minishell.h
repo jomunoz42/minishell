@@ -62,11 +62,12 @@ void    print_env(t_map *env);
 
 t_cmd	   *new_head();
 t_cmd    *new_node(char **new);
-void     put_in(char **new, t_cmd *head);
-void	   parsing(char *input, t_cmd *all);
-void     quote_handler(char *input);
+t_cmd    *put_in(char **new, t_cmd *head);
+t_cmd	   *parsing(char *input, t_cmd *all);
+int     quote_handler(char *input);
 void     revert_quote(char **line);
 char     *unlink_redir(char *str);
+int      count_redir(char *str);
 
 //=========================UTILS==========================
 
