@@ -23,7 +23,7 @@ void print_struct(t_cmd *head)
             {
                 printf("----- REDIRECIONAMENTO ----\n");
                 i = 0;
-                if (redir_node->args)
+                if (*redir_node->args)
                 {
                     while (i < 2)
                         printf("REDIR: %s\n", redir_node->args[i++]);

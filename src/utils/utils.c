@@ -7,19 +7,6 @@ void error_exit(char *s, int code)
     exit(0);
 }
 
-void	free_double(char **arg)
-{
-	int i;
-
-	i = 0;
-	if (!arg || !*arg)
-		return ;
-    while (arg[i])
-        free(arg[i++]);
-    free(arg);
-    return ;
-}
-
 char *ft_realloc(char *str, int len)
 {
     int i;
