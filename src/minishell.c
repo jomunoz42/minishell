@@ -55,27 +55,27 @@ int main(int argc, char **argv, char **environ)
 {
     char *input;
     t_cmd *cmd;
-    t_map *env;
+    //t_map *env;
 
-    env = new_map();
+    //env = new_map();
     //copy_env(env, environ);
     while (1)
     {
         input = readline("<minishell>: ");
         if (*input)
-        add_history(input);
-        cmd = NULL;
-        cmd = parsing(input, cmd);
-        if (!cmd)
+            add_history(input);
+        cmd = parsing(input, NULL);
+        if (cmd)
         {
-            free_list(cmd);
-            break;
+            print_struct(cmd);
+        // is_built_in(cmd, env);
+            if (!ft_strncmp(cmd->args[0], "exit", 5))
+                break;
         }
-        print_struct(cmd);
-        is_built_in(cmd, env);
         free_list(cmd);
     }
+    free_list(cmd);
     rl_clear_history();
-    env->destroy(env);
+   // env->destroy(env);
 }
 

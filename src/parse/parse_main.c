@@ -153,6 +153,24 @@ int	init_redir(t_cmd *head)
 	return (1);
 }
 
+int is_empty(char *input)
+{
+	int i;
+	bool flag;
+
+	i = 0;
+	flag = false;
+	while (input[i])
+	{
+		if (input[i++] != ' ')
+		{
+			flag = true;
+			break;
+		}
+	}
+	return (flag == true);
+}
+
 t_cmd *parsing(char *input, t_cmd *head)
 {
 	int i;
@@ -160,7 +178,7 @@ t_cmd *parsing(char *input, t_cmd *head)
 	char **line;
 	char **args;
 
-	if (!input || !quote_handler(input))
+	if (!input || !is_empty(input) || !quote_handler(input))
 		return (NULL);
 	input = unlink_redir(input);
 	if (!input)
@@ -177,7 +195,7 @@ t_cmd *parsing(char *input, t_cmd *head)
 		j = 0;
 		revert_quote(args);
 		head = put_in(args, head);
-		free_double(args);
+
 		if (!head)
 			return (free_double(line), perror("Allocation Error"), NULL);
 		i++;

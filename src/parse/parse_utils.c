@@ -74,9 +74,12 @@ void	revert_quote(char **line)
 
 static char	*pos_redir(char *str, int i)
 {
-	str = ft_realloc(str, ft_strlen(str) + 2);
-	if (!str)
-		ft_exit(0);
+	char *tmp;
+
+	tmp = realloc(str, ft_strlen(str) + 2);
+	if (!tmp)
+		return (free(str), NULL);
+	str = tmp;
 	ft_memmove(str + i + 1, str + i, ft_strlen(str + i) + 1);
 	str[i] = ' ';
 	return (str);
@@ -86,7 +89,7 @@ static char	*pre_redir(char *str, int i)
 {
 	str = ft_realloc(str, ft_strlen(str) + 2);
 	if (!str)
-		ft_exit(0);
+		return (NULL);
 	ft_memmove(str + i, str + i - 1, ft_strlen(str + i - 1) + 1);
 	str[i] = ' ';
 	return (str);
@@ -97,7 +100,7 @@ int count_redir(char *str)
 	int i;
 
 	i = 0;
-	while (str[i] == '<' | str[i] == '>')
+	while (str[i] == '<' || str[i] == '>')
 		i++;
 	return (i > 2);
 }
