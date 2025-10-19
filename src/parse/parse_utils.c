@@ -78,7 +78,7 @@ static char	*pos_redir(char *str, int i)
 
 	tmp = realloc(str, ft_strlen(str) + 2);
 	if (!tmp)
-		return (free(str), NULL);
+		return (NULL);
 	str = tmp;
 	ft_memmove(str + i + 1, str + i, ft_strlen(str + i) + 1);
 	str[i] = ' ';
@@ -105,6 +105,42 @@ int count_redir(char *str)
 	return (i > 2);
 }
 
+char *space_between(char *str)
+{
+	int i;
+	int j;
+	char *new;
+
+	new = malloc(ft_strlen(str) + 3);
+	if (!new)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		// if (str[i + 1] && (str[i + 1] == '>' || str[i + 1] == '<'))
+		// {
+		// 	new[j + i] = ' ';
+		// 	j++;
+		// }
+		if (str[i] == '>' || str[i] == '<')
+		{
+			char c = str[i];
+			while (str[i + j] == c)
+				j++;
+			new[j + i] = ' ';
+			j++;
+		}
+		new[i + j] = str[i];
+		i++;
+	}
+	new[i + j] = '\0';
+	fprintf(stderr, "%s", new);
+	exit(0);
+	free(str);
+	return (new);
+}
+
 char	*unlink_redir(char *str)
 {
 	int		i;
@@ -118,16 +154,17 @@ char	*unlink_redir(char *str)
 			flag = !flag;
 		if (!flag && (str[i] == '>' || str[i] == '<'))
 		{
-			if (i > 0 && str[i - 1] != ' ' && str[i - 1] != '\0')
-				str = pre_redir(str, i);
-			if (!str)
-				return (NULL);
-			while (str[i] == str[i + 1])
-				i++;
-			if (str[i + 1] != ' ' && str[i + 1] != '\0')
-				str = pos_redir(str, i + 1);
-			if (!str)
-				return (NULL);
+			str = space_between(str);
+			// if (i > 0 && str[i - 1] != ' ' && str[i - 1] != '\0')
+			// 	str = pre_redir(str, i);
+			// if (!str)
+			// 	return (NULL);
+			// while (str[i] == str[i + 1])
+			// 	i++;
+			// if (str[i + 1] != ' ' && str[i + 1] != '\0')
+			// 	str = pos_redir(str, i + 1);
+			// if (!str)
+			// 	return (NULL);
 		}
 		i++;
 	}
