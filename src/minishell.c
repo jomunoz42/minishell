@@ -51,7 +51,7 @@ int main(int argc, char **argv, char **environ)
     static t_exec exec;
     char *input;
     t_map  *env;
-    t_cmd *cmd;
+    t_cmd  *cmd;
 
     env = new_map();
     copy_env(env, environ, &exec);

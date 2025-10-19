@@ -36,10 +36,10 @@ typedef struct s_exec
 
 typedef struct s_redir
 {
-   char             *args[2];
-   struct s_redir   *next;
-   int              fd;
-}                   t_redir;
+	char			*args[2];
+	struct s_redir	*next;
+	int				fd;
+}					t_redir;
 
 typedef struct s_cmd
 {
@@ -69,14 +69,14 @@ void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 
 //========================PARSING=========================
 
-t_cmd	   *new_head();
-t_cmd    *new_node(char **new);
-t_cmd    *put_in(char **new, t_cmd *head);
-t_cmd	   *parsing(char *input, t_cmd *all);
-int     quote_handler(char *input);
-void     revert_quote(char **line);
-char     *unlink_redir(char *str);
-int      count_redir(char *str);
+t_cmd				*new_head(void);
+t_cmd				*new_node(char **new);
+t_cmd				*put_in(char **new, t_cmd *head);
+t_cmd				*parsing(char *input, t_cmd *all);
+int					quote_handler(char *input);
+void				revert_quote(char **line);
+char				*unlink_redir(char *str);
+int					count_redir(char *str);
 
 //==========================UTILS=========================
 
@@ -91,6 +91,9 @@ void				handle_cd_errors(char *path, int error_id);
 char				*find_last_slash(char *current_pwd);
 int					count_arguments(char **input);
 char				*ft_strjoin_free(char *s1, char *s2);
+void				free_double(char **arg);
+void				error_exit(char *s, int code);
+char				*ft_realloc(char *str, int len);
 
 //=========================LIBFT==========================
 
@@ -108,11 +111,8 @@ void				ft_putchar_fd(char c, int fd);
 void				ft_putstr_fd(char *s, int fd);
 char				*ft_strrchr(const char *s, int c);
 int					ft_lstsize(t_cmd *lst);
-
-void	   *ft_memmove(void *dest, const void *src, size_t n);
-void	   free_double(char **arg);
-void     error_exit(char *s, int code);
-char     *ft_realloc(char *str, int len);
+void				*ft_memmove(void *dest, const void *src, size_t n);
+char				*ft_strdup(const char *s);
 
 # define COPY ft_strdup
 
