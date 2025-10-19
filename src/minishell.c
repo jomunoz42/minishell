@@ -6,6 +6,8 @@ static void    is_built_in(t_cmd *cmd, t_map *env)
 {
     if (!cmd || !cmd->args)
         return;
+    if (!cmd || !cmd->args[0])
+        return ;
     if (!ft_strncmp(cmd->args[0], "exit", 5))
         ft_exit(0);
     else if (!ft_strncmp(cmd->args[0], "echo", 5))
@@ -13,11 +15,23 @@ static void    is_built_in(t_cmd *cmd, t_map *env)
     else if (!ft_strncmp(cmd->args[0], "pwd", 4))
         ft_pwd();
     else if (!ft_strncmp(cmd->args[0], "env", 4))
+        ft_exit(0);        
+    if (!ft_strncmp(cmd->args[0], "cd", 3))
+        ft_cd(cmd, env);
+    if (!ft_strncmp(cmd->args[0], "echo", 5))
+        ft_echo(cmd, env);
+    if (!ft_strncmp(cmd->args[0], "pwd", 4))
+        ft_pwd(env);
+    if (!ft_strncmp(cmd->args[0], "env", 4))
         ft_env(env);
     else if (!ft_strncmp(cmd->args[0], "export", 7))
         ft_export(cmd, env);
     else if (!ft_strncmp(cmd->args[0], "unset", 6))
         ft_unset(cmd, env);
+    if (!ft_strncmp(cmd->args[0], "export", 7))
+        ft_export(cmd, env, exec);
+    if (!ft_strncmp(cmd->args[0], "unset", 6))
+        ft_unset(cmd, env, exec);
 }
 
 void free_list(t_cmd *all)
@@ -54,14 +68,27 @@ void free_list(t_cmd *all)
 int main(int argc, char **argv, char **environ)
 {
     char *input;
+    // char *args[] = {"export", "-la", NULL};
+    // t_cmd cmd = 
+    // {
+    //     .args=args,
+    //     .redir=NULL,
+    //     .next=NULL
+    // };
+    t_exec *exec;
+    t_map  *env;
     t_cmd *cmd;
-    //t_map *env;
 
-    //env = new_map();
-    //copy_env(env, environ);
+    exec = malloc(sizeof(t_exec));
+    if (!exec)
+        ft_exit(1);
+    copy_env(env, environ, exec);
+    env = new_map();
     while (1)
     {
         input = readline("<minishell>: ");
+        is_built_in(&cmd, env, exec);
+        execute_command(&cmd, env, exec);
         if (*input)
             add_history(input);
         cmd = parsing(input, NULL);
@@ -78,4 +105,3 @@ int main(int argc, char **argv, char **environ)
     rl_clear_history();
    // env->destroy(env);
 }
-

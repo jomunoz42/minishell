@@ -2,48 +2,30 @@
 
 #include "minishell.h"
 
-// static char	*get_path(char **env)
-// {
-// 	char	*str;
-// 	int		i;
+char	*get_absolute_path(t_map *env, char *cmd)
+{
+	char	**dirs;
+	char	*path;
+	char	*temp;
+	char	*str;
+	int		i;
 
-// 	str = NULL;
-// 	i = -1;
-// 	while (env[++i])
-// 	{
-// 		if (ft_strnstr(env[i], "PATH=", 5))
-// 			str = env[i];
-// 	}
-// 	if (!*env)
-// 		str = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
-// 	return (str);
-// }
-
-// int get_absolute_path(char **env, char *cmd)
-// {
-// 	char	**dirs;
-// 	char	*path;
-// 	char	*temp;
-// 	char	*str;
-// 	int		i;
-
-// 	if (ft_strncmp(cmd, "", 1) == 0)
-// 		return ("");
-// 	if (access(cmd, X_OK) == 0)
-// 		return (1);
-// 	str = get_path(env);
-// 	if (str == NULL)
-// 		return (0);
-// 	i = -1;
-// 	dirs = ft_split(str, ':');
-// 	while (dirs[++i])
-// 	{
-// 		temp = ft_strjoin(dirs[i], "/");
-// 		path = ft_strjoin(temp, cmd);
-// 		free(temp);
-// 		if (access(path, X_OK) == 0)
-// 			return (free_double(dirs), 1);
-// 		free(path);
-// 	}
-// 	return (free_double(dirs), 0);
-// }
+	if (ft_strncmp(cmd, "", 1) == 0)
+		return ("");
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
+	str = env->get(env, "PATH");
+	if (!str || str[0] == '\0')
+		return (NULL);  // check error here or after
+	i = -1;
+	dirs = ft_split(str, ':');
+	while (dirs[++i])
+	{
+		temp = ft_strjoin_free(dirs[i], "/");
+		path = ft_strjoin_free(temp, cmd);
+		if (access(path, X_OK) == 0)
+			return (path);
+		free(path);
+	}
+	return (NULL);
+}
