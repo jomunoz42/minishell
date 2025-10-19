@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 15:22:03 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/15 22:13:01 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/19 18:06:41 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_node	*create_node(t_map_extra *this, char *key, char *value)
 	if (!node)
 		return (NULL);
 	node->key = key;
-	node->value = ft_strdup(value);  // Meti o ft_strdup aqui
+	node->value = value;
 	node->next = NULL;
 	return (node);
 }

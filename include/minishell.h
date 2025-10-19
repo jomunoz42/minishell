@@ -110,16 +110,6 @@ char				*ft_strrchr(const char *s, int c);
 int					ft_lstsize(t_cmd *lst);
 
 void	   *ft_memmove(void *dest, const void *src, size_t n);
-char	   *ft_strdup(const char *s);
-int		ft_strlen(const char *s);
-char	   *ft_itoa(int n);
-char	   **ft_split(char const *s, char c);
-size_t	ft_strlcpy(char *dest, const char *src, size_t size);
-char	   *ft_strjoin(char const *s1, char const *s2);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-int		ft_strcmp(const char *s1, const char *s2);
-char	   *ft_substr(char const *s, unsigned int start, size_t len);
-void	   *ft_calloc(size_t nmemb, size_t size);
 void	   free_double(char **arg);
 void     error_exit(char *s, int code);
 char     *ft_realloc(char *str, int len);

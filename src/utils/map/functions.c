@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:55:11 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/15 22:38:41 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/19 18:06:19 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	__put(t_map_extra *this, char *key, char *value)
 		{
 			free(node->value);
 			// free(key);   // check this in the future
-			node->value = ft_strdup(value); 
+			node->value = value; 
 			// Meti o dup aqui (esta merda resolveu a cena do env fodido)
 			return ;
 		}
