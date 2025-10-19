@@ -21,12 +21,11 @@ char	*get_absolute_path(t_map *env, char *cmd)
 	dirs = ft_split(str, ':');
 	while (dirs[++i])
 	{
-		temp = ft_strjoin(dirs[i], "/");
-		path = ft_strjoin(temp, cmd);
-		free(temp);
+		temp = ft_strjoin_free(dirs[i], "/");
+		path = ft_strjoin_free(temp, cmd);
 		if (access(path, X_OK) == 0)
-			return (free_double(dirs), path);
+			return (path);
 		free(path);
 	}
-	return (free_double(dirs), NULL);
+	return (NULL);
 }

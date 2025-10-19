@@ -56,6 +56,7 @@ int main(int argc, char **argv, char **environ)
     t_exec *exec;
     t_map  *env;
 
+    cmd.next = NULL;
     env = new_map();
     exec = malloc(sizeof(t_exec));
     if (!exec)

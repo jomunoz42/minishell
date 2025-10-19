@@ -79,8 +79,8 @@ static int    absolute_or_relative(t_cmd *cmd, t_map *env, char *current_pwd)
     else
     {
         path = env->get(env, "PWD");
-        path = ft_strjoin(path, "/");
-        path = ft_strjoin(path, cmd->args[1]);
+        path = ft_strjoin_free(path, "/");
+        path = ft_strjoin_free(path, cmd->args[1]);
     }
     if (file_or_directory(path) == 0)
     {
@@ -93,7 +93,8 @@ static int    absolute_or_relative(t_cmd *cmd, t_map *env, char *current_pwd)
     return (1);   // check this
 }
 
-//       && SEE RETURN VALUES     &&      CHECK ALLOCS FAILURE
+//      DO RETURN VALUES     &&   LEAKS   &&    CHECK ALLOCS FAILURE
+
 int	ft_cd(t_cmd *cmd, t_map *env)
 {
     char    *path;

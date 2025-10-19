@@ -27,11 +27,8 @@ typedef struct s_exec
 	int				outfile;
 	int				in;
 	int				out;
-	int				cmd_number;
-	// int				child;
 	int				pipefd[2];
 	int				eof_no_limiter;
-	pid_t			*process_id;
 	int				status;
 
 	int				env_len;
@@ -49,6 +46,7 @@ typedef struct s_cmd
 	char			**args;
 	t_redir			*redir;
 	struct s_cmd	*next;
+	pid_t			pid;
 }					t_cmd;
 
 //./minishell ls >> END cat < fd | wc
@@ -86,6 +84,7 @@ int					file_or_directory(char *path);
 void				handle_cd_errors(char *path, int error_id);
 char				*find_last_slash(char *current_pwd);
 int					count_arguments(char **input);
+char				*ft_strjoin_free(char *s1, char *s2);
 
 //=========================LIBFT==========================
 

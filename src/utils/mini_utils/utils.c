@@ -37,3 +37,12 @@ char *ft_realloc(char *str, int len)
         new[0] = '\0';
     return (new);
 }
+
+char	*ft_strjoin_free(char *s1, char *s2)
+{
+	char *result;
+	
+	result = ft_strjoin(s1, s2);
+	free(s1);
+	return (result);
+}

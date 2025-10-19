@@ -65,41 +65,38 @@
 // 	}
 // }
 
-static void infile_and_outfile(t_cmd *cmd, t_exec *exec)
-{
-	exec->infile = open(      , O_RDONLY);
-	if (exec->infile == -1)
-		// handling_errors(      , exec, 1);
-	exec->outfile = open(, O_CREAT | O_WRONLY | O_TRUNC,
-			0644);
-	if (exec->outfile == -1)
-		// handling_errors(     , exec, 2);
-}
 
-static void waiting_proccesses(t_exec *exec)
-{
-	int i;
 
-	i = 0;
-	while (i < exec->cmd_number)
+// static void infile_and_outfile(t_cmd *cmd, t_exec *exec)
+// {
+// 	exec->infile = open(      , O_RDONLY);
+// 	if (exec->infile == -1)
+// 		// handling_errors(      , exec, 1);
+// 	exec->outfile = open(, O_CREAT | O_WRONLY | O_TRUNC,
+// 			0644);
+// 	if (exec->outfile == -1)
+// 		// handling_errors(     , exec, 2);
+// }
+
+static void waiting_proccesses(t_exec *exec, t_cmd *cmd)
+{
+	while (cmd)
 	{
-		if (i == exec->cmd_number - 1)
-			waitpid(exec->process_id[i], &exec->status, 0);
+		if (!cmd->next)
+			waitpid(cmd->pid, &exec->status, 0);
 		else
-			waitpid(exec->process_id[i], NULL, 0);
-		i++;
+			waitpid(cmd->pid, NULL, 0);
 	}
-	free(exec->process_id);
 }
 
-void	create_children(t_cmd *cmd, t_map *env, t_exec *exec, int i)
+void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	char	*path;
 
-	exec->process_id[i] = fork();
+	cmd->pid = fork();
 	// if (!exec->process_id[exec->cmd_number] == -1)
 		// handling_errors(argv, exec, 4);
-	if (exec->process_id[i] == 0)
+	if (cmd->pid == 0)
 	{
 		// dup2(exec->in, 0);
 		// close(exec->in);
@@ -122,15 +119,11 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec, int i)
 
 void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 {
-	int i;
+	t_cmd *temp;
 
-	i = 0;
-	exec->cmd_number = 1/* ft_lstsize(cmd) */;
-	exec->process_id = malloc(sizeof(pid_t) * exec->cmd_number);
-    if (!exec->process_id)
-        ft_exit(1);
+	temp = cmd;
 	exec->in = dup(0);
-	while (i < exec->cmd_number)
+	while (temp)
 	{
 		exec->out = dup(1);
 		// if (argv[exec->index + 2])
@@ -140,9 +133,9 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 		// 	pipe(exec->pipefd);
 		// 	exec->out = exec->pipefd[1];
 		// }
-		create_children(cmd, env, exec, i);
+		create_children(cmd, env, exec);
 		// exec->in = exec->pipefd[0];
-		i++;
+		temp = temp->next;
 	}
-	waiting_proccesses(exec);
+	waiting_proccesses(exec, cmd);
 }

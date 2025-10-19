@@ -73,8 +73,7 @@ char	*create_var(t_node *node)
 	{
 		str = ft_strjoin(node->key, "=\"");
 		new_value = ft_strjoin(node->value, "\"");
-		result = ft_strjoin(str, new_value);
-		free(str);
+		result = ft_strjoin_free(str, new_value);
 		free(new_value);
 	}
 	else

@@ -29,3 +29,6 @@ void    ft_env(t_map *env)
     while(vars && vars[i] && is_there_value(vars[i]))
         printf("%s\n", vars[i++]);
 }
+
+
+//        IS  ENV -I ./MINISHELL    PROTECTED???????
