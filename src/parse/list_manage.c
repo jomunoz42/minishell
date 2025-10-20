@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-t_cmd *new_node(char **args)
+t_cmd	*new_node(char **args)
 {
-	t_cmd *node;
+	t_cmd	*node;
 
 	node = malloc(sizeof(t_cmd));
 	if (!node)
@@ -13,10 +13,10 @@ t_cmd *new_node(char **args)
 	return (node);
 }
 
-t_cmd *put_in(char **new, t_cmd *head)
+t_cmd	*put_in(char **new, t_cmd *head)
 {
-	t_cmd *node;
-	t_cmd *current;
+	t_cmd	*node;
+	t_cmd	*current;
 
 	if (!head)
 		head = new_node(new);
@@ -32,3 +32,4 @@ t_cmd *put_in(char **new, t_cmd *head)
 	}
 	return (head);
 }
+

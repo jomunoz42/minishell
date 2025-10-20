@@ -7,7 +7,7 @@ void error_exit(char *s, int code)
     exit(0);
 }
 
-char *ft_realloc(char *str, int len)
+char *ft_realloc_str(char *str, int len)
 {
     int i;
     char *new;

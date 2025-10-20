@@ -88,15 +88,12 @@ int remove_redir(t_cmd *head, int i)
 {
 	int len;
 	char **tmp;
+	t_cmd *node;
 
 	len = arr_count(head->args);
 	free(head->args[i]);
 	free(head->args[i + 1]);
 	ft_memmove(&head->args[i], &head->args[i + 2], (len - i - 1) * sizeof(char *));
-	tmp = realloc(head->args, (len - 1) * sizeof(char *));
-	if (!tmp)
-		return (0);
-	head->args = tmp;
 	return (1);
 }
 
@@ -175,15 +172,19 @@ t_cmd *parsing(char *input, t_cmd *head)
 {
 	int i;
 	int j;
+	char *dup;
 	char **line;
 	char **args;
 
 	if (!input || !is_empty(input) || !quote_handler(input))
 		return (NULL);
-	input = unlink_redir(input);
-	if (!input)
+	dup = ft_strdup(input);
+	if (!dup)
 		return (NULL);
-	line = ft_split(input, '|');
+	dup = unlink_redir(dup);
+	if (!dup)
+		return (NULL);
+	line = ft_split(dup, '|');
 	if (!line)
 		return (perror("Allocation Error"), NULL);
 	i = 0;
@@ -195,7 +196,6 @@ t_cmd *parsing(char *input, t_cmd *head)
 		j = 0;
 		revert_quote(args);
 		head = put_in(args, head);
-
 		if (!head)
 			return (free_double(line), perror("Allocation Error"), NULL);
 		i++;
@@ -203,5 +203,6 @@ t_cmd *parsing(char *input, t_cmd *head)
 	if (!init_redir(head) || !check_sintax(head))
 		return(free_double(line), NULL);
 	free_double(line);
+	free(dup);
 	return (head);
 }

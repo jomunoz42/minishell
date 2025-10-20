@@ -93,7 +93,7 @@ int					count_arguments(char **input);
 char				*ft_strjoin_free(char *s1, char *s2);
 void				free_double(char **arg);
 void				error_exit(char *s, int code);
-char				*ft_realloc(char *str, int len);
+char				*ft_realloc_str(char *str, int len);
 
 //=========================LIBFT==========================
 

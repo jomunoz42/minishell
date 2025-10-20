@@ -48,30 +48,30 @@ void free_list(t_cmd *all)
 
 int main(int argc, char **argv, char **environ)
 {    
-    static t_exec exec;
+    //static t_exec exec;
     char *input;
-    t_map  *env;
+    //t_map  *env;
     t_cmd  *cmd;
 
-    env = new_map();
-    copy_env(env, environ, &exec);
+    //env = new_map();
+    //copy_env(env, environ, &exec);
     while (1)
     {
         input = readline("<minishell>: ");
         if (*input)
             add_history(input);
         cmd = parsing(input, NULL);
-        free(input);
         if (cmd)
         {
             print_struct(cmd);  
-            if (!ft_strncmp(cmd->args[0], "exit", 4))
+            if (cmd->args[0] && !ft_strncmp(cmd->args[0], "exit", 4))
                 break;
             //execute_command(cmd, env, &exec);
         }
         free_list(cmd);
     }
+    free(input);
     free_list(cmd);
     rl_clear_history();
-    env->destroy(env);
+    //env->destroy(env);
 }

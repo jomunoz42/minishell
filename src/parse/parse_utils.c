@@ -18,7 +18,7 @@ int	quote_count(char *str)
 		i++;
 	}
 	if (single_flag || double_flag)
-		return (perror("Oprn Quotes"), 0);
+		return (perror("Open Quotes"), 0);
 	return (1);
 }
 
@@ -74,9 +74,9 @@ void	revert_quote(char **line)
 
 static char	*pos_redir(char *str, int i)
 {
-	char *tmp;
+	char	*tmp;
 
-	tmp = realloc(str, ft_strlen(str) + 2);
+	tmp = ft_realloc_str(str, ft_strlen(str) + 2);
 	if (!tmp)
 		return (NULL);
 	str = tmp;
@@ -87,58 +87,25 @@ static char	*pos_redir(char *str, int i)
 
 static char	*pre_redir(char *str, int i)
 {
-	str = ft_realloc(str, ft_strlen(str) + 2);
-	if (!str)
+	char	*tmp;
+
+	tmp = ft_realloc_str(str, ft_strlen(str) + 2);
+	if (!tmp)
 		return (NULL);
+	str = tmp;
 	ft_memmove(str + i, str + i - 1, ft_strlen(str + i - 1) + 1);
 	str[i] = ' ';
 	return (str);
 }
 
-int count_redir(char *str)
+int	count_redir(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i] == '<' || str[i] == '>')
 		i++;
 	return (i > 2);
-}
-
-char *space_between(char *str)
-{
-	int i;
-	int j;
-	char *new;
-
-	new = malloc(ft_strlen(str) + 3);
-	if (!new)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		// if (str[i + 1] && (str[i + 1] == '>' || str[i + 1] == '<'))
-		// {
-		// 	new[j + i] = ' ';
-		// 	j++;
-		// }
-		if (str[i] == '>' || str[i] == '<')
-		{
-			char c = str[i];
-			while (str[i + j] == c)
-				j++;
-			new[j + i] = ' ';
-			j++;
-		}
-		new[i + j] = str[i];
-		i++;
-	}
-	new[i + j] = '\0';
-	fprintf(stderr, "%s", new);
-	exit(0);
-	free(str);
-	return (new);
 }
 
 char	*unlink_redir(char *str)
@@ -154,17 +121,16 @@ char	*unlink_redir(char *str)
 			flag = !flag;
 		if (!flag && (str[i] == '>' || str[i] == '<'))
 		{
-			str = space_between(str);
-			// if (i > 0 && str[i - 1] != ' ' && str[i - 1] != '\0')
-			// 	str = pre_redir(str, i);
-			// if (!str)
-			// 	return (NULL);
-			// while (str[i] == str[i + 1])
-			// 	i++;
-			// if (str[i + 1] != ' ' && str[i + 1] != '\0')
-			// 	str = pos_redir(str, i + 1);
-			// if (!str)
-			// 	return (NULL);
+			if (i > 0 && str[i - 1] != ' ' && str[i - 1] != '\0')
+				str = pre_redir(str, i);
+			if (!str)
+				return (NULL);
+			while (str[i] == str[i + 1])
+				i++;
+			if (str[i + 1] != ' ' && str[i + 1] != '\0')
+				str = pos_redir(str, i + 1);
+			if (!str)
+				return (NULL);
 		}
 		i++;
 	}

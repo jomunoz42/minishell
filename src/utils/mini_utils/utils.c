@@ -5,7 +5,7 @@ void	free_double(char **arg)
 	int i;
 
 	i = 0;
-	if (!arg || !*arg)
+	if (!arg)
 		return ;
     while (arg[i])
         free(arg[i++]);
