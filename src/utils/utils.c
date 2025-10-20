@@ -52,3 +52,13 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	}
 	return (d);
 }
+
+int	arr_count(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
+}

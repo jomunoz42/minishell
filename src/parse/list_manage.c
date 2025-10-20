@@ -13,16 +13,21 @@ t_cmd	*new_node(char **args)
 	return (node);
 }
 
-t_cmd	*put_in(char **new, t_cmd *head)
+t_cmd	*separate_args(t_cmd *head, char *line)
 {
+	char	**args;
 	t_cmd	*node;
 	t_cmd	*current;
 
+	args = ft_split(line, ' ');
+	if (!args)
+		return (perror("Allocation Error"), NULL);
+	revert_quote(args);
 	if (!head)
-		head = new_node(new);
+		head = new_node(args);
 	else
 	{
-		node = new_node(new);
+		node = new_node(args);
 		if (!node)
 			return (NULL);
 		current = head;
@@ -30,6 +35,25 @@ t_cmd	*put_in(char **new, t_cmd *head)
 			current = current->next;
 		current->next = node;
 	}
+	if (!head)
+		return (perror("Allocation Error"), NULL);
 	return (head);
 }
 
+t_redir	*new_redir(t_cmd *head, int i)
+{
+	t_redir	*new;
+
+	new = malloc(sizeof(t_redir));
+	if (!new)
+		return (NULL);
+	new->args[0] = ft_strdup(head->args[i]);
+	if (!new->args[0])
+		return (NULL);
+	new->args[1] = ft_strdup(head->args[i + 1]);
+	if (!new->args[1])
+		return (free(new->args[0]), NULL);
+	new->next = NULL;
+	new->fd = 0;
+	return (new);
+}

@@ -71,12 +71,15 @@ void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 
 t_cmd				*new_head(void);
 t_cmd				*new_node(char **new);
-t_cmd				*put_in(char **new, t_cmd *head);
+t_cmd				*separate_args(t_cmd *head, char *line);
 t_cmd				*parsing(char *input, t_cmd *all);
 int					quote_handler(char *input);
 void				revert_quote(char **line);
 char				*unlink_redir(char *str);
 int					count_redir(char *str);
+int					init_redir(t_cmd *head);
+t_redir				*new_redir(t_cmd *head, int i);
+int					remove_redir(t_cmd *head, int i);
 
 //==========================UTILS=========================
 
@@ -94,6 +97,7 @@ char				*ft_strjoin_free(char *s1, char *s2);
 void				free_double(char **arg);
 void				error_exit(char *s, int code);
 char				*ft_realloc_str(char *str, int len);
+int					arr_count(char **arr);
 
 //=========================LIBFT==========================
 

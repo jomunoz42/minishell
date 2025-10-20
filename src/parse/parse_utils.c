@@ -72,32 +72,6 @@ void	revert_quote(char **line)
 	}
 }
 
-static char	*pos_redir(char *str, int i)
-{
-	char	*tmp;
-
-	tmp = ft_realloc_str(str, ft_strlen(str) + 2);
-	if (!tmp)
-		return (NULL);
-	str = tmp;
-	ft_memmove(str + i + 1, str + i, ft_strlen(str + i) + 1);
-	str[i] = ' ';
-	return (str);
-}
-
-static char	*pre_redir(char *str, int i)
-{
-	char	*tmp;
-
-	tmp = ft_realloc_str(str, ft_strlen(str) + 2);
-	if (!tmp)
-		return (NULL);
-	str = tmp;
-	ft_memmove(str + i, str + i - 1, ft_strlen(str + i - 1) + 1);
-	str[i] = ' ';
-	return (str);
-}
-
 int	count_redir(char *str)
 {
 	int	i;
@@ -106,33 +80,4 @@ int	count_redir(char *str)
 	while (str[i] == '<' || str[i] == '>')
 		i++;
 	return (i > 2);
-}
-
-char	*unlink_redir(char *str)
-{
-	int		i;
-	bool	flag;
-
-	i = 0;
-	flag = false;
-	while (str[i])
-	{
-		if (str[i] == '"')
-			flag = !flag;
-		if (!flag && (str[i] == '>' || str[i] == '<'))
-		{
-			if (i > 0 && str[i - 1] != ' ' && str[i - 1] != '\0')
-				str = pre_redir(str, i);
-			if (!str)
-				return (NULL);
-			while (str[i] == str[i + 1])
-				i++;
-			if (str[i + 1] != ' ' && str[i + 1] != '\0')
-				str = pos_redir(str, i + 1);
-			if (!str)
-				return (NULL);
-		}
-		i++;
-	}
-	return (str);
 }

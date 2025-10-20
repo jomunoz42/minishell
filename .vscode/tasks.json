@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Format C file (42)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-lc",
+        "c_formatter_42 \"${file}\""
+      ],
+      "group": "none",
+      "presentation": {
+        "reveal": "never",
+        "panel": "dedicated",
+        "echo": false
+      },
+      "problemMatcher": []
+    }
+  ]
+}

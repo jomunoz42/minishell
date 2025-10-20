@@ -1,0 +1,109 @@
+#include "minishell.h"
+
+static char	*pos_redir(char *str, int i)
+{
+	char	*tmp;
+
+	tmp = ft_realloc_str(str, ft_strlen(str) + 2);
+	if (!tmp)
+		return (NULL);
+	str = tmp;
+	ft_memmove(str + i + 1, str + i, ft_strlen(str + i) + 1);
+	str[i] = ' ';
+	return (str);
+}
+
+static char	*pre_redir(char *str, int i)
+{
+	char	*tmp;
+
+	tmp = ft_realloc_str(str, ft_strlen(str) + 2);
+	if (!tmp)
+		return (NULL);
+	str = tmp;
+	ft_memmove(str + i, str + i - 1, ft_strlen(str + i - 1) + 1);
+	str[i] = ' ';
+	return (str);
+}
+
+char	*unlink_redir(char *str)
+{
+	int		i;
+	bool	flag;
+
+	i = 0;
+	flag = false;
+	while (str[i])
+	{
+		if (str[i] == '"')
+			flag = !flag;
+		if (!flag && (str[i] == '>' || str[i] == '<'))
+		{
+			if (i > 0 && str[i - 1] != ' ' && str[i - 1] != '\0')
+				str = pre_redir(str, i);
+			if (!str)
+				return (NULL);
+			while (str[i] == str[i + 1])
+				i++;
+			if (str[i + 1] != ' ' && str[i + 1] != '\0')
+				str = pos_redir(str, i + 1);
+			if (!str)
+				return (NULL);
+		}
+		i++;
+	}
+	return (str);
+}
+
+t_redir	*redir_start(t_cmd *head, int i)
+{
+	t_redir	*node;
+	t_redir	*current;
+
+	if (!head->redir)
+	{
+		head->redir = new_redir(head, i);
+		if (!head->redir)
+			return (NULL);
+		node = head->redir;
+	}
+	else
+	{
+		node = new_redir(head, i);
+		if (!node)
+			return (NULL);
+		current = head->redir;
+		while (current->next)
+			current = current->next;
+		current->next = node;
+	}
+	if (!remove_redir(head, i))
+		return (NULL);
+	return (node);
+}
+
+int	init_redir(t_cmd *head)
+{
+	int		i;
+	t_cmd	*node;
+
+	node = head;
+	while (node)
+	{
+		i = 0;
+		while (node->args[i])
+		{
+			if (node->args[i][0] == '>' || node->args[i][0] == '<')
+			{
+				if (!node->args[i + 1])
+					return (1);
+				if (!redir_start(node, i))
+					return (0);
+				continue ;
+			}
+			i++;
+		}
+		node = node->next;
+	}
+	return (1);
+}
