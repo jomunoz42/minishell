@@ -39,9 +39,9 @@ void	print_struct(t_cmd *head)
 int	check_sintax(t_cmd *head)
 {
 	int		i;
-	t_cmd	*node;
+	t_redir	*node;
 
-	node = head;
+	node = head->redir;
 	while (node)
 	{
 		i = 0;
@@ -112,13 +112,13 @@ char *verify_var(char *str, t_map *env)
 	int j;
 	char *var;
 
-	i = 0;
-	while (str[i])
+	i = -1;
+	while (str[++i])
 	{
 		if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
 		{
 			j = 0;
-			while (str[i + j] && str[i + j] != ' ')
+			while (str[i + j] && str[i + j] != ' ' && str[i + j + 1] != '"')
 				j++;
 			var = ft_substr(str, i + 1, j);
 			free(str);
@@ -128,9 +128,10 @@ char *verify_var(char *str, t_map *env)
 			free(var);
 			if (!str)
 				str = ft_strdup("");
+			else
+				str = ft_strdup(str);
 			break;
 		}
-		i++;
 	}
 	return (str);
 }

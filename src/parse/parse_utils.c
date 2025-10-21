@@ -75,9 +75,16 @@ void	revert_quote(char **line)
 int	count_redir(char *str)
 {
 	int	i;
+	char c;
 
 	i = 0;
+	c = str[i];
 	while (str[i] == '<' || str[i] == '>')
-		i++;
+	{
+		if (str[i] == c)
+			i++;
+		else
+			return (0);
+	}
 	return (i > 2);
 }
