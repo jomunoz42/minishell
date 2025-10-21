@@ -69,10 +69,9 @@ void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 
 //========================PARSING=========================
 
-t_cmd				*new_head(void);
 t_cmd				*new_node(char **new);
 t_cmd				*separate_args(t_cmd *head, char *line);
-t_cmd				*parsing(char *input, t_cmd *all);
+t_cmd				*parsing(char *input, t_cmd *all, t_map *env);
 int					quote_handler(char *input);
 void				revert_quote(char **line);
 char				*unlink_redir(char *str);
