@@ -90,13 +90,41 @@ static void waiting_proccesses(t_exec *exec, t_cmd *cmd)
 	}
 }
 
+static void redirections(t_cmd *cmd, t_map *env, t_exec *exec)
+{
+	if (ft_strncmp(cmd->redir->args[0], "<<", 3) == 0)
+	{
+		exec->in = cmd->redir->fd;
+		// close ??
+	}
+	if (ft_strncmp(cmd->redir->args[0], "<", 2) == 0)
+	{
+		exec->in = open(cmd->redir->args[1], O_RDONLY);
+		if (exec->in == -1)
+			handling_errors(exec, cmd->redir->args[1], 1);
+	}
+	if (ft_strncmp(cmd->redir->args[0], ">>", 3) == 0)
+	{
+		exec->out = open(cmd->redir->args[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+		if (exec->out == -1)
+			handling_errors(exec, cmd->redir->args[1], 2);
+	}
+	if (ft_strncmp(cmd->redir->args[0], ">", 2) == 0)
+	{
+		exec->out = open(cmd->redir->args[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (exec->out == -1)
+			handling_errors(exec, cmd->redir->args[1], 2);
+	}
+}
+
 void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	cmd->pid = fork();
 	if (cmd->pid == -1)
-		handling_errors(cmd, exec, 4);
+		handling_errors(exec, NULL, 4);
 	if (cmd->pid == 0)
 	{
+	
 		dup2(exec->in, 0);
 		close(exec->in);
 		dup2(exec->out, 1);
@@ -116,13 +144,40 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 		close(exec->out);
 }
 
+void   run_all_heredocs(t_cmd *cmd, t_exec *exec)
+{
+	t_cmd *temp;
+	int   marker;
 
+	marker = 0;
+	temp = cmd;
+	while(temp)
+	{
+		if (ft_strncmp(temp->redir->args[0], "<<", 3) == 0)
+		{
+			handling_here_doc(temp, exec);
+			temp->redir->last_here_doc = false;
+			marker++;
+		}
+		temp = temp->next;
+	}
+	temp = cmd;
+	while(temp)
+	{
+		if (ft_strncmp(temp->redir->args[0], "<<", 3) == 0)
+			marker--;
+		if (marker == 0)
+			temp->redir->last_here_doc = true;
+		temp = temp->next;
+	}
+}
 
-void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
+void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)  // env ??
 {
 	t_cmd *temp;
 
 	temp = cmd;
+	run_all_heredocs(cmd, exec);
 	exec->in = dup(0);
 	while (temp)
 	{
@@ -130,9 +185,10 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 		if (temp->next)
 		{
 			if (pipe(exec->pipefd) == -1)
-				handling_errors(temp, exec, 3);
+				handling_errors(exec, NULL, 3);
 			exec->out = exec->pipefd[1];
 		}
+		redirections(temp, env, exec);
 		create_children(temp, env, exec);
 		exec->in = exec->pipefd[0];
 		temp = temp->next;

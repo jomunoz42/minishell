@@ -1,28 +1,28 @@
 
 #include "minishell.h"
 
-void	handling_errors(t_cmd *cmd, t_exec *exec, int error_id)
+void	handling_errors(t_exec *exec, char *arg, int error_id)
 {
-// 	if (error_id == 1)
-// 	{
-// 		write(2, "bash: ", 6);
-// 		perror(argv[1]);
-// 	}
-// 	if (error_id == 2)
-// 	{
-// 		write(2, "bash: ", 6);
-// 		perror(argv[get->last_arg]);
-// 	}
+	if (error_id == 1)
+	{
+		write(2, "bash: ", 6);
+		perror(arg);            // check
+	}
+	if (error_id == 2)
+	{
+		write(2, "bash: ", 6);
+		perror(arg); 			// check
+	}
 	if (error_id == 3)
 	{
 		perror("pipe");
-		close_everything(exec);
+		close_everything(exec); // check
 		exit(1);
 	}
 	if (error_id == 4)
 	{
 		perror("fork");
-		close_everything(exec);
+		close_everything(exec); // check
 		exit(1);
 	}
 }

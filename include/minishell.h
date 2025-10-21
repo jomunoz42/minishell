@@ -21,6 +21,10 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 50
+# endif
+
 typedef struct s_exec
 {
 	int				infile;
@@ -29,6 +33,8 @@ typedef struct s_exec
 	int				out;
 	int				pipefd[2];
 	int				status;
+
+
 
 	int				eof_no_limiter;
 
@@ -40,6 +46,7 @@ typedef struct s_redir
 	char			*args[2];
 	struct s_redir	*next;
 	int				fd;
+	bool			last_here_doc;
 }					t_redir;
 
 typedef struct s_cmd
@@ -64,10 +71,11 @@ void				ft_exit(int status);
 
 //=======================EXECUTION========================
 
-void				handle_path_not_found(char *path, char **cmd);
-void				handling_errors(t_cmd *cmd, t_exec *exec, int error_id);
 char				*get_absolute_path(t_map *env, char *cmd);
+void				handling_here_doc(t_cmd *cmd, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
+void				handling_errors(t_exec *exec, char *arg, int error_id);
+void				handle_path_not_found(char *path, char **cmd);
 void				close_everything(t_exec *exec);
 
 //========================PARSING=========================
@@ -97,6 +105,8 @@ char				*ft_strjoin_free(char *s1, char *s2);
 void				free_double(char **arg);
 void				error_exit(char *s, int code);
 char				*ft_realloc(char *str, int len);
+char				*get_next_line(int fd);
+
 
 //=========================LIBFT==========================
 
