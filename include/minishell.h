@@ -116,6 +116,7 @@ char				*ft_strrchr(const char *s, int c);
 int					ft_lstsize(t_cmd *lst);
 void				*ft_memmove(void *dest, const void *src, size_t n);
 char				*ft_strdup(const char *s);
+void				*ft_memcpy(void *dest, const void *src, size_t n);
 
 # define COPY ft_strdup
 

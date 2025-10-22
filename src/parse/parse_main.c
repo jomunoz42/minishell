@@ -106,11 +106,11 @@ char	*primary_check(char *input)
 	return (dup);
 }
 
-char *verify_var(char *str, t_map *env)
+char	*verify_var(char *str, t_map *env)
 {
-	int i;
-	int j;
-	char *var;
+	int		i;
+	int		j;
+	char	*var;
 
 	i = -1;
 	while (str[++i])
@@ -118,45 +118,83 @@ char *verify_var(char *str, t_map *env)
 		if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
 		{
 			j = 0;
-			while (str[i + j] && str[i + j] != ' ' && str[i + j + 1] != '"')
+			while (str[i + j] && str[i + j + 1] != ' ' && str[i + j + 1] != '"')
 				j++;
 			var = ft_substr(str, i + 1, j);
-			free(str);
 			if (!var)
-				return(NULL);
+				return (NULL);
 			str = env->get(env, var);
 			free(var);
 			if (!str)
 				str = ft_strdup("");
 			else
 				str = ft_strdup(str);
-			break;
+			break ;
 		}
 	}
 	return (str);
 }
 
+int	check_size(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != ' ' && str[i] != '"')
+		i++;
+	return (i);
+}
+
+char	*expand_str(char *dest, char *src, int index)
+{
+	int		d_len;
+	int		s_len;
+	int		var_size;
+	int		tail_len;
+	char	*tmp;
+
+	d_len = ft_strlen(dest);
+	s_len = ft_strlen(src);
+	var_size = check_size(dest + index);
+	tail_len = ft_strlen(dest + index + var_size);
+	tmp = ft_realloc_str(dest, s_len + d_len - var_size + 1);
+	if (!tmp)
+		return (NULL);
+	dest = tmp;
+	ft_memmove(dest + index + s_len, dest + index + var_size, tail_len + 1);
+	ft_memcpy(dest + index, src, s_len);
+	free(src);
+	return (dest);
+}
+
 void	change_expansion(t_cmd *head, t_map *env)
 {
-	int i;
-	int j;
-	bool flag;
-	t_cmd *node;
+	int		i;
+	int		j;
+	bool	flag;
+	char	*str;
+	t_cmd	*node;
 
 	node = head;
-	while(node)
+	while (node)
 	{
 		i = 0;
 		flag = false;
 		while (node->args[i])
 		{
 			j = 0;
-			while(node->args[i][j])
+			while (node->args[i][j])
 			{
 				if (node->args[i][j] == '\'')
 					flag = !flag;
 				if (!flag && node->args[i][j] == '$')
-					node->args[i] = verify_var(node->args[i], env);
+				{
+					str = verify_var(node->args[i], env);
+					node->args[i] = expand_str(node->args[i], str, j);
+					for (int l = 0; l < 7; l++)
+						write(1, &node->args[i][l], 1);
+					exit(0);
+				}
 				j++;
 			}
 			i++;
