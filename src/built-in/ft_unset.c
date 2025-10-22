@@ -11,8 +11,6 @@ void    ft_unset(t_cmd *cmd, t_map *env, t_exec *exec)
         while(cmd->args[i])
         {
             env->remove(env, cmd->args[i]);
-            if (i < exec->env_len)
-                exec->env_len--;
             i++;
         }
     }

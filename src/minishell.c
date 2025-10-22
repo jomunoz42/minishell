@@ -2,24 +2,6 @@
 
 void print_struct(t_cmd *head);
 
-static void    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
-{
-    if (!cmd || !cmd->args)
-        return;       
-    if (!ft_strncmp(cmd->args[0], "cd", 3))
-        ft_cd(cmd, env);
-    if (!ft_strncmp(cmd->args[0], "echo", 5))
-        ft_echo(cmd, env);
-    if (!ft_strncmp(cmd->args[0], "pwd", 4))
-        ft_pwd(env);
-    if (!ft_strncmp(cmd->args[0], "env", 4))
-        ft_env(env);
-    if (!ft_strncmp(cmd->args[0], "export", 7))
-        ft_export(cmd, env, exec);
-    if (!ft_strncmp(cmd->args[0], "unset", 6))
-        ft_unset(cmd, env, exec);
-}
-
 void free_list(t_cmd *all)
 {
     t_cmd *current;
