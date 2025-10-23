@@ -52,9 +52,9 @@ static void	handling_here_doc(t_redir *redir_temp, t_exec *exec)
 	char	*line;
 	int 	size;
 
-	redir_temp->fd = open(redir_temp->args[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (exec->in == -1)
-		handling_errors(exec, redir_temp->args[1], 1);
+	redir_temp->fd = open("temp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (redir_temp->fd == -1)
+		handling_errors(exec, "temp", 1);
 	pid = fork();
 	if (pid == -1)
 		handling_errors(exec, NULL, 4);
@@ -78,54 +78,14 @@ static void	handling_here_doc(t_redir *redir_temp, t_exec *exec)
 	}
 }
 
-static int true_last_here_doc(t_cmd *cmd_temp)
-{
-	t_redir *redir_temp;
-
-	redir_temp = cmd_temp->redir;
-	while(cmd_temp)
-	{
-		while(redir_temp)
-		{
-			if (ft_strncmp(redir_temp->args[0], "<<", 3) == 0)
-				return (0);
-			redir_temp = redir_temp->next;
-		}
-		cmd_temp = cmd_temp->next;
-	}
-	return (1);
-}
-
-static void   mark_last_heredoc(t_cmd *cmd_temp, t_exec *exec, int marker)
-{
-	t_redir *redir_temp;
-
-	redir_temp = cmd_temp->redir;
-	while(redir_temp)
-	{
-		if (ft_strncmp(redir_temp->args[0], "<<", 3) == 0)
-			marker--;
-		if (marker == 0)
-		{
-			if (true_last_here_doc(cmd_temp))
-				redir_temp->last_here_doc = 2;
-			else
-				redir_temp->last_here_doc = 1;
-		}
-		redir_temp = redir_temp->next;
-	}
-}
-
 void   execute_heredocs(t_cmd *cmd, t_exec *exec)
 {
 	t_cmd 	*cmd_temp;
 	t_redir *redir_temp;
-	int   marker;
 
 	cmd_temp = cmd;
 	while(cmd_temp)
 	{
-		marker = 0;
 		redir_temp = cmd_temp->redir;
 		while(redir_temp)
 		{
@@ -133,16 +93,9 @@ void   execute_heredocs(t_cmd *cmd, t_exec *exec)
 			{
 				handling_here_doc(redir_temp, exec);
 				wait(NULL);
-				redir_temp->last_here_doc = 0;
-				marker++;
 			}
 			redir_temp = redir_temp->next;
 		}
-		mark_last_heredoc(cmd_temp, exec, marker);
 		cmd_temp = cmd_temp->next;
 	}
 }
-
-
-
-// HERE DOC DOESN'T WRITE TO THE LAST INFILE IF THERE IS MORE THAN ONE.

@@ -35,32 +35,31 @@ static void waiting_proccesses(t_cmd *cmd, t_exec *exec)
 	}
 }
 
-static void redirections(t_cmd *cmd, t_map *env, t_exec *exec)
+static void redirections(t_redir *redir, t_map *env, t_exec *exec)
 {
-	if (ft_strncmp(cmd->redir->args[0], "<<", 3) == 0)
+	if (!redir)
+		return ;
+	if (ft_strncmp(redir->args[0], "<<", 3) == 0)
 	{
-		close (cmd->redir->fd);
-		exec->in = open(cmd->redir->args[1], O_RDONLY);
-		// exec->in = cmd->redir->fd;
-		// close ??
+		exec->in = open("temp", O_RDONLY);
 	}
-	else if (ft_strncmp(cmd->redir->args[0], "<", 2) == 0)
+	if (ft_strncmp(redir->args[0], "<", 2) == 0)
 	{
-		exec->in = open(cmd->redir->args[1], O_RDONLY);
+		exec->in = open(redir->args[1], O_RDONLY);
 		if (exec->in == -1)
-			handling_errors(exec, cmd->redir->args[1], 1);
+			handling_errors(exec, redir->args[1], 1);
 	}
-	else if (ft_strncmp(cmd->redir->args[0], ">>", 3) == 0)
+	if (ft_strncmp(redir->args[0], ">>", 3) == 0)
 	{
-		exec->out = open(cmd->redir->args[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+		exec->out = open(redir->args[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
 		if (exec->out == -1)
-			handling_errors(exec, cmd->redir->args[1], 2);
+			handling_errors(exec, redir->args[1], 2);
 	}
-	else if (ft_strncmp(cmd->redir->args[0], ">", 2) == 0)
+	if (ft_strncmp(redir->args[0], ">", 2) == 0)
 	{
-		exec->out = open(cmd->redir->args[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		exec->out = open(redir->args[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (exec->out == -1)
-			handling_errors(exec, cmd->redir->args[1], 2);
+			handling_errors(exec, redir->args[1], 2);
 	}
 }
 
@@ -71,17 +70,12 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 		handling_errors(exec, NULL, 4);
 	if (!cmd->pid)
 	{
-	
 		dup2(exec->in, 0);
 		close(exec->in);
 		dup2(exec->out, 1);
 		close(exec->out);
-		// if (exec->pipefd[0])
-		// 	close(exec->pipefd[0]);
-		// if (exec->infile != -1)
-		// 	close(exec->infile);
-		// if (exec->outfile != -1)
-		// 	close(exec->outfile);
+		if (exec->pipefd[0])
+			close(exec->pipefd[0]);
 		execve(cmd->args[0], cmd->args, env->to_str(env));
 		// handle_path_not_found(cmd->args[0], cmd->args);
 	}
@@ -109,7 +103,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)  // env ??
 				handling_errors(exec, NULL, 3);
 			exec->out = exec->pipefd[1];
 		}
-		redirections(temp, env, exec);
+		redirections(temp->redir, env, exec);
 		create_children(temp, env, exec);
 		exec->in = exec->pipefd[0];
 		temp = temp->next;
