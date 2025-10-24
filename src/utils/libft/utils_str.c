@@ -2,11 +2,16 @@
 
 #include "minishell.h"
 
-int ft_strlen(const char *s)
+int	ft_strlen(const char *s)
 {
-    if (!s || !*s)
-        return 0;
-    return (1 + ft_strlen(s + 1));
+	int	i;
+
+	if (!s)
+		return (0);
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
 
 size_t	ft_strlcpy(char *dest, const char *src, size_t size)
@@ -27,14 +32,14 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 
 char	*ft_strdup(const char *s)
 {
+	int		len;
 	char	*copy;
 
-	if (!s)
-		return (NULL);
-	copy = (char *)malloc((ft_strlen(s) + 1) * sizeof(char));
+	len = ft_strlen(s);
+	copy = ft_calloc((len + 1), sizeof(char));
 	if (!copy)
 		return (NULL);
-	ft_strlcpy(copy, s, ft_strlen(s) + 1);
+	ft_strlcpy(copy, s, len + 1);
 	return (copy);
 }
 

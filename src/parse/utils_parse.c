@@ -74,8 +74,8 @@ void	revert_quote(char **line)
 
 int	count_redir(char *str)
 {
-	int	i;
-	char c;
+	int		i;
+	char	c;
 
 	i = 0;
 	c = str[i];

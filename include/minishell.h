@@ -79,6 +79,7 @@ int					count_redir(char *str);
 int					init_redir(t_cmd *head);
 t_redir				*new_redir(t_cmd *head, int i);
 int					remove_redir(t_cmd *head, int i);
+int					change_expansion(t_cmd *head, t_map *env);
 
 //==========================UTILS=========================
 
