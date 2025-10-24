@@ -42,12 +42,9 @@ void	handle_path_not_found(char *path, char **cmd)
 
 void	close_everything(t_exec *exec)
 {
-	if (exec->infile != -1)
-		close(exec->infile);
-	if (exec->outfile != -1)
-		close(exec->outfile);
-	if (exec->pipefd[0] != -1)
-		close(exec->pipefd[0]);
-	if (exec->pipefd[1] != -1)
-		close(exec->pipefd[1]);
+	if (exec->in != -1)
+		close(exec->in);
+	if (exec->out != -1)
+		close(exec->out);
+
 } 

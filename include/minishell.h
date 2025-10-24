@@ -27,14 +27,10 @@
 
 typedef struct s_exec
 {
-	int				infile;
-	int				outfile;
 	int				in;
 	int				out;
 	int				pipefd[2];
 	int				status;
-
-
 
 	int				eof_no_limiter;
 }					t_exec;
@@ -44,7 +40,6 @@ typedef struct s_redir
 	char			*args[2];
 	struct s_redir	*next;
 	int				fd;
-	int				last_here_doc;
 }					t_redir;
 
 typedef struct s_cmd
@@ -70,6 +65,7 @@ void				ft_exit(int status);
 //=======================EXECUTION========================
 
 char				*get_absolute_path(t_map *env, char *cmd);
+int    				is_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
 void   				execute_heredocs(t_cmd *cmd, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 void				handling_errors(t_exec *exec, char *arg, int error_id);

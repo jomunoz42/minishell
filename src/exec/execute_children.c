@@ -1,25 +1,6 @@
 
 #include "minishell.h"
 
-static int    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec) // return values
-{
-    if (!cmd || !cmd->args)
-        return (0);  // ?       
-    if (!ft_strncmp(cmd->args[0], "cd", 3))
-        ft_cd(cmd, env);
-    if (!ft_strncmp(cmd->args[0], "echo", 5))
-        ft_echo(cmd, env);
-    if (!ft_strncmp(cmd->args[0], "pwd", 4))
-        ft_pwd(env);
-    if (!ft_strncmp(cmd->args[0], "env", 4))
-        ft_env(env);
-    if (!ft_strncmp(cmd->args[0], "export", 7))
-        ft_export(cmd, env, exec);
-    if (!ft_strncmp(cmd->args[0], "unset", 6))
-        ft_unset(cmd, env, exec);
-	return (0);
-}
-
 static void waiting_proccesses(t_cmd *cmd, t_exec *exec)
 {
 	t_cmd *temp;
@@ -37,29 +18,37 @@ static void waiting_proccesses(t_cmd *cmd, t_exec *exec)
 
 static void redirections(t_redir *redir, t_map *env, t_exec *exec)
 {
-	if (!redir)
-		return ;
-	if (ft_strncmp(redir->args[0], "<<", 3) == 0)
+	while(redir)
 	{
-		exec->in = open("temp", O_RDONLY);
-	}
-	if (ft_strncmp(redir->args[0], "<", 2) == 0)
-	{
-		exec->in = open(redir->args[1], O_RDONLY);
-		if (exec->in == -1)
-			handling_errors(exec, redir->args[1], 1);
-	}
-	if (ft_strncmp(redir->args[0], ">>", 3) == 0)
-	{
-		exec->out = open(redir->args[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
-		if (exec->out == -1)
-			handling_errors(exec, redir->args[1], 2);
-	}
-	if (ft_strncmp(redir->args[0], ">", 2) == 0)
-	{
-		exec->out = open(redir->args[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (exec->out == -1)
-			handling_errors(exec, redir->args[1], 2);
+		if (ft_strncmp(redir->args[0], "<<", 3) == 0)
+		{
+			close(exec->in);
+			exec->in = open("temp", O_RDONLY);
+			if (exec->in == -1)
+				handling_errors(exec, redir->args[1], 1);
+		}
+		if (ft_strncmp(redir->args[0], "<", 2) == 0)
+		{
+			close(exec->in);
+			exec->in = open(redir->args[1], O_RDONLY);
+			if (exec->in == -1)
+				handling_errors(exec, redir->args[1], 1);
+		}
+		if (ft_strncmp(redir->args[0], ">>", 3) == 0)
+		{
+			close(exec->out);
+			exec->out = open(redir->args[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+			if (exec->out == -1)
+				handling_errors(exec, redir->args[1], 2);
+		}
+		if (ft_strncmp(redir->args[0], ">", 2) == 0)
+		{
+			close(exec->out);
+			exec->out = open(redir->args[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			if (exec->out == -1)
+				handling_errors(exec, redir->args[1], 2);
+		}
+		redir = redir->next;
 	}
 }
 
@@ -90,6 +79,8 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)  // env ??
 	t_cmd *temp;
 
 	temp = cmd;
+	exec->in = -1;
+	exec->out = -1;
 	if (is_built_in(cmd, env, exec))
 		return ;
 	execute_heredocs(cmd, exec);
@@ -101,6 +92,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)  // env ??
 		{
 			if (pipe(exec->pipefd) == -1)
 				handling_errors(exec, NULL, 3);
+			close(exec->out);
 			exec->out = exec->pipefd[1];
 		}
 		redirections(temp->redir, env, exec);
@@ -113,6 +105,16 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)  // env ??
 
 
 
+// Temporary heredoc file handling:
 
+// You overwrite exec->in and exec->out multiple times          SEEMS CORRECT - 
+
+// Close pipefd in parent processes properly:             SEEMS CORRECT - 
+
+// Exit codes of commands
+
+
+		// Variable expansion in heredocs: Bash may do expansions
+	// in heredoc content unless quotes are used around delimiters.
 
 // cat /dev/random | echo a

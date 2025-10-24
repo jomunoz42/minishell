@@ -28,6 +28,25 @@ char	*get_absolute_path(t_map *env, char *cmd)
 	return (cmd);
 }
 
+int    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec) // return values
+{
+    if (!cmd || !cmd->args)
+        return (0);  // ?       
+    if (!ft_strncmp(cmd->args[0], "cd", 3))
+        ft_cd(cmd, env);
+    if (!ft_strncmp(cmd->args[0], "echo", 5))
+        ft_echo(cmd, env);
+    if (!ft_strncmp(cmd->args[0], "pwd", 4))
+        ft_pwd(env);
+    if (!ft_strncmp(cmd->args[0], "env", 4))
+        ft_env(env);
+    if (!ft_strncmp(cmd->args[0], "export", 7))
+        ft_export(cmd, env, exec);
+    if (!ft_strncmp(cmd->args[0], "unset", 6))
+        ft_unset(cmd, env, exec);
+	return (0);
+}
+
 // static void	ctrl_d_pressed(t_cmd *cmd, char **argv, char *line)
 // {
 // 	if (!line)
@@ -46,36 +65,35 @@ char	*get_absolute_path(t_map *env, char *cmd)
 // 	}
 // }
 
-static void	handling_here_doc(t_redir *redir_temp, t_exec *exec)
+static void	handling_here_doc(t_redir *redir, t_exec *exec)
 {
 	pid_t   pid;
 	char	*line;
 	int 	size;
 
-	redir_temp->fd = open("temp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (redir_temp->fd == -1)
+	redir->fd = open("temp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (redir->fd == -1)
 		handling_errors(exec, "temp", 1);
 	pid = fork();
 	if (pid == -1)
 		handling_errors(exec, NULL, 4);
 	if (!pid)
 	{
-		size = ft_strlen(redir_temp->args[1]);
+		size = ft_strlen(redir->args[1]);
 		while (1)
 		{
 			line = get_next_line(0);
-			if (!line || !*line || ((ft_strncmp(redir_temp->args[1], line, size) == 0)
+			if (!line || !*line || ((ft_strncmp(redir->args[1], line, size) == 0)
 					&& line[size] == '\n'))
 			{
 				free(line);
 				break ;
 			}
-			write(redir_temp->fd, line, ft_strlen(line));
-			free(line);
+			(write(redir->fd, line, ft_strlen(line)), free(line));
 		}
-		close(redir_temp->fd);
-		exit(0);
+		(close(redir->fd), exit(0));
 	}
+	close(redir->fd);
 }
 
 void   execute_heredocs(t_cmd *cmd, t_exec *exec)
@@ -99,3 +117,5 @@ void   execute_heredocs(t_cmd *cmd, t_exec *exec)
 		cmd_temp = cmd_temp->next;
 	}
 }
+
+  

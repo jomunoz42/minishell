@@ -39,7 +39,7 @@ int main(int argc, char **argv, char **environ)
     copy_env(env, environ, &exec);
     while (1)
     {
-        input = readline("<minishell>: ");
+        input = readline("minishell$ ");
         if (*input)
             add_history(input);
         cmd = parsing(input, NULL, env);
