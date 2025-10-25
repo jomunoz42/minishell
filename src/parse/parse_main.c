@@ -108,9 +108,34 @@ char	*primary_check(char *input)
 
 void remove_quotes(t_cmd *head)
 {
+	int i = 0;;
+	int j = 0;
+	bool flag;
+	char c;
 	t_cmd *node;
 
 	node = head;
+	while (node)
+	{
+		i = 0;
+		flag = false;
+		while (node->args[i])
+		{
+			j = 0;
+			while (node->args[i][j])
+			{
+				if (node->args[i][j] == '"' || node->args[i][j] == '\'')
+				{
+					flag = !flag;
+					c = node->args[i][j];
+				}
+				
+				j++;
+			}
+			i++;
+		}
+		node = node->next;
+	}
 }
 
 t_cmd	*parsing(char *input, t_cmd *head, t_map *env)

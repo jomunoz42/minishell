@@ -112,5 +112,5 @@ int	change_expansion(t_cmd *head, t_map *env)
 		}
 		node = node->next;
 	}
-	return (0);
+	return (1);
 }
