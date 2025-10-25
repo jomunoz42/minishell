@@ -106,6 +106,13 @@ char	*primary_check(char *input)
 	return (dup);
 }
 
+void remove_quotes(t_cmd *head)
+{
+	t_cmd *node;
+
+	node = head;
+}
+
 t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 {
 	int		i;
@@ -129,6 +136,8 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 	free_double(line);
 	if (!init_redir(head) || !check_sintax(head))
 		return (NULL);
-	change_expansion(head, env);
+	if (!change_expansion(head, env))
+		return (NULL);
+	//remove_quotes(head);
 	return (head);
 }

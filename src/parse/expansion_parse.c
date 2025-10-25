@@ -34,7 +34,7 @@ int	check_size(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] && str[i] != ' ')
+	while (str[i] && str[i] != ' ' && str[i] != '"' && str[i] != '\'')
 		i++;
 	return (i);
 }
@@ -53,7 +53,7 @@ char	*expand_str(char *dest, char *src, int index)
 	tail_len = ft_strlen(dest + index + var_size);
 	if (*src)
 	{
-		tmp = ft_realloc_str(dest, s_len + d_len - var_size + 2);
+		tmp = ft_realloc_str(dest, s_len + d_len - var_size + 1);
 		if (!tmp)
 			return (NULL);
 		dest = tmp;
