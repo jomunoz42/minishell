@@ -104,6 +104,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)  // env ??
 	waiting_proccesses(cmd, exec);
 }
 
+// cat < 2.txt < 1.txt | cat > 3.txt
 
 
 // Temporary heredoc file handling:

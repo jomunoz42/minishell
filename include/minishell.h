@@ -104,12 +104,10 @@ char				*ft_realloc_str(char *str, int len);
 int					arr_count(char **arr);
 char				*get_next_line(int fd);
 
-
 //=========================LIBFT==========================
 
 char				*ft_strdup(const char *s);
 int					ft_strlen(const char *s);
-char				*ft_itoa(int n);
 char				**ft_split(char const *s, char c);
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 char				*ft_strjoin(char const *s1, char const *s2);
@@ -124,6 +122,10 @@ int					ft_lstsize(t_cmd *lst);
 void				*ft_memmove(void *dest, const void *src, size_t n);
 char				*ft_strdup(const char *s);
 void				*ft_memcpy(void *dest, const void *src, size_t n);
+int					ft_atoi(const char *nptr);
+char				*ft_itoa_jomunoz(int nbr);
+char				*ft_itoa(int n);
+
 
 # define COPY ft_strdup
 
