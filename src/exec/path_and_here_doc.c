@@ -71,9 +71,9 @@ static void	handling_here_doc(t_redir *redir, t_exec *exec)
 	char	*line;
 	int 	size;
 
-	redir->fd = open("temp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	redir->fd = open("/tmp/mini_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (redir->fd == -1)
-		handling_errors(exec, "temp", 1);
+		handling_errors(exec, "/tmp/mini_temp", 1);
 	pid = fork();
 	if (pid == -1)
 		handling_errors(exec, NULL, 4);

@@ -23,7 +23,7 @@ static void redirections(t_redir *redir, t_map *env, t_exec *exec)
 		if (ft_strncmp(redir->args[0], "<<", 3) == 0)
 		{
 			close(exec->in);
-			exec->in = open("temp", O_RDONLY);
+			exec->in = open("/tmp/mini_temp", O_RDONLY);
 			if (exec->in == -1)
 				handling_errors(exec, redir->args[1], 1);
 		}
@@ -67,6 +67,7 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 			close(exec->pipefd[0]);
 		execve(cmd->args[0], cmd->args, env->to_str(env));
 		// handle_path_not_found(cmd->args[0], cmd->args);
+		exit(1);
 	}
 	if (exec->in)
 		close(exec->in);
