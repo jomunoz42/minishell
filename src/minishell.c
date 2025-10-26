@@ -39,6 +39,7 @@ int main(int argc, char **argv, char **environ)
     copy_env(env, environ, &exec);
     while (1)
     {
+        printf("pid - %d\n", getpid());
         input = readline("minishell$ ");
         if (*input)
             add_history(input);
@@ -56,4 +57,5 @@ int main(int argc, char **argv, char **environ)
     free_list(cmd);
     rl_clear_history();
     env->destroy(env);
+    unlink("/tmp/mini_temp");
 }
