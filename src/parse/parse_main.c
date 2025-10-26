@@ -106,32 +106,42 @@ char	*primary_check(char *input)
 	return (dup);
 }
 
+void find_quotes(char *str, int i)
+{
+	int j = 0;
+	char quote;
+
+	if (!str[i])
+		return;
+	if (str[i] == '"' || str[i] == '\'')
+	{
+		quote = str[i];
+		j = i + 1;
+		while (str[j] && str[j] != quote)
+			j++;
+		if (str[j] == quote)
+		{
+			ft_memmove(str + j, str + j + 1, ft_strlen(str + j + 1) + 1);
+			ft_memmove(str + i, str + i + 1, ft_strlen(str + i + 1) + 1);
+			find_quotes(str, i);
+			return;
+		}
+	}
+	find_quotes(str, i + 1);
+}
+
 void remove_quotes(t_cmd *head)
 {
 	int i = 0;;
-	int j = 0;
-	bool flag;
-	char c;
 	t_cmd *node;
 
 	node = head;
 	while (node)
 	{
 		i = 0;
-		flag = false;
 		while (node->args[i])
 		{
-			j = 0;
-			while (node->args[i][j])
-			{
-				if (node->args[i][j] == '"' || node->args[i][j] == '\'')
-				{
-					flag = !flag;
-					c = node->args[i][j];
-				}
-				
-				j++;
-			}
+			find_quotes(node->args[i], 0);
 			i++;
 		}
 		node = node->next;
@@ -163,6 +173,6 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 		return (NULL);
 	if (!change_expansion(head, env))
 		return (NULL);
-	//remove_quotes(head);
+	remove_quotes(head);
 	return (head);
 }
