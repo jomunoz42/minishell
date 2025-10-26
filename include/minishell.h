@@ -21,17 +21,18 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 50
+# endif
+
 typedef struct s_exec
 {
-	int				infile;
-	int				outfile;
 	int				in;
 	int				out;
 	int				pipefd[2];
-	int				eof_no_limiter;
 	int				status;
 
-	int				env_len;
+	int				eof_no_limiter;
 }					t_exec;
 
 typedef struct s_redir
@@ -63,9 +64,13 @@ void				ft_exit(int status);
 
 //=======================EXECUTION========================
 
-void				handle_path_not_found(char *path, char **cmd);
 char				*get_absolute_path(t_map *env, char *cmd);
+int    				is_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
+void   				execute_heredocs(t_cmd *cmd, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
+void				handling_errors(t_exec *exec, char *arg, int error_id);
+void				handle_path_not_found(char *path, char **cmd);
+void				close_everything(t_exec *exec);
 
 //========================PARSING=========================
 
@@ -92,12 +97,13 @@ int					handle_folder_errors(t_cmd *cmd, char *path);
 int					file_or_directory(char *path);
 void				handle_cd_errors(char *path, int error_id);
 char				*find_last_slash(char *current_pwd);
-int					count_arguments(char **input);
 char				*ft_strjoin_free(char *s1, char *s2);
 void				free_double(char **arg);
 void				error_exit(char *s, int code);
 char				*ft_realloc_str(char *str, int len);
 int					arr_count(char **arr);
+char				*get_next_line(int fd);
+
 
 //=========================LIBFT==========================
 

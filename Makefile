@@ -6,14 +6,14 @@
 #    By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
-#    Updated: 2025/10/13 18:19:47 by pbongiov         ###   ########.fr        #
+#    Updated: 2025/10/24 13:49:43 by jomunoz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
 
-CFLAGS = -Iinclude #-Wall -Wextra -Werror
+CFLAGS = -g -Iinclude #-Wall -Wextra -Werror
 
 LDFLAGS = -lreadline
 
@@ -49,5 +49,8 @@ vl:
 
 vc:
 	make re && clear && valgrind --track-origins=yes --suppressions=readline.supp ./$(NAME)
+
+vall:
+	make re && clear && valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=readline.supp ./$(NAME)
 
 .PHONY: all clean fclean re r
