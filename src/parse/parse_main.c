@@ -162,7 +162,7 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 	i = 0;
 	while (line[i])
 	{
-		head = separate_args(head, line[i]);
+		head = separate_args(head, line[i], env);
 		if (!head)
 			return (free_double(line), NULL);
 		i++;
@@ -173,6 +173,6 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 		return (NULL);
 	if (!change_expansion(head, env))
 		return (NULL);
-	remove_quotes(head);
+	//remove_quotes(head);
 	return (head);
 }

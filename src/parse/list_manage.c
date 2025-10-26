@@ -15,7 +15,7 @@ t_cmd *new_node(char **args, t_map *env)
 	return (node);
 }
 
-t_cmd	*separate_args(t_cmd *head, char *line)
+t_cmd	*separate_args(t_cmd *head, char *line, t_map *env)
 {
 	char	**args;
 	t_cmd	*node;
@@ -26,10 +26,10 @@ t_cmd	*separate_args(t_cmd *head, char *line)
 		return (perror("Allocation Error"), NULL);
 	revert_quote(args);
 	if (!head)
-		head = new_node(args);
+		head = new_node(args, env);
 	else
 	{
-		node = new_node(args);
+		node = new_node(args, env);
 		if (!node)
 			return (NULL);
 		current = head;
