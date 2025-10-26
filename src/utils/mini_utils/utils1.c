@@ -49,15 +49,3 @@ int is_there_value(char *vars)
     }
     return (0);
 }
-
-int count_arguments(char **input)
-{
-    int i;
-
-    i = 0;
-    if (!input || !*input)
-        return (i);
-    while(input[i])
-        i++;
-    return(i);
-}

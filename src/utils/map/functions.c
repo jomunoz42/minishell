@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:55:11 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/19 18:06:19 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/10/26 19:46:04 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	__put(t_map_extra *this, char *key, char *value)
 			free(node->value);
 			// free(key);   // check this in the future
 			node->value = value; 
-			// Meti o dup aqui (esta merda resolveu a cena do env fodido)
 			return ;
 		}
 		node = node->next;
@@ -80,9 +79,7 @@ void	__remove(t_map_extra *this, char *key)
 				this->head = node->next;
 			if (node == this->tail)
                 this->tail = prev;
-			free(node->key);
-			free(node->value);
-			free(node);
+			(free(node->key), free(node->value), free(node));
 			this->size--;
 			if (this->size == 0)
                 this->tail = NULL;

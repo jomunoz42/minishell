@@ -20,13 +20,13 @@ static void	print_export(char **vars)
 	free(vars);
 }
 
-static char	**sort_vars(char **vars, int start, int end)
+static char	**sort_vars(char **vars)
 {
 	int		i;
 	char	*tmp;
 
-	i = start;
-	while (vars[i] && vars[i + 1] && i < end)
+	i = 0;
+	while (vars[i] && vars[i + 1])
 	{
 		if (ft_strcmp(vars[i], vars[i + 1]) > 0)
 		{
@@ -81,7 +81,7 @@ char	*create_var(t_node *node)
 	return (result);
 }
 
-void	ft_export(t_cmd *cmd, t_map *env, t_exec *x)
+void	ft_export(t_cmd *cmd, t_map *env, t_exec *x) //  REMEMBER TO TEST THE CHANGE (NO SOUBLE SORT)
 {
 	t_node	*node;
 	char	**copy;
@@ -106,11 +106,6 @@ void	ft_export(t_cmd *cmd, t_map *env, t_exec *x)
 			node = node->next;
 		}
 		copy[i] = NULL;
-		print_export(sort_vars(sort_vars(copy, 0, x->env_len), x->env_len, i));
+		print_export(sort_vars(copy));
 	}
 }
-
-//         STILL NEED TO DO
-
-//         a=$PATH     gives a the value of PATH
-//         a='$PATH'   gives a the name of the variable
