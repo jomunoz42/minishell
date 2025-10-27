@@ -35,7 +35,7 @@ int	quote_handler(char *input)
 		return (0);
 	while (input[i])
 	{
-		if (input[i] == '"')
+		if (input[i] == '\'')
 			s_flag = !s_flag;
 		if (input[i] == '"')
 			d_flag = !d_flag;
@@ -72,19 +72,45 @@ void	revert_quote(char **line)
 	}
 }
 
-int	count_redir(char *str)
+void	find_quotes(char *str, int i)
+{
+	int		j;
+	char	quote;
+
+	if (!str[i])
+		return ;
+	j = 0;
+	if (str[i] == '"' || str[i] == '\'')
+	{
+		quote = str[i];
+		j = i + 1;
+		while (str[j] && str[j] != quote)
+			j++;
+		if (str[j] == quote)
+		{
+			ft_memmove(str + j, str + j + 1, ft_strlen(str + j + 1) + 1);
+			ft_memmove(str + i, str + i + 1, ft_strlen(str + i + 1) + 1);
+			find_quotes(str, j - 1);
+			return ;
+		}
+	}
+	find_quotes(str, i + 1);
+}
+
+void	remove_quotes(t_cmd *head)
 {
 	int		i;
-	char	c;
+	t_cmd	*node;
 
-	i = 0;
-	c = str[i];
-	while (str[i] == '<' || str[i] == '>')
+	node = head;
+	while (node)
 	{
-		if (str[i] == c)
+		i = 0;
+		while (node->args[i])
+		{
+			find_quotes(node->args[i], 0);
 			i++;
-		else
-			return (0);
+		}
+		node = node->next;
 	}
-	return (i > 2);
 }

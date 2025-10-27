@@ -65,8 +65,8 @@ void				ft_exit(int status);
 //=======================EXECUTION========================
 
 char				*get_absolute_path(t_map *env, char *cmd);
-int    				is_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
-void   				execute_heredocs(t_cmd *cmd, t_exec *exec);
+int					is_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
+void				execute_heredocs(t_cmd *cmd, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 void				handling_errors(t_exec *exec, char *arg, int error_id);
 void				handle_path_not_found(char *path, char **cmd);
@@ -85,6 +85,8 @@ int					init_redir(t_cmd *head);
 t_redir				*new_redir(t_cmd *head, int i);
 int					remove_redir(t_cmd *head, int i);
 int					change_expansion(t_cmd *head, t_map *env);
+void				remove_quotes(t_cmd *head);
+t_redir				*redir_start(t_cmd *head, int i);
 
 //==========================UTILS=========================
 
@@ -103,7 +105,6 @@ void				error_exit(char *s, int code);
 char				*ft_realloc_str(char *str, int len);
 int					arr_count(char **arr);
 char				*get_next_line(int fd);
-
 
 //=========================LIBFT==========================
 

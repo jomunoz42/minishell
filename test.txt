@@ -1,1 +1,65 @@
-How to test cd
+echo "olá mundo"
+echo 'olá mundo'
+echo "olá 'mundo'"
+echo 'olá "mundo"'
+#######echo "\"aspas duplas dentro de duplas\""
+#######echo '\'aspas simples dentro de simples?\''
+
+export VAR="mundo"
+
+echo $VAR
+echo "$VAR"
+echo '$VAR'
+echo "olá $VAR"
+echo 'olá $VAR'
+#######echo "$VAR!"'!!'
+
+unset VAR
+echo "$VAR"
+#######echo ${VAR:-"valor padrão"}
+export VAR="test"
+#######echo ${VAR:-"valor padrão"}
+#######echo "->${VAR}<-"
+
+#######echo \"aqui\"
+#######echo "aqui\"também\""
+#######echo 'aqui\'não\''
+#######echo "barra invertida \\ dentro de aspas"
+
+#######echo "Data: $(date)"
+#######echo 'Data: $(date)'
+#######echo "Resultado: `echo ola`"
+#######echo 'Resultado: `echo ola`'
+
+export X=foo
+export Y=bar
+#######echo "$X$Y"
+echo '$X$Y'
+echo "$X""$Y"
+echo "$X"'$Y'
+
+echo "abc'def"
+echo 'abc"def'
+echo "'"
+echo '"'
+#######echo "\"'"
+#######echo "'\""
+echo "a'b'c"d"e"
+echo "a'b'c" 'd"e"f'
+echo "  espaço no fim "    
+echo "   vários    espaços   no meio   "
+echo "'   espaços dentro de aspas   '"
+
+export VAR="palavra com espaço"
+echo $VAR
+echo "$VAR"
+echo "$VAR e mais"
+#######echo "$VAR\ e\ escape"
+
+======BONUS======
+echo "a"; echo "b"
+echo "a" ;echo "b"
+echo "a"&&echo "b"
+echo "a"||echo "b"
+echo "a && b"
+==================
