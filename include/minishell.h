@@ -32,6 +32,9 @@ typedef struct s_exec
 	int				pipefd[2];
 	int				status;
 
+	bool			no_permission;
+	bool			no_file;
+
 	int				eof_no_limiter;
 }					t_exec;
 
@@ -54,7 +57,7 @@ typedef struct s_cmd
 
 //========================BUILTINS========================
 
-int					ft_echo(t_cmd *cmd, t_map *env);
+int					ft_echo(t_cmd *cmd, t_map *env, t_exec *exec);
 int					ft_cd(t_cmd *cmd, t_map *env);
 int					ft_pwd(t_map *env);
 void				ft_export(t_cmd *cmd, t_map *env, t_exec *exec);

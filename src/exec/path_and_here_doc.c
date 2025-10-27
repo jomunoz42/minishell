@@ -2,6 +2,25 @@
 
 #include "minishell.h"
 
+static int    is_it_built_in(char *cmd)
+{
+    if (!cmd)
+        return (0);     
+    if (!ft_strncmp(cmd, "cd", 3))
+        return (1);
+    if (!ft_strncmp(cmd, "echo", 5))
+        return (1);
+    if (!ft_strncmp(cmd, "pwd", 4))
+        return (1);
+    if (!ft_strncmp(cmd, "env", 4))
+        return (1);
+    if (!ft_strncmp(cmd, "export", 7))
+        return (1);
+    if (!ft_strncmp(cmd, "unset", 6))
+        return (1);
+	return (0);
+}
+
 char	*get_absolute_path(t_map *env, char *cmd)
 {
 	char	**dirs;
@@ -10,6 +29,8 @@ char	*get_absolute_path(t_map *env, char *cmd)
 	char	*str;
 	int		i;
 
+	if (is_it_built_in(cmd))
+		return (cmd);
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
 	str = env->get(env, "PATH");
@@ -33,17 +54,17 @@ int    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec) // return values
     if (!cmd || !cmd->args)
         return (0);  // ?       
     if (!ft_strncmp(cmd->args[0], "cd", 3))
-        ft_cd(cmd, env);
+        return (ft_cd(cmd, env), 1);
     if (!ft_strncmp(cmd->args[0], "echo", 5))
-        ft_echo(cmd, env);
+        return (ft_echo(cmd, env, exec), 1);
     if (!ft_strncmp(cmd->args[0], "pwd", 4))
-        ft_pwd(env);
+        return (ft_pwd(env), 1);
     if (!ft_strncmp(cmd->args[0], "env", 4))
-        ft_env(env);
+        return (ft_env(env), 1);
     if (!ft_strncmp(cmd->args[0], "export", 7))
-        ft_export(cmd, env, exec);
+        return (ft_export(cmd, env, exec), 1);
     if (!ft_strncmp(cmd->args[0], "unset", 6))
-        ft_unset(cmd, env, exec);
+       return (ft_unset(cmd, env, exec), 1);
 	return (0);
 }
 

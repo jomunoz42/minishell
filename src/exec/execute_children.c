@@ -14,41 +14,46 @@ static void waiting_proccesses(t_cmd *cmd, t_exec *exec)
 			waitpid(temp->pid, NULL, 0);
 		temp = temp->next;
 	}
+	if (WIFEXITED(exec->status))
+    	exec->status = WEXITSTATUS(exec->status);
 }
 
 static void redirections(t_redir *redir, t_map *env, t_exec *exec)
 {
-	while(redir)
+	t_redir *temp;
+
+	temp = redir;
+	while(temp)
 	{
-		if (ft_strncmp(redir->args[0], "<<", 3) == 0)
+		if (ft_strncmp(temp->args[0], "<<", 3) == 0)
 		{
 			close(exec->in);
 			exec->in = open("/tmp/mini_temp", O_RDONLY);
 			if (exec->in == -1)
-				handling_errors(exec, redir->args[1], 1);
+				handling_errors(exec, temp->args[1], 1); // check this error id   1??
 		}
-		if (ft_strncmp(redir->args[0], "<", 2) == 0)
+		if (ft_strncmp(temp->args[0], "<", 2) == 0)
 		{
 			close(exec->in);
-			exec->in = open(redir->args[1], O_RDONLY);
+			exec->in = open(temp->args[1], O_RDONLY);
 			if (exec->in == -1)
-				handling_errors(exec, redir->args[1], 1);
+				handling_errors(exec, temp->args[1], 1);
 		}
-		if (ft_strncmp(redir->args[0], ">>", 3) == 0)
+		if (ft_strncmp(temp->args[0], ">>", 3) == 0)
 		{
 			close(exec->out);
-			exec->out = open(redir->args[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+			exec->out = open(temp->args[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
 			if (exec->out == -1)
-				handling_errors(exec, redir->args[1], 2);
+				handling_errors(exec, temp->args[1], 2);
 		}
-		if (ft_strncmp(redir->args[0], ">", 2) == 0)
+		if (ft_strncmp(temp->args[0], ">", 2) == 0)
 		{
 			close(exec->out);
-			exec->out = open(redir->args[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			exec->out = open(temp->args[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 			if (exec->out == -1)
-				handling_errors(exec, redir->args[1], 2);
+				handling_errors(exec, temp->args[1], 2);
 		}
-		redir = redir->next;
+		temp = temp->next;
 	}
 }
 
@@ -65,14 +70,19 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 		close(exec->out);
 		if (exec->pipefd[0])
 			close(exec->pipefd[0]);
+		if (exec->no_file == true)
+			exit(1);
+		if (exec->no_permission == true)     //    check if it can go on handle_path
+			exit(126);
 		execve(cmd->args[0], cmd->args, env->to_str(env));
-		// handle_path_not_found(cmd->args[0], cmd->args);
-		exit(1);
+		handle_path_not_found(cmd->args[0], cmd->args);
 	}
 	if (exec->in)
 		close(exec->in);
 	if (exec->out)
 		close(exec->out);
+	exec->no_file = false;
+	exec->no_permission = false;
 }
 
 void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)  // env ??
