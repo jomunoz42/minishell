@@ -12,7 +12,7 @@ echo "$VAR"
 echo '$VAR'
 echo "olá $VAR"
 echo 'olá $VAR'
-#######echo "$VAR!"'!!'
+echo "$VAR!"'!!'
 
 unset VAR
 echo "$VAR"
@@ -33,7 +33,7 @@ export VAR="test"
 
 export X=foo
 export Y=bar
-#######echo "$X$Y"
+echo "$X$Y"
 echo '$X$Y'
 echo "$X""$Y"
 echo "$X"'$Y'
@@ -54,12 +54,22 @@ export VAR="palavra com espaço"
 echo $VAR
 echo "$VAR"
 echo "$VAR e mais"
-#######echo "$VAR\ e\ escape"
+echo "$VAR\ e\ escape"
 
-======BONUS======
+======BONUS=======
 echo "a"; echo "b"
 echo "a" ;echo "b"
 echo "a"&&echo "b"
 echo "a"||echo "b"
 echo "a && b"
 ==================
+
+Unicas formas possiveis
+
+export NOME="João"
+export VAR_1=123
+export _oculto="sim"
+
+export 1VAR=teste     # começa com número ❌
+export meu-nome="a"   # hífen ❌
+export nome.sobrenome="b"  # ponto ❌

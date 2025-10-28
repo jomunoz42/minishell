@@ -125,6 +125,8 @@ int					ft_lstsize(t_cmd *lst);
 void				*ft_memmove(void *dest, const void *src, size_t n);
 char				*ft_strdup(const char *s);
 void				*ft_memcpy(void *dest, const void *src, size_t n);
+int					ft_isalnum(int c);
+int					ft_isdigit(int c);
 
 # define COPY ft_strdup
 
