@@ -82,28 +82,19 @@ t_redir	*redir_start(t_cmd *head, int i)
 	return (node);
 }
 
-int	init_redir(t_cmd *head)
+int	count_redir(char *str)
 {
 	int		i;
-	t_cmd	*node;
+	char	c;
 
-	node = head;
-	while (node)
+	i = 0;
+	c = str[i];
+	while (str[i] == '<' || str[i] == '>')
 	{
-		i = 0;
-		while (node->args[i])
-		{
-			if (node->args[i][0] == '>' || node->args[i][0] == '<')
-			{
-				if (!node->args[i + 1])
-					return (1);
-				if (!redir_start(node, i))
-					return (0);
-				continue ;
-			}
+		if (str[i] == c)
 			i++;
-		}
-		node = node->next;
+		else
+			return (0);
 	}
-	return (1);
+	return (i > 2);
 }
