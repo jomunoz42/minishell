@@ -14,20 +14,11 @@ echo "olá $VAR"
 echo 'olá $VAR'
 echo "$VAR!"'!!'
 
-unset VAR
-echo "$VAR"
-#######echo ${VAR:-"valor padrão"}
-export VAR="test"
-#######echo ${VAR:-"valor padrão"}
-#######echo "->${VAR}<-"
-
 #######echo \"aqui\"
 #######echo "aqui\"também\""
 #######echo 'aqui\'não\''
 #######echo "barra invertida \\ dentro de aspas"
 
-#######echo "Data: $(date)"
-#######echo 'Data: $(date)'
 #######echo "Resultado: `echo ola`"
 #######echo 'Resultado: `echo ola`'
 
