@@ -78,7 +78,6 @@ t_cmd				*new_node(char **new, t_map *env);
 t_cmd				*separate_args(t_cmd *head, char *line, t_map *env);
 t_cmd				*parsing(char *input, t_cmd *all, t_map *env);
 int					quote_handler(char *input);
-void				revert_quote(char **line);
 char				*unlink_redir(char *str);
 int					count_redir(char *str);
 int					init_redir(t_cmd *head);
@@ -105,6 +104,7 @@ void				error_exit(char *s, int code);
 char				*ft_realloc_str(char *str, int len);
 int					arr_count(char **arr);
 char				*get_next_line(int fd);
+char				identify_quote(char c, char flag);
 
 //=========================LIBFT==========================
 
@@ -125,7 +125,7 @@ int					ft_lstsize(t_cmd *lst);
 void				*ft_memmove(void *dest, const void *src, size_t n);
 char				*ft_strdup(const char *s);
 void				*ft_memcpy(void *dest, const void *src, size_t n);
-int					ft_isalnum(int c);
+int					ft_isalnum_modified(int c);
 int					ft_isdigit(int c);
 
 # define COPY ft_strdup

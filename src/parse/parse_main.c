@@ -1,62 +1,39 @@
 #include "minishell.h"
 
-// void	print_struct(t_cmd *head)
-// {
-// 	t_cmd	*node;
-// 	int		i;
-// 	t_redir	*redir_node;
-
-// 	node = head;
-// 	while (node)
-// 	{
-// 		printf("======== COMANDO =========\n");
-// 		i = 0;
-// 		if (node->args)
-// 		{
-// 			while (node->args[i])
-// 				printf("ARGS: %s\n", node->args[i++]);
-// 		}
-// 		if (node->redir)
-// 		{
-// 			redir_node = node->redir;
-// 			while (redir_node)
-// 			{
-// 				printf("----- REDIRECIONAMENTO ----\n");
-// 				i = 0;
-// 				if (*redir_node->args)
-// 				{
-// 					while (i < 2)
-// 						printf("REDIR: %s\n", redir_node->args[i++]);
-// 				}
-// 				redir_node = redir_node->next;
-// 			}
-// 		}
-// 		printf("==========================\n\n");
-// 		node = node->next;
-// 	}
-// }
-
-int	check_sintax(t_cmd *head)
+void	print_struct(t_cmd *head)
 {
+	t_cmd	*node;
 	int		i;
-	t_redir	*node;
+	t_redir	*redir_node;
 
-	node = head->redir;
+	node = head;
 	while (node)
 	{
+		printf("======== COMANDO =========\n");
 		i = 0;
-		while (node->args[i])
+		if (node->args)
 		{
-			if (count_redir(node->args[i]))
-			{
-				printf("minishell: syntax error near unexpected token\n");
-				return (0);
-			}
-			i++;
+			while (node->args[i])
+				printf("ARGS: %s\n", node->args[i++]);
 		}
+		if (node->redir)
+		{
+			redir_node = node->redir;
+			while (redir_node)
+			{
+				printf("----- REDIRECIONAMENTO ----\n");
+				i = 0;
+				if (*redir_node->args)
+				{
+					while (i < 2)
+						printf("REDIR: %s\n", redir_node->args[i++]);
+				}
+				redir_node = redir_node->next;
+			}
+		}
+		printf("==========================\n\n");
 		node = node->next;
 	}
-	return (1);
 }
 
 int	remove_redir(t_cmd *head, int i)
@@ -114,7 +91,7 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 	input = primary_check(input);
 	if (!input)
 		return (NULL);
-	line = ft_split(input, '|');
+	line = ft_split(input, '\2');
 	if (!line)
 		return (perror("Allocation Error"), NULL);
 	i = 0;
@@ -127,7 +104,7 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 	}
 	free(input);
 	free_double(line);
-	if (!init_redir(head) || !check_sintax(head))
+	if (!init_redir(head))
 		return (NULL);
 	if (!change_expansion(head, env))
 		return (NULL);

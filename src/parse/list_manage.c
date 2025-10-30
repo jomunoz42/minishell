@@ -20,10 +20,9 @@ t_cmd	*separate_args(t_cmd *head, char *line, t_map *env)
 	t_cmd	*node;
 	t_cmd	*current;
 
-	args = ft_split(line, ' ');
+	args = ft_split(line, '\3');
 	if (!args)
 		return (perror("Allocation Error"), NULL);
-	revert_quote(args);
 	if (!head)
 		head = new_node(args, env);
 	else

@@ -45,10 +45,10 @@ int main(int argc, char **argv, char **environ)
         cmd = parsing(input, NULL, env);
         if (cmd)
         {
-            //print_struct(cmd);  
+            print_struct(cmd);  
             if (!ft_strncmp(cmd->args[0], "exit", 4))
                 break;
-            execute_command(cmd, env, &exec);
+            //execute_command(cmd, env, &exec);
         }
         free_list(cmd);
     }

@@ -9,7 +9,7 @@ static char	*pos_redir(char *str, int i)
 		return (NULL);
 	str = tmp;
 	ft_memmove(str + i + 1, str + i, ft_strlen(str + i) + 1);
-	str[i] = ' ';
+	str[i] = '\3';
 	return (str);
 }
 
@@ -22,30 +22,29 @@ static char	*pre_redir(char *str, int i)
 		return (NULL);
 	str = tmp;
 	ft_memmove(str + i, str + i - 1, ft_strlen(str + i - 1) + 1);
-	str[i] = ' ';
+	str[i] = '\3';
 	return (str);
 }
 
 char	*unlink_redir(char *str)
 {
 	int		i;
-	bool	flag;
+	char	flag;
 
 	i = 0;
-	flag = false;
+	flag = 0;
 	while (str[i])
 	{
-		if (str[i] == '"')
-			flag = !flag;
+		flag = identify_quote(str[i], flag);
 		if (!flag && (str[i] == '>' || str[i] == '<'))
 		{
-			if (i > 0 && str[i - 1] != ' ' && str[i - 1] != '\0')
+			if (i > 0 && str[i - 1] != '\3' && str[i - 1] != '\0')
 				str = pre_redir(str, i);
 			if (!str)
 				return (NULL);
 			while (str[i] == str[i + 1])
 				i++;
-			if (str[i + 1] != ' ' && str[i + 1] != '\0')
+			if (str[i + 1] != '\3' && str[i + 1] != '\0')
 				str = pos_redir(str, i + 1);
 			if (!str)
 				return (NULL);
