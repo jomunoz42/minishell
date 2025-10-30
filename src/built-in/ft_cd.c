@@ -93,8 +93,7 @@ static int    absolute_or_relative(t_cmd *cmd, t_map *env, char *current_pwd)
     return (1);   // check this
 }
 
-//      DO RETURN VALUES     &&   LEAKS   &&    CHECK ALLOCS FAILURE
-
+//      LEAKS   &&    CHECK ALLOCS FAILURE
 int	ft_cd(t_cmd *cmd, t_map *env)
 {
     char    *path;
@@ -113,6 +112,8 @@ int	ft_cd(t_cmd *cmd, t_map *env)
         return (goes_home(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], "-", 2))
         return (goes_last_dir(cmd, env, current_pwd));
+    else if (!ft_strncmp(cmd->args[1], "-P", 3) || !ft_strncmp(cmd->args[1], "-L", 3))
+        return (handle_cd_errors(NULL, -1), 0);
     else if (!ft_strncmp(cmd->args[1], "..", 3))
         return (goes_up(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], ".", 2))

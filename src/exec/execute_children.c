@@ -72,7 +72,7 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 			close(exec->pipefd[0]);
 		if (exec->no_file == true)
 			exit(1);
-		if (exec->no_permission == true)     //    check if it can go on handle_path
+		if (exec->no_permission == true)
 			exit(126);
 		execve(cmd->args[0], cmd->args, env->to_str(env));
 		handle_path_not_found(cmd->args[0], cmd->args);

@@ -35,6 +35,7 @@ int main(int argc, char **argv, char **environ)
     t_cmd         *cmd;
     char          *input;
 
+    
     env = new_map();
     copy_env(env, environ, &exec);
     while (1)
@@ -45,7 +46,7 @@ int main(int argc, char **argv, char **environ)
         cmd = parsing(input, NULL, env);
         if (cmd)
         {
-            print_struct(cmd);  
+            // print_struct(cmd);  
             if (!ft_strncmp(cmd->args[0], "exit", 4))
                 break;
             execute_command(cmd, env, &exec);

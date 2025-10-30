@@ -60,7 +60,7 @@ int    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec) // return values
     if (!ft_strncmp(cmd->args[0], "pwd", 4))
         return (ft_pwd(env), 1);
     if (!ft_strncmp(cmd->args[0], "env", 4))
-        return (ft_env(env), 1);
+        return (ft_env(cmd, env), 1);
     if (!ft_strncmp(cmd->args[0], "export", 7))
         return (ft_export(cmd, env, exec), 1);
     if (!ft_strncmp(cmd->args[0], "unset", 6))

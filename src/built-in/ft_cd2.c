@@ -18,6 +18,8 @@ char  *find_last_slash(char *current_pwd)
 
 void handle_cd_errors(char *path, int error_id)
 {
+    if (error_id == -1)
+        write(1, "We don't have to handle that option\n", 37);
     if (error_id == 0)
     {
         fprintf(stderr, "bash: cd: error retrieving current directory: getcwd: %s\n", strerror(errno));

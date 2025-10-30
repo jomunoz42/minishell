@@ -33,7 +33,7 @@ void	handling_errors(t_exec *exec, char *arg, int error_id)
 
 void	handle_path_not_found(char *path, char **cmd)
 {
-	if (path && ft_strncmp(path, "\"\"", 1) == 0)
+	if (path && ft_strncmp(path, "\"\"", 1) == 0)   //  "" > 2.txt
 		write(2, "Command '' not found\n", 22);
 	else
 	{

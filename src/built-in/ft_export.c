@@ -109,3 +109,9 @@ void	ft_export(t_cmd *cmd, t_map *env, t_exec *x) //  REMEMBER TO TEST THE CHANG
 		print_export(sort_vars(copy));
 	}
 }
+
+
+// primeiro caractere nao pode ser numero
+
+// nao pode ter caracteres especiais  __ pode       qualquer um que nao seja alpha numerico   is alnum
+

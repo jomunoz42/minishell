@@ -1,4 +1,6 @@
 Test ./minishell several times and check if SHLVL is updated.
+
+
 echo "olá mundo"
 echo 'olá mundo'
 echo "olá 'mundo'"
