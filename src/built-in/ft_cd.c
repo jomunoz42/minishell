@@ -19,7 +19,7 @@ static int    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
                 return (perror("bash: cd"), 1);
         }
         env->put(env, "OLDPWD", current_pwd);
-        env->put(env, "PWD", path);
+        env->put(env, "PWD", ft_strdup(path));
         return (0);
     }
     else
@@ -43,7 +43,7 @@ static int    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
                 return (perror("bash: cd"), 1);
         }
         printf("%s\n", path);
-        env->put(env, "PWD", path);
+        env->put(env, "PWD", ft_strdup(path));
         env->put(env, "OLDPWD", current_pwd);
         return (0);
     }
@@ -53,11 +53,9 @@ static int    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
 
 static int    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
 {
-    char *copy_pwd;
     char *path;
 
-    copy_pwd = ft_strdup(current_pwd);
-    path = find_last_slash(copy_pwd);
+    path = find_last_slash(ft_strdup(current_pwd));
     if (chdir(path) != 0)
     {
         if (errno == EACCES)
@@ -79,21 +77,20 @@ static int    absolute_or_relative(t_cmd *cmd, t_map *env, char *current_pwd)
     else
     {
         path = env->get(env, "PWD");
-        path = ft_strjoin_free(path, "/");
-        path = ft_strjoin_free(path, cmd->args[1]);
+        path = ft_strjoin(path, "/");
+        path = ft_strjoin(path, cmd->args[1]);  //     VER LEAK AQUI  ft_strjoin_free
     }
     if (file_or_directory(path) == 0)
     {
         if (chdir(path) != 0)
             return (handle_folder_errors(cmd, path), 1);
         env->put(env, "OLDPWD", current_pwd);
-        env->put(env, "PWD", path);
+        env->put(env, "PWD", ft_strdup(path));
         return (0);
     }
     return (1);   // check this
 }
 
-//      LEAKS   &&    CHECK ALLOCS FAILURE
 int	ft_cd(t_cmd *cmd, t_map *env)
 {
     char    *path;
@@ -113,7 +110,8 @@ int	ft_cd(t_cmd *cmd, t_map *env)
     else if (!ft_strncmp(cmd->args[1], "-", 2))
         return (goes_last_dir(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], "-P", 3) || !ft_strncmp(cmd->args[1], "-L", 3))
-        return (handle_cd_errors(NULL, -1), 0);
+        return (handle_cd_errors(NULL, -1), 0);//////
+
     else if (!ft_strncmp(cmd->args[1], "..", 3))
         return (goes_up(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], ".", 2))
@@ -122,3 +120,11 @@ int	ft_cd(t_cmd *cmd, t_map *env)
         return (absolute_or_relative(cmd, env, current_pwd));
     return (0);
 }
+
+//      cd with no absolute not working 2 times    done ??
+
+//      env fucked up after cd
+
+//      test permissions
+
+//      LEAKS

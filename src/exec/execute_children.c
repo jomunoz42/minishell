@@ -1,6 +1,8 @@
 
 #include "minishell.h"
 
+int    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
+
 static void waiting_proccesses(t_cmd *cmd, t_exec *exec)
 {
 	t_cmd *temp;
@@ -30,7 +32,7 @@ static void redirections(t_redir *redir, t_map *env, t_exec *exec)
 			close(exec->in);
 			exec->in = open("/tmp/mini_temp", O_RDONLY);
 			if (exec->in == -1)
-				handling_errors(exec, temp->args[1], 1); // check this error id   1??
+				handling_errors(exec, temp->args[1], 1); //errado e check this error id   1??
 		}
 		if (ft_strncmp(temp->args[0], "<", 2) == 0)
 		{

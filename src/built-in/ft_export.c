@@ -2,50 +2,48 @@
 
 #include "minishell.h"
 
+char	**sort_vars(char **vars);
+
 static void	print_export(char **vars)
 {
 	int	i;
 
-	i = 0;
-	while (vars && vars[i])
+	i = -1;
+	while (vars && vars[++i])
 	{
-		if (ft_strncmp(vars[i], "_=\"./minishell\"", 16) == 0)
-		{
-			i++;
+		if (!ft_strncmp(vars[i], "_=\"./minishell\"", 16)
+			|| !ft_strncmp(vars[i], "?", 1) || !ft_strncmp(vars[i], "$", 1))
 			continue ;
-		}
 		printf("declare -x %s\n", vars[i]);
-		i++;
 	}
 	free(vars);
 }
 
-static char	**sort_vars(char **vars)
+static int  handle_invalid_export(char *arg)
 {
 	int		i;
-	char	*tmp;
 
-	i = 0;
-	while (vars[i] && vars[i + 1])
+	i = -1;
+	while(arg[++i] && arg[i] != '=')
 	{
-		if (ft_strcmp(vars[i], vars[i + 1]) > 0)
+		if (ft_isdigit(arg[0]) || !ft_isalnum(arg[i]))
 		{
-			tmp = vars[i];
-			vars[i] = vars[i + 1];
-			vars[i + 1] = tmp;
-			i = 0;
+			write(2, "bash: export: `", 15);
+			write(2, arg, ft_strlen(arg));
+			write(2, "': not a valid identifier\n", 27);
+			return (1);
 		}
-		else
-			i++;
 	}
-	return (vars);
+	return (0);
 }
 
-static void	add_export(char *arg, t_map *env)
+static int	add_export(char *arg, t_map *env)
 {
 	char	**vars;
 	int		j;
 
+	if (handle_invalid_export(arg))
+		return (1);
 	vars = ft_calloc(sizeof(char *), 3);
 	if (!vars)
 		ft_exit(1);
@@ -61,9 +59,10 @@ static void	add_export(char *arg, t_map *env)
 	}
 	else
 		env->put(env, ft_strdup(arg), NULL);
+	return (0);
 }
 
-char	*create_var(t_node *node)
+static char	*create_var(t_node *node)
 {
 	char	*str;
 	char	*new_value;
@@ -81,7 +80,7 @@ char	*create_var(t_node *node)
 	return (result);
 }
 
-void	ft_export(t_cmd *cmd, t_map *env, t_exec *x) //  REMEMBER TO TEST THE CHANGE (NO SOUBLE SORT)
+int	ft_export(t_cmd *cmd, t_map *env, t_exec *x)
 {
 	t_node	*node;
 	char	**copy;
@@ -91,7 +90,10 @@ void	ft_export(t_cmd *cmd, t_map *env, t_exec *x) //  REMEMBER TO TEST THE CHANG
 	if (cmd->args[i])
 	{
 		while (cmd->args[i])
-			add_export(cmd->args[i++], env);
+		{
+			if (add_export(cmd->args[i++], env))
+				return (1);
+		}
 	}
 	else
 	{
@@ -108,10 +110,5 @@ void	ft_export(t_cmd *cmd, t_map *env, t_exec *x) //  REMEMBER TO TEST THE CHANG
 		copy[i] = NULL;
 		print_export(sort_vars(copy));
 	}
+	return (0);
 }
-
-
-// primeiro caractere nao pode ser numero
-
-// nao pode ter caracteres especiais  __ pode       qualquer um que nao seja alpha numerico   is alnum
-

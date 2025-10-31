@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-static int    is_it_built_in(char *cmd)
+static int    is_it_built_in(char *cmd)//  ver se da para meter no ficheiro do parsing
 {
     if (!cmd)
         return (0);     

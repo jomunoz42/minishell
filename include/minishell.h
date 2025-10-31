@@ -60,15 +60,14 @@ typedef struct s_cmd
 int					ft_echo(t_cmd *cmd, t_map *env, t_exec *exec);
 int					ft_cd(t_cmd *cmd, t_map *env);
 int					ft_pwd(t_map *env);
-void				ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
-void				ft_unset(t_cmd *cmd, t_map *env, t_exec *exec);
-void				ft_env(t_cmd *cmd, t_map *env);
-void				ft_exit(int status);
+int					ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
+void				ft_unset(t_cmd *cmd, t_map *env, t_exec *exec);// return
+void				ft_env(t_cmd *cmd, t_map *env);//  return
+void				ft_exit(int status);//  return
 
 //=======================EXECUTION========================
 
 char				*get_absolute_path(t_map *env, char *cmd);
-int					is_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
 void				execute_heredocs(t_cmd *cmd, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 void				handling_errors(t_exec *exec, char *arg, int error_id);
