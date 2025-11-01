@@ -29,13 +29,10 @@ typedef struct s_exec
 {
 	int				in;
 	int				out;
-	int				pipefd[2];
+	int				pipefd[2];  //   verificar se da para tirar sem problema
 	int				status;
-
 	bool			no_permission;
 	bool			no_file;
-
-	int				eof_no_limiter;
 }					t_exec;
 
 typedef struct s_redir
@@ -53,21 +50,18 @@ typedef struct s_cmd
 	pid_t			pid;
 }					t_cmd;
 
-//./minishell ls >> END cat < fd | wc
-
 //========================BUILTINS========================
 
-int					ft_echo(t_cmd *cmd, t_map *env, t_exec *exec);
-int					ft_cd(t_cmd *cmd, t_map *env);
-int					ft_pwd(t_map *env);
-int					ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
-void				ft_unset(t_cmd *cmd, t_map *env, t_exec *exec);// return
-void				ft_env(t_cmd *cmd, t_map *env);//  return
+void				ft_echo(t_cmd *cmd, t_map *env, t_exec *exec);
+void				ft_cd(t_cmd *cmd, t_map *env);
+void				ft_pwd(t_map *env);
+void				ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
+void				ft_unset(t_cmd *cmd, t_map *env, t_exec *exec);
+void				ft_env(t_cmd *cmd, t_map *env);
 void				ft_exit(int status);//  return
 
 //=======================EXECUTION========================
 
-char				*get_absolute_path(t_map *env, char *cmd);
 void				execute_heredocs(t_cmd *cmd, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 void				handling_errors(t_exec *exec, char *arg, int error_id);
@@ -93,14 +87,11 @@ t_redir				*redir_start(t_cmd *head, int i);
 //==========================UTILS=========================
 
 void				copy_env(t_map *map, char **env, t_exec *exec);
-void				print_env(t_map *env);
 int					length_of_equal(char *vars);
 int					is_there_equal(char *vars);
 int					is_there_value(char *vars);
-int					handle_folder_errors(t_cmd *cmd, char *path);
-int					file_or_directory(char *path);
-void				handle_cd_errors(char *path, int error_id);
-char				*find_last_slash(char *current_pwd);
+void				handle_cd_errors(char *path, int error_id, t_map *env);
+int                 file_or_directory(char *path, t_map *env);
 char				*ft_strjoin_free(char *s1, char *s2);
 void				free_double(char **arg);
 void				error_exit(char *s, int code);
@@ -121,7 +112,6 @@ char				*ft_substr(char const *s, unsigned int start, size_t len);
 void				*ft_calloc(size_t nmemb, size_t size);
 void				ft_putchar_fd(char c, int fd);//
 void				ft_putstr_fd(char *s, int fd);//
-char				*ft_strrchr(const char *s, int c);
 int					ft_lstsize(t_cmd *lst);
 void				*ft_memmove(void *dest, const void *src, size_t n);
 void				*ft_memcpy(void *dest, const void *src, size_t n);

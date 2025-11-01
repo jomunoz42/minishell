@@ -1,4 +1,43 @@
+--------------------------------------------------------------------------------------
+
+SHLVL:
+
+Check if SHLVL is "3" at start.
+
 Test ./minishell several times and check if SHLVL is updated.
+
+Export SHLVL 999 and see if it resets to 1 with message.
+
+--------------------------------------------------------------------------------------
+
+Execucao:
+
+Absolute Paths, pastas e ficheiros no input.
+
+Invalid com ou sem absolute path (com barra):
+/home/jomunoz/aaaa   =   "bash: /home/jomunoz/aaaa: No such file or directory"
+$? = 127
+
+Valid Directory com absolute path:
+/home/jomunoz   =   "bash: /home/jomunoz: Is a directory"
+$? = 126
+
+Valid File com absolute path:
+/home/.../minishell/ficheiro   =  "bash: /home/.../minishell/ficheiro: Permission denied"
+$? = 126
+
+-------
+
+Sem barra:
+test.txt     =    "test.txt: command not found"
+$? = 127
+
+-------
+
+
+
+
+
 
 
 echo "olá mundo"
@@ -19,10 +58,7 @@ echo "$VAR!"'!!'
 
 unset VAR
 echo "$VAR"
-#######echo ${VAR:-"valor padrão"}
-export VAR="test"
-#######echo ${VAR:-"valor padrão"}
-#######echo "->${VAR}<-"
+
 
 #######echo \"aqui\"
 #######echo "aqui\"também\""
@@ -59,13 +95,6 @@ echo "$VAR"
 echo "$VAR e mais"
 echo "$VAR\ e\ escape"
 
-======BONUS=======
-echo "a"; echo "b"
-echo "a" ;echo "b"
-echo "a"&&echo "b"
-echo "a"||echo "b"
-echo "a && b"
-==================
 
 Unicas formas possiveis
 

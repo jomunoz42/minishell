@@ -16,7 +16,7 @@ static int	only_ns(char *arg)
 	return (1);
 }
 
-int	ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
+void	ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	int		i;
 	int		j;
@@ -42,7 +42,7 @@ int	ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
 	}
 	if (!n_option)
 		printf("\n");
-	return (0);
+	env->put(env, "?", ft_strdup("0"));
 }
 
 ///// HANDLE FD REDIRECTION

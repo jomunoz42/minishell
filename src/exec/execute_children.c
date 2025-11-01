@@ -3,7 +3,7 @@
 
 int    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
 
-static void waiting_proccesses(t_cmd *cmd, t_exec *exec)
+static void waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
 {
 	t_cmd *temp;
 
@@ -17,10 +17,28 @@ static void waiting_proccesses(t_cmd *cmd, t_exec *exec)
 		temp = temp->next;
 	}
 	if (WIFEXITED(exec->status))
-    	exec->status = WEXITSTATUS(exec->status);
+    	env->put(env, "?", ft_itoa(WEXITSTATUS(exec->status)));
 }
 
-static void redirections(t_redir *redir, t_map *env, t_exec *exec)
+static void redirections2(t_redir *temp, t_exec *exec)
+{
+	if (ft_strncmp(temp->args[0], ">>", 3) == 0)
+	{
+		close(exec->out);
+		exec->out = open(temp->args[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+		if (exec->out == -1)
+			handling_errors(exec, temp->args[1], 2);
+	}
+	if (ft_strncmp(temp->args[0], ">", 2) == 0)
+	{
+		close(exec->out);
+		exec->out = open(temp->args[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (exec->out == -1)
+			handling_errors(exec, temp->args[1], 2);
+	}
+}
+
+static void redirections(t_redir *redir, t_exec *exec)
 {
 	t_redir *temp;
 
@@ -41,20 +59,7 @@ static void redirections(t_redir *redir, t_map *env, t_exec *exec)
 			if (exec->in == -1)
 				handling_errors(exec, temp->args[1], 1);
 		}
-		if (ft_strncmp(temp->args[0], ">>", 3) == 0)
-		{
-			close(exec->out);
-			exec->out = open(temp->args[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
-			if (exec->out == -1)
-				handling_errors(exec, temp->args[1], 2);
-		}
-		if (ft_strncmp(temp->args[0], ">", 2) == 0)
-		{
-			close(exec->out);
-			exec->out = open(temp->args[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-			if (exec->out == -1)
-				handling_errors(exec, temp->args[1], 2);
-		}
+		redirections2(temp, exec);
 		temp = temp->next;
 	}
 }
@@ -87,7 +92,7 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 	exec->no_permission = false;
 }
 
-void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)  // env ??
+void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	t_cmd *temp;
 
@@ -108,15 +113,19 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)  // env ??
 			close(exec->out);
 			exec->out = exec->pipefd[1];
 		}
-		redirections(temp->redir, env, exec);
+		redirections(temp->redir, exec);
 		create_children(temp, env, exec);
 		exec->in = exec->pipefd[0];
 		temp = temp->next;
 	}
-	waiting_proccesses(cmd, exec);
+	waiting_proccesses(cmd, exec, env);
 }
 
-// cat < 2.txt < 1.txt | cat > 3.txt
+//    ./minishell ls >> END cat < fd | wc     SEG FAULT
+
+
+//    cat < 2.txt < 1.txt | cat > 3.txt
+
 
 
 // Temporary heredoc file handling:

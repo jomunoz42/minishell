@@ -54,7 +54,6 @@ void	ft_env(t_cmd *cmd, t_map *env)
 	int		i;
 
 	i = -1;
-	
 	if (cmd->args[1])
 	{
 		write(1, "Minishell subject: env with no options or arguments.\n", 54);
@@ -65,6 +64,7 @@ void	ft_env(t_cmd *cmd, t_map *env)
 	{
 		if (!ft_strncmp(vars[i], "?", 1) || !ft_strncmp(vars[i], "$", 1))
 			continue ;
-		printf("%s\n", vars[i++]);
+		printf("%s\n", vars[i]);
 	}
+	env->put(env, "?", ft_strdup("0"));
 }

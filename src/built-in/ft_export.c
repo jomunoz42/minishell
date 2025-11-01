@@ -4,7 +4,7 @@
 
 char	**sort_vars(char **vars);
 
-static void	print_export(char **vars)
+static void	print_export(char **vars, t_map *env)
 {
 	int	i;
 
@@ -17,9 +17,10 @@ static void	print_export(char **vars)
 		printf("declare -x %s\n", vars[i]);
 	}
 	free(vars);
+	env->put(env, "?", ft_strdup("0"));
 }
 
-static int  handle_invalid_export(char *arg)
+static int  handle_invalid_export(char *arg, t_map *env)
 {
 	int		i;
 
@@ -31,19 +32,20 @@ static int  handle_invalid_export(char *arg)
 			write(2, "bash: export: `", 15);
 			write(2, arg, ft_strlen(arg));
 			write(2, "': not a valid identifier\n", 27);
+			env->put(env, "?", ft_strdup("1"));
 			return (1);
 		}
 	}
 	return (0);
 }
 
-static int	add_export(char *arg, t_map *env)
+static void	add_export(char *arg, t_map *env)
 {
 	char	**vars;
 	int		j;
 
-	if (handle_invalid_export(arg))
-		return (1);
+	if (handle_invalid_export(arg, env))
+		return ;
 	vars = ft_calloc(sizeof(char *), 3);
 	if (!vars)
 		ft_exit(1);
@@ -59,7 +61,7 @@ static int	add_export(char *arg, t_map *env)
 	}
 	else
 		env->put(env, ft_strdup(arg), NULL);
-	return (0);
+	env->put(env, "?", ft_strdup("0"));
 }
 
 static char	*create_var(t_node *node)
@@ -80,7 +82,7 @@ static char	*create_var(t_node *node)
 	return (result);
 }
 
-int	ft_export(t_cmd *cmd, t_map *env, t_exec *x)
+void	ft_export(t_cmd *cmd, t_map *env, t_exec *x)
 {
 	t_node	*node;
 	char	**copy;
@@ -90,10 +92,7 @@ int	ft_export(t_cmd *cmd, t_map *env, t_exec *x)
 	if (cmd->args[i])
 	{
 		while (cmd->args[i])
-		{
-			if (add_export(cmd->args[i++], env))
-				return (1);
-		}
+			add_export(cmd->args[i++], env);
 	}
 	else
 	{
@@ -108,7 +107,6 @@ int	ft_export(t_cmd *cmd, t_map *env, t_exec *x)
 			node = node->next;
 		}
 		copy[i] = NULL;
-		print_export(sort_vars(copy));
+		print_export(sort_vars(copy), env);
 	}
-	return (0);
 }

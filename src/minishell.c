@@ -35,6 +35,13 @@ int main(int argc, char **argv, char **environ)
     t_cmd         *cmd;
     char          *input;
 
+    // char *args[] = {"cd", "..", NULL};
+    // t_cmd cmd = 
+    // {
+    //     .args=args,
+    //     .redir=NULL,
+    //     .next=NULL
+    // };
     
     env = new_map();
     copy_env(env, environ, &exec);
