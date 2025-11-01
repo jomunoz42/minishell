@@ -5,6 +5,10 @@ int	check_size(char *str)
 	int	i;
 
 	i = 0;
+	if (ft_isdigit(str[i]))
+		return (1);
+	if (str[i] == '?' || str[i] == '$')
+		return (1);
 	while (str[i] && ft_isalnum_modified(str[i]))
 		i++;
 	return (i);
@@ -15,15 +19,14 @@ int	verify_var_sintax(char *str)
 	int	i;
 	int	j;
 
-	i = 0;
+	i = 1;
 	j = check_size(str);
+	if (!ft_isalnum_modified(str[i]) && str[i] != '?' && str[i] != '$')
+		return (0);
 	while (i < j && str[i])
 	{
-		if (!ft_isalnum_modified(str[i]))
+		if (!ft_isalnum_modified(str[i++]))
 			return (0);
-		else if (i == 0 && ft_isdigit(str[i]))
-			return (0);
-		i++;
 	}
 	return (1);
 }
@@ -110,6 +113,45 @@ char	*expanded_arg(char *str, t_map *env)
 	return (str);
 }
 
+int organize_args(char **args)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (args[i])
+	{
+		if (!*args[i] && args[i + 1])
+		{
+			j = 0;
+			while (args[i + j + 1])
+			{
+				args[i + j] = args[ i + j + 1];
+				j++;
+			}
+			args[i + j] = NULL;
+		}
+		i++;
+	}
+	if (!*args[0])
+		return (0);
+	return (1);
+}
+
+int organize_list(t_cmd *head)
+{
+	t_cmd *node;
+
+	node = head;
+	while (node)
+	{
+		if (!organize_args(node->args))
+			return (0);
+		node = node ->next;
+	}
+	return (1);
+}
+
 int	change_expansion(t_cmd *head, t_map *env)
 {
 	int		i;
@@ -129,5 +171,7 @@ int	change_expansion(t_cmd *head, t_map *env)
 		}
 		node = node->next;
 	}
+	if (!organize_list(head))
+		return (0);
 	return (1);
 }
