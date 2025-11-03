@@ -101,6 +101,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	exec->out = -1;
 	if (is_built_in(cmd, env, exec))
 		return ;
+	// cmd->args[0] = get_absolute_path(env, cmd->args[0]);
 	execute_heredocs(cmd, exec);
 	exec->in = dup(0);
 	while (temp)

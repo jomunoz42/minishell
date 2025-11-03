@@ -58,7 +58,7 @@ void handle_folder_errors(t_cmd *cmd, char *path, t_map *env)
     }
 }
 
-void handle_cd_options(t_cmd *cmd, t_map *env)
+void handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
 {
     int i;
 
@@ -78,6 +78,7 @@ void handle_cd_options(t_cmd *cmd, t_map *env)
         write(2, "cd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n", 41);
         env->put(env, "?", ft_strdup("2"));
     }
+    free(current_pwd);
 }
 
 void    goes_nowhere(t_map *env, char *current_pwd)
@@ -91,4 +92,5 @@ void    goes_nowhere(t_map *env, char *current_pwd)
         return ;
     }
     env->put(env, "?", ft_strdup("0"));
+    free(current_pwd);
 }

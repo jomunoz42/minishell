@@ -16,7 +16,7 @@ void	handling_errors(t_exec *exec, char *arg, int error_id)
 	if (errno == ENOENT) 
 		exec->no_file = true;
 	else if (errno == EACCES)
-		exec->no_permission = true;
+		exec->no_permission = true;   ///   ver se tem mesmo que ser
 	if (error_id == 3)
 	{
 		perror("pipe");
@@ -98,4 +98,5 @@ void	close_everything(t_exec *exec)
 		close(exec->in);
 	if (exec->out != -1)
 		close(exec->out);
+	// falta aqui if (pipefd[0] > 0) e (pipefd[1] > 0)
 } 

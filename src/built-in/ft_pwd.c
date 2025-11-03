@@ -29,4 +29,3 @@ void    ft_pwd(t_map *env)
     // Possible Errors (errno)
 
     // EACCES: permission denied to read a directory in the path.
-

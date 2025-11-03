@@ -1,40 +1,40 @@
 #include "minishell.h"
 
-// void	print_struct(t_cmd *head)
-// {
-// 	t_cmd	*node;
-// 	int		i;
-// 	t_redir	*redir_node;
+void	print_struct(t_cmd *head)
+{
+	t_cmd	*node;
+	int		i;
+	t_redir	*redir_node;
 
-// 	node = head;
-// 	while (node)
-// 	{
-// 		printf("======== COMANDO =========\n");
-// 		i = 0;
-// 		if (node->args)
-// 		{
-// 			while (node->args[i])
-// 				printf("ARGS: %s\n", node->args[i++]);
-// 		}
-// 		if (node->redir)
-// 		{
-// 			redir_node = node->redir;
-// 			while (redir_node)
-// 			{
-// 				printf("----- REDIRECIONAMENTO ----\n");
-// 				i = 0;
-// 				if (*redir_node->args)
-// 				{
-// 					while (i < 2)
-// 						printf("REDIR: %s\n", redir_node->args[i++]);
-// 				}
-// 				redir_node = redir_node->next;
-// 			}
-// 		}
-// 		printf("==========================\n\n");
-// 		node = node->next;
-// 	}
-// }
+	node = head;
+	while (node)
+	{
+		printf("======== COMANDO =========\n");
+		i = 0;
+		if (node->args)
+		{
+			while (node->args[i])
+				printf("ARGS: %s\n", node->args[i++]);
+		}
+		if (node->redir)
+		{
+			redir_node = node->redir;
+			while (redir_node)
+			{
+				printf("----- REDIRECIONAMENTO ----\n");
+				i = 0;
+				if (*redir_node->args)
+				{
+					while (i < 2)
+						printf("REDIR: %s\n", redir_node->args[i++]);
+				}
+				redir_node = redir_node->next;
+			}
+		}
+		printf("==========================\n\n");
+		node = node->next;
+	}
+}
 
 int	check_sintax(t_cmd *head)
 {

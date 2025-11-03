@@ -45,7 +45,7 @@ void	copy_env(t_map *map, char **env, t_exec *exec)
 	else
 		handle_no_env(map);
 	map->put(map, ft_strdup("?"), ft_strdup("0"));
-	map->put(map, ft_strdup("$"), ft_strdup("substituir"));
+	map->put(map, ft_strdup("$"), ft_strdup("substituir")); //
 }
 
 void	ft_env(t_cmd *cmd, t_map *env)

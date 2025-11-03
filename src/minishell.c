@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void		print_struct(t_cmd *head);
+void				print_struct(t_cmd *head);
 
 void free_list(t_cmd *all)
 {
@@ -34,14 +34,6 @@ int main(int argc, char **argv, char **environ)
     t_map         *env;
     t_cmd         *cmd;
     char          *input;
-
-    // char *args[] = {"cd", "..", NULL};
-    // t_cmd cmd = 
-    // {
-    //     .args=args,
-    //     .redir=NULL,
-    //     .next=NULL
-    // };
     
     env = new_map();
     copy_env(env, environ, &exec);
@@ -66,3 +58,8 @@ int main(int argc, char **argv, char **environ)
     env->destroy(env);
     unlink("/tmp/mini_temp");
 }
+
+//          minishell$ cat < 2.txt wc < 3.txt
+//          Segmentation fault (core dumped)
+
+//          com printfs nao acontece e fica correto

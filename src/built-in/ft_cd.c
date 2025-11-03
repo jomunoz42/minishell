@@ -4,7 +4,7 @@
 
 int					handle_folder_errors(t_cmd *cmd, char *path, t_map *env);
 char				*find_last_slash(char *current_pwd);
-void                handle_cd_options(t_cmd *cmd, t_map *env);
+void                handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd);
 void                goes_nowhere(t_map *env, char *current_pwd);
 
 static void    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
@@ -22,6 +22,9 @@ static void    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
                 handle_cd_errors(path, 4, env);
             else
                 (perror("bash: cd"), env->put(env, "?", ft_strdup("1")));
+            free(path);
+            free(current_pwd);
+            return ;
         }
         env->put(env, "OLDPWD", current_pwd);
         env->put(env, "PWD", ft_strdup(path));
@@ -29,6 +32,7 @@ static void    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
     }
     else
         env->put(env, "?", ft_strdup("1"));
+    free(path);
 }
 
 static void    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
@@ -46,6 +50,8 @@ static void    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
                 handle_cd_errors(path, 4, env);
             else
                 (perror("bash: cd"), env->put(env, "?", ft_strdup("1")));
+            free(path);
+            free(current_pwd);
             return ;
         }
         printf("%s\n", path);
@@ -55,6 +61,7 @@ static void    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
     }
     else
         env->put(env, "?", ft_strdup("1"));
+    free(path);
 }
 
 static void    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
@@ -67,15 +74,15 @@ static void    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
         if (errno == EACCES)
             handle_cd_errors(path, 4, env);
         else
-        {
-            perror("bash: cd");
-            env->put(env, "?", ft_strdup("1"));
-        }
+            (perror("bash: cd"), env->put(env, "?", ft_strdup("1")));
+        free(path);
+        free(current_pwd);
         return ;
     }
-    env->put(env, "PWD", path);
+    env->put(env, "PWD", ft_strdup(path));
     env->put(env, "OLDPWD", current_pwd);
     env->put(env, "?", ft_strdup("0"));
+    free(path);
 }
 
 static void    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
@@ -88,24 +95,26 @@ static void    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
     {
         path = env->get(env, "PWD");
         path = ft_strjoin(path, "/");
-        path = ft_strjoin(path, cmd->args[1]);  //     VER LEAK AQUI  ft_strjoin_free
+        path = ft_strjoin(path, cmd->args[1]);  //  VER LEAK AQUI  ft_strjoin_free
     }
     if (file_or_directory(path, env) == 0)
     {
         if (chdir(path) != 0)
         {
             handle_folder_errors(cmd, path, env);
+            free(path);
+            free(current_pwd);
             return ;
         }
         env->put(env, "OLDPWD", current_pwd);
         env->put(env, "PWD", ft_strdup(path));
         env->put(env, "?", ft_strdup("0"));
     }
+    free(path);
 }
 
 void	ft_cd(t_cmd *cmd, t_map *env)
 {
-    char    *path;
     char    *current_pwd;
 
     current_pwd = getcwd(NULL, 0);
@@ -122,7 +131,7 @@ void	ft_cd(t_cmd *cmd, t_map *env)
     else if (!ft_strncmp(cmd->args[1], "-", 2))
         goes_last_dir(cmd, env, current_pwd);
     else if (!ft_strncmp(cmd->args[1], "-", 1))
-        handle_cd_options(cmd, env);
+        handle_cd_options(cmd, env, current_pwd);
     else if (!ft_strncmp(cmd->args[1], "..", 3))
         goes_up(cmd, env, current_pwd);
     else if (!ft_strncmp(cmd->args[1], ".", 2))
@@ -131,10 +140,5 @@ void	ft_cd(t_cmd *cmd, t_map *env)
         absolute_and_relative(cmd, env, current_pwd);
 }
 
-//      cd with no absolute not working 2 times    done ??
+//      LEAKS    671 allocs, 447
 
-//      env fucked up after cd
-
-//      test permissions
-
-//      LEAKS
