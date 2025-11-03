@@ -113,10 +113,10 @@ char	*expanded_arg(char *str, t_map *env)
 	return (str);
 }
 
-int organize_args(char **args)
+int	organize_args(char **args)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (args[i])
@@ -126,7 +126,7 @@ int organize_args(char **args)
 			j = 0;
 			while (args[i + j + 1])
 			{
-				args[i + j] = args[ i + j + 1];
+				args[i + j] = args[i + j + 1];
 				j++;
 			}
 			args[i + j] = NULL;
@@ -138,16 +138,71 @@ int organize_args(char **args)
 	return (1);
 }
 
-int organize_list(t_cmd *head)
+char	**new_args_expanded(char **splited, t_cmd *node, int start)
 {
-	t_cmd *node;
+	int j;
+	int i;
+	char	**new_args;
+
+	new_args = ft_calloc(arr_count(node->args) + arr_count(splited),
+			sizeof(char *));
+	if (!new_args)
+		return (NULL);
+	i = 0;
+	while (node->args[i])
+	{
+		if (i == start)
+		{
+			j = -1;
+			while (++j < arr_count(splited))
+				new_args[i + j] = splited[j];
+		}
+		else
+			new_args[i] = node->args[i];
+		i++;
+	}
+	return (new_args);
+}
+
+int	split_expansion(t_cmd *head)
+{
+	int		i;
+	char	**tmp;
+	t_cmd	*node;
+
+	node = head;
+	while (node)
+	{
+		i = 0;
+		while (node->args[i])
+		{
+			quote_handler(node->args[i]);
+			tmp = ft_split(node->args[i], '\3');
+			if (!tmp)
+				return (0);
+			if (arr_count(tmp) > 1)
+			{
+				node->args = new_args_expanded(tmp, node, i);
+				if (!node->args)
+					return (0);
+			}
+			i++;
+		}
+		node = node->next;
+	}
+	return (1);
+}
+
+int	organize_list(t_cmd *head)
+{
+	t_cmd	*node;
 
 	node = head;
 	while (node)
 	{
 		if (!organize_args(node->args))
 			return (0);
-		node = node ->next;
+		node = node->next;
 	}
 	return (1);
 }
@@ -171,7 +226,7 @@ int	change_expansion(t_cmd *head, t_map *env)
 		}
 		node = node->next;
 	}
-	if (!organize_list(head))
+	if (!organize_list(head) || !split_expansion(head))
 		return (0);
 	return (1);
 }
