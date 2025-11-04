@@ -27,7 +27,7 @@ static int  handle_invalid_export(char *arg, t_map *env)
 	i = -1;
 	while(arg[++i] && arg[i] != '=')
 	{
-		if (ft_isdigit(arg[0]) || !ft_isalnum(arg[i]))
+		if (ft_isdigit(arg[0]) || !ft_isalnum_modified(arg[i]))
 		{
 			write(2, "bash: export: `", 15);
 			write(2, arg, ft_strlen(arg));
