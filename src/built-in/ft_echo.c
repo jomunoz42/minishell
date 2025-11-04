@@ -2,32 +2,47 @@
 
 #include "minishell.h"
 
-int	ft_echo(t_cmd *cmd, t_map *env)  ///// HANDLE FD REDIRECTION
+static int	only_ns(char *arg)
 {
-	int i;
-	int j;
-	bool n_option;
-	bool flag_over;	
+	int	j;
 
-	i = 1;
+	j = 1;
+	while (arg[j])
+	{
+		if (arg[j] != 'n')
+			return (0);
+		j++;
+	}
+	return (1);
+}
+
+void	ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
+{
+	int		i;
+	int		j;
+	bool	n_option;
+	bool	over;
+
+	i = 0;
 	n_option = false;
-	flag_over = false;
-	while (cmd->args[i])
+	over = false;
+	while (cmd->args[++i])
 	{
 		j = 0;
-		if (ft_strncmp(&cmd->args[i][j], "-n", 2) == 0 && !flag_over)
-            n_option = true;
+		if (!ft_strncmp(&cmd->args[i][j], "-n", 2) && !over && only_ns(cmd->args[i]))
+			n_option = true;
 		else
 		{
-			flag_over = true;
-			while(cmd->args[i][j])
-        		write(1, &cmd->args[i][j++], 1);
+			over = true;
+			while (cmd->args[i][j])
+				printf("%c", cmd->args[i][j++]);
 			if (cmd->args[i + 1])
-				write(1, " ", 1);
+				printf(" ");
 		}
-		i++;
 	}
-    if (!n_option)
-        write(1, "\n", 1);
-	return (0);
+	if (!n_option)
+		printf("\n");
+	env->put(env, "?", ft_strdup("0"));
 }
+
+///// HANDLE FD REDIRECTION

@@ -1,6 +1,8 @@
 
 #include "minishell.h"
 
+char	*ft_strrchr(const char *s, int c);
+
 void	free_double(char **arg)
 {
 	int i;
@@ -21,4 +23,38 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	result = ft_strjoin(s1, s2);
 	free(s1);
 	return (result);
+}
+
+char  *find_last_slash(char *current_pwd)
+{
+    char *last_slash;
+
+    last_slash = strrchr(current_pwd, '/');
+    if (last_slash)
+    {
+        if (last_slash == current_pwd)
+            *(last_slash + 1) = '\0';
+        else
+            *last_slash = '\0';
+    }
+    return (current_pwd);
+}
+
+int    is_it_built_in(char *cmd)
+{
+    if (!cmd)
+        return (0);     
+    if (!ft_strncmp(cmd, "cd", 3))
+        return (1);
+    if (!ft_strncmp(cmd, "echo", 5))
+        return (1);
+    if (!ft_strncmp(cmd, "pwd", 4))
+        return (1);
+    if (!ft_strncmp(cmd, "env", 4))
+        return (1);
+    if (!ft_strncmp(cmd, "export", 7))
+        return (1);
+    if (!ft_strncmp(cmd, "unset", 6))
+        return (1);
+	return (0);
 }

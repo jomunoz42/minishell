@@ -1,3 +1,127 @@
+                                   < BUILT-INS >
+
+---> CD 
+
+-> cd aaa aaa
+bash: cd: too many arguments
+$? = 1
+
+-> cd     e     cd ~
+Confirmar PWD e OLDPWD no env
+$? = 0
+Sem permissoes
+bash: cd: /home/jomunoz: Permission denied
+$? = 1
+
+-> cd -
+Confirmar PWD e OLDPWD no env
+$? = 0
+Sem permissoes
+bash: cd: /absolute_path: Permission denied
+$? = 1
+
+-> cd .     sem permissoes
+bash: cd: .: Permission denied
+cd .     depois de apagado
+bash: cd: .: No such file or directory
+$? = 1
+
+-> cd ..
+Confirmar PWD e OLDPWD no env
+Fazer cd .. ate ser so /
+$? = 0
+
+-> cd src      (Valid directory)
+Confirmar PWD e OLDPWD no env
+$? = 0
+Sem permissoes
+bash: cd: src: Permission denied
+$? = 1
+
+-> cd /absolute_path
+Confirmar PWD e OLDPWD no env
+$? = 0
+Sem permissoes
+bash: cd: /absolute_path: Permission denied
+$? = 1
+
+cd /src     (Valid directory and valid file and invalid input)
+bash: cd: /src: No such file or directory
+$? = 1
+
+cd test.txt    (Valid file)
+bash: cd: test.txt: Not a directory
+$? = 1
+
+
+--------------------------------------------------------------------------------------
+
+SHLVL:
+
+Check if SHLVL is "3" at start.
+
+Test ./minishell several times and check if SHLVL is updated.
+
+Export SHLVL 999 and see if it resets to 1 with message.
+
+--------------------------------------------------------------------------------------
+
+                                   < Execucao >
+
+--> Absolute Paths, pastas e ficheiros no input.
+
+Invalid com ou sem absolute path (com barra):
+/home/jomunoz/aaaa   =   "bash: /home/jomunoz/aaaa: No such file or directory"
+/aaaaaaa             =   "bash: /aaaaaaa : No such file or directory"
+$? = 127
+
+Valid Directory com absolute path:
+/home/jomunoz   =   "bash: /home/jomunoz: Is a directory"
+$? = 126
+
+Valid File com absolute path:
+/home/.../minishell/ficheiro   =  "bash: /home/.../minishell/ficheiro: Permission denied"
+$? = 126
+
+
+Sem barra:
+test.txt     =    "test.txt: command not found"
+$? = 127
+
+---> Pipeline
+
+ls
+
+ls | cat
+
+ls | cat | cat | cat | cat | wc -l
+
+cat < in.txt
+
+cat < in.txt | cat > out.txt
+
+cat < in.txt | cat >> out.txt
+
+cat << aa | cat > out.txt
+
+cat < nofile | cat > out.txt
+bash: nofile: No such file or directory          confirm $? = 0
+
+cat < in.txt | ls > nofile            creates file?
+
+cat < no_file
+$? = 1
+
+
+
+wc < 2.txt cat < 3.txt                          wc < 2.txt aaa < 3.txt
+wc: cat: No such file or directory              wc: aaa: No such file or directory
+$? = 1
+
+
+
+
+
 echo "olá mundo"
 echo 'olá mundo'
 echo "olá 'mundo'"
@@ -13,6 +137,10 @@ echo '$VAR'
 echo "olá $VAR"
 echo 'olá $VAR'
 echo "$VAR!"'!!'
+
+unset VAR
+echo "$VAR"
+
 
 #######echo \"aqui\"
 #######echo "aqui\"também\""
@@ -47,13 +175,6 @@ echo "$VAR"
 echo "$VAR e mais"
 echo "$VAR\ e\ escape"
 
-======BONUS=======
-echo "a"; echo "b"
-echo "a" ;echo "b"
-echo "a"&&echo "b"
-echo "a"||echo "b"
-echo "a && b"
-==================
 
 Unicas formas possiveis
 
