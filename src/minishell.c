@@ -37,8 +37,6 @@ int	main(int argc, char **argv, char **environ)
 
 	env = new_map();
 	copy_env(env, environ, &exec);
-	env->put(env, ft_strdup("$"), ft_strdup("6769"));
-	env->put(env, ft_strdup("?"), ft_strdup("127"));
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -47,7 +45,7 @@ int	main(int argc, char **argv, char **environ)
 		cmd = parsing(input, NULL, env);
 		if (cmd)
 		{
-			print_struct(cmd);
+			//print_struct(cmd);
 			if (!ft_strncmp(cmd->args[0], "exit", 4))
 				break ;
 			execute_command(cmd, env, &exec);

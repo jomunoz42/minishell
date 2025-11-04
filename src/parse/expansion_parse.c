@@ -31,6 +31,27 @@ int	verify_var_sintax(char *str)
 	return (1);
 }
 
+char	*get_expansion(char *var, t_map *env)
+{
+	char	*tmp;
+	char	*str;
+	int		len;
+
+	if (var[0] == '0')
+		tmp = ft_strdup("bash");
+	else
+		tmp = ft_strdup(env->get(env, var));
+	if (!tmp)
+		return (NULL);
+	len = ft_strlen(tmp);
+	str = ft_calloc(len + 2, 1);
+	str[0] = '!';
+	ft_memcpy(str + 1, tmp, len);
+	str[len + 1] = '!';
+	free(tmp);
+	return (str);
+}
+
 char	*verify_var(char *str, t_map *env)
 {
 	int		i;
@@ -42,22 +63,17 @@ char	*verify_var(char *str, t_map *env)
 	{
 		if (str[i++] == '$')
 		{
-			if (str[i] == '0')
-			{
-				str = ft_strdup("bash");
-				break ;
-			}
 			j = check_size(str + i);
 			var = ft_substr(str, i, j);
 			if (!var)
 				return (NULL);
-			str = ft_strdup(env->get(env, var));
+			str = get_expansion(var, env);
+			if (!str)
+				return (NULL);
 			free(var);
 			break ;
 		}
 	}
-	if (!str)
-		return (NULL);
 	return (str);
 }
 
@@ -140,8 +156,8 @@ int	organize_args(char **args)
 
 char	**new_args_expanded(char **splited, t_cmd *node, int start)
 {
-	int j;
-	int i;
+	int		j;
+	int		i;
 	char	**new_args;
 
 	new_args = ft_calloc(arr_count(node->args) + arr_count(splited),
