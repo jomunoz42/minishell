@@ -140,5 +140,8 @@ void	ft_cd(t_cmd *cmd, t_map *env)
         absolute_and_relative(cmd, env, current_pwd);
 }
 
-//      LEAKS    671 allocs, 447
+//      LEAKS
 
+//      minishell$ cd /
+//      free(): double free detected in tcache 2
+//      Aborted (core dumped)

@@ -63,3 +63,13 @@ int main(int argc, char **argv, char **environ)
 //          Segmentation fault (core dumped)
 
 //          com printfs nao acontece e fica correto
+
+// declare -x a="a
+
+// export a=c b=a c=t   &a&b&c
+
+// export a nao tira o valor de a
+
+// echo dentro de fork
+
+//    unset e cd e exit nao funcionam de pipe
