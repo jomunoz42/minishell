@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:55:11 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/26 19:46:04 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/10/31 20:05:32 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	__put(t_map_extra *this, char *key, char *value)
 		if (ft_strcmp(node->key, key) == 0)
 		{
 			free(node->value);
-			// free(key);   // check this in the future
 			node->value = value; 
 			return ;
 		}

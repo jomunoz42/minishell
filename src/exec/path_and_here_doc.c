@@ -2,6 +2,9 @@
 
 #include "minishell.h"
 
+void				print_env(t_map *env);
+int				    is_it_built_in(char *cmd);
+
 char	*get_absolute_path(t_map *env, char *cmd)
 {
 	char	**dirs;
@@ -10,6 +13,8 @@ char	*get_absolute_path(t_map *env, char *cmd)
 	char	*str;
 	int		i;
 
+	if (is_it_built_in(cmd))
+		return (cmd);
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
 	str = env->get(env, "PATH");
@@ -28,42 +33,27 @@ char	*get_absolute_path(t_map *env, char *cmd)
 	return (cmd);
 }
 
-int    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec) // return values
+int    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
 {
     if (!cmd || !cmd->args)
-        return (0);  // ?       
+	{
+		env->put(env, "?", ft_strdup("0"));
+        return (0);     
+	}
     if (!ft_strncmp(cmd->args[0], "cd", 3))
-        ft_cd(cmd, env);
+        return (ft_cd(cmd, env), 1);
     if (!ft_strncmp(cmd->args[0], "echo", 5))
-        ft_echo(cmd, env);
+        return (ft_echo(cmd, env, exec), 1);
     if (!ft_strncmp(cmd->args[0], "pwd", 4))
-        ft_pwd(env);
+        return (ft_pwd(env), 1);
     if (!ft_strncmp(cmd->args[0], "env", 4))
-        ft_env(env);
+        return (ft_env(cmd, env), 1);
     if (!ft_strncmp(cmd->args[0], "export", 7))
-        ft_export(cmd, env, exec);
+        return (ft_export(cmd, env, exec), 1);
     if (!ft_strncmp(cmd->args[0], "unset", 6))
-        ft_unset(cmd, env, exec);
+       return (ft_unset(cmd, env, exec), 1);
 	return (0);
 }
-
-// static void	ctrl_d_pressed(t_cmd *cmd, char **argv, char *line)
-// {
-// 	if (!line)
-// 	{
-// 		write(2,
-// 			"bash: warning: here-document delimited by end-of-file (wanted `",
-// 			63);
-// 		write(2, argv[2], get->length);
-// 		write(2, "')\n", 3);
-// 		close(get->hdoc_pipe[1]);
-// 		get->infile = get->hdoc_pipe[0];
-// 		get->eof_no_limiter = 1;
-						// ctrl_d_pressed(argv, get, line);
-						// if (exec->eof_no_limiter == 1)
-						// 	break ;
-// 	}
-// }
 
 static void	handling_here_doc(t_redir *redir, t_exec *exec)
 {
@@ -117,5 +107,3 @@ void   execute_heredocs(t_cmd *cmd, t_exec *exec)
 		cmd_temp = cmd_temp->next;
 	}
 }
-
-  

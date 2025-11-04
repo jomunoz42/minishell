@@ -2,7 +2,7 @@
 
 #include "minishell.h"
 
-int    ft_pwd(t_map *env)
+void    ft_pwd(t_map *env)
 {
     char    *path;
 
@@ -13,7 +13,8 @@ int    ft_pwd(t_map *env)
         if (!path || path[0] == '\0')
         {
             fprintf(stderr, "bash: pwd: error retrieving current directory: getcwd: %s\n", strerror(errno));
-            return (1);
+            env->put(env, "?", ft_strdup("1"));
+            return ;
         }
         printf("%s\n", path);
     }
@@ -21,16 +22,10 @@ int    ft_pwd(t_map *env)
     {
         printf("%s\n", path);
         free(path);
+        env->put(env, "?", ft_strdup("0"));
     }
-    return (0);
 }
 
     // Possible Errors (errno)
 
-    // EINVAL: size is 0.
-
-    // ERANGE: buffer size is too small for the pathname.
-
     // EACCES: permission denied to read a directory in the path.
-
-    // ENOMEM: insufficient memory (if dynamically allocating).

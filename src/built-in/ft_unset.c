@@ -14,4 +14,5 @@ void    ft_unset(t_cmd *cmd, t_map *env, t_exec *exec)
             i++;
         }
     }
+    env->put(env, "?", ft_strdup("0"));
 }
