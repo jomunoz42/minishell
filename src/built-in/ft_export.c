@@ -2,7 +2,8 @@
 
 #include "minishell.h"
 
-char	**sort_vars(char **vars);
+char		**sort_vars(char **vars);
+int			if_key_exists(char *arg, t_map *env);
 
 static void	print_export(char **vars, t_map *env)
 {
@@ -20,12 +21,12 @@ static void	print_export(char **vars, t_map *env)
 	env->put(env, "?", ft_strdup("0"));
 }
 
-static int  handle_invalid_export(char *arg, t_map *env)
+static int	handle_invalid_export(char *arg, t_map *env)
 {
-	int		i;
+	int	i;
 
 	i = -1;
-	while(arg[++i] && arg[i] != '=')
+	while (arg[++i] && arg[i] != '=')
 	{
 		if (ft_isdigit(arg[0]) || !ft_isalnum_modified(arg[i]))
 		{
@@ -60,7 +61,11 @@ static void	add_export(char *arg, t_map *env)
 		env->put(env, vars[0], vars[1]);
 	}
 	else
+	{
+		if (if_key_exists(arg, env))
+			return ;
 		env->put(env, ft_strdup(arg), NULL);
+	}
 	env->put(env, "?", ft_strdup("0"));
 }
 
@@ -82,7 +87,7 @@ static char	*create_var(t_node *node)
 	return (result);
 }
 
-void	ft_export(t_cmd *cmd, t_map *env, t_exec *x)
+void	ft_export(t_cmd *cmd, t_map *env)
 {
 	t_node	*node;
 	char	**copy;

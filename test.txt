@@ -1,5 +1,31 @@
                                    < BUILT-INS >
 
+---> ENV
+
+Do the 3 variables that have 2 or more equals have them ?
+
+Is SHLVL = 3 ?
+
+env * 5
+
+
+
+---> EXPORT
+
+Does export have   declare -x ?
+
+Is export sorted ?
+
+Does the value has "value" ?
+
+
+export a=a
+export a
+It doesn't substitute the value if there is no equal
+$? = 0
+
+
+
 ---> CD 
 
 -> cd aaa aaa
@@ -53,6 +79,8 @@ cd test.txt    (Valid file)
 bash: cd: test.txt: Not a directory
 $? = 1
 
+cd / e pwd     correct = /
+$? = 0
 
 --------------------------------------------------------------------------------------
 

@@ -26,6 +26,7 @@ void	ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
 	i = 0;
 	n_option = false;
 	over = false;
+	printf("%d\n", exec->out);
 	while (cmd->args[++i])
 	{
 		j = 0;
@@ -35,13 +36,13 @@ void	ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
 		{
 			over = true;
 			while (cmd->args[i][j])
-				printf("%c", cmd->args[i][j++]);
+				write(exec->out, &cmd->args[i][j++], 1);
 			if (cmd->args[i + 1])
-				printf(" ");
+				write(exec->out, " ", 1);
 		}
 	}
 	if (!n_option)
-		printf("\n");
+		write(exec->out, "\n", 1);
 	env->put(env, "?", ft_strdup("0"));
 }
 

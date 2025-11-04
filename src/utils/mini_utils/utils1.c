@@ -70,3 +70,18 @@ char	**sort_vars(char **vars)
 	}
 	return (vars);
 }
+
+int	if_key_exists(char *arg, t_map *env)
+{
+	t_node	*node;
+
+	node = env->head;
+	while (node)
+	{
+		if (!strncmp(node->key, arg, ft_strlen(arg) + 1))
+			return (1);
+		node = node->next;
+	}
+	env->put(env, "?", ft_strdup("0"));
+	return (0);
+}

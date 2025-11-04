@@ -100,3 +100,13 @@ void	close_everything(t_exec *exec)
 		close(exec->out);
 	// falta aqui if (pipefd[0] > 0) e (pipefd[1] > 0)
 } 
+
+void close_and_reset(t_exec *exec)
+{
+	if (exec->in)
+		close(exec->in);
+	if (exec->out)
+		close(exec->out);
+	exec->no_file = false;
+	exec->no_permission = false;
+}

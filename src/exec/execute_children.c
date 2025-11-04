@@ -83,15 +83,14 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 			exit(1);
 		if (exec->no_permission == true)
 			exit(126);
+		if (is_built_in(cmd, env, exec))
+			exit(1);
+		else
+			cmd->args[0] = get_absolute_path(env, cmd->args[0]);
 		execve(cmd->args[0], cmd->args, env->to_str(env));
 		handle_path_not_found(cmd->args[0], cmd->args);
 	}
-	if (exec->in)
-		close(exec->in);
-	if (exec->out)
-		close(exec->out);
-	exec->no_file = false;
-	exec->no_permission = false;
+	close_and_reset(exec);
 }
 
 void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
@@ -101,9 +100,6 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	temp = cmd;
 	exec->in = -1;
 	exec->out = -1;
-	if (is_built_in(cmd, env, exec))
-		return ;
-	cmd->args[0] = get_absolute_path(env, cmd->args[0]);
 	execute_heredocs(cmd, exec);
 	exec->in = dup(0);
 	while (temp)
@@ -116,6 +112,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 			close(exec->out);
 			exec->out = exec->pipefd[1];
 		}
+		printf("%d\n", exec->out);
 		redirections(temp->redir, exec);
 		create_children(temp, env, exec);
 		exec->in = exec->pipefd[0];

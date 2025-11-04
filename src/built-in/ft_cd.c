@@ -90,12 +90,11 @@ static void    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
     char *path;
 
     if (cmd->args[1][0] == '/')
-        path = cmd->args[1];
+        path = ft_strdup(cmd->args[1]);
     else
     {
-        path = env->get(env, "PWD");
-        path = ft_strjoin(path, "/");
-        path = ft_strjoin(path, cmd->args[1]);  //  VER LEAK AQUI  ft_strjoin_free
+        path = ft_strjoin(env->get(env, "PWD"), "/");
+        path = ft_strjoin_free(path, cmd->args[1]);
     }
     if (file_or_directory(path, env) == 0)
     {
@@ -141,7 +140,3 @@ void	ft_cd(t_cmd *cmd, t_map *env)
 }
 
 //      LEAKS
-
-//      minishell$ cd /
-//      free(): double free detected in tcache 2
-//      Aborted (core dumped)

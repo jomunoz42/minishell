@@ -55,7 +55,7 @@ typedef struct s_cmd
 void				ft_echo(t_cmd *cmd, t_map *env, t_exec *exec);
 void				ft_cd(t_cmd *cmd, t_map *env);
 void				ft_pwd(t_map *env);
-void				ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
+void				ft_export(t_cmd *cmd, t_map *env);
 void				ft_unset(t_cmd *cmd, t_map *env, t_exec *exec);
 void				ft_env(t_cmd *cmd, t_map *env);
 void				ft_exit(int status);//  return
@@ -67,6 +67,7 @@ void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 void				handling_errors(t_exec *exec, char *arg, int error_id);
 void				handle_path_not_found(char *path, char **cmd);
 void				close_everything(t_exec *exec);
+void 				close_and_reset(t_exec *exec);
 
 //========================PARSING=========================
 
