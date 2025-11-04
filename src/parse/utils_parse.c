@@ -25,66 +25,96 @@ int	quote_count(char *str)
 int	quote_handler(char *input)
 {
 	int		i;
-	bool	s_flag;
-	bool	d_flag;
+	char	flag;
 
-	i = 0;
-	s_flag = false;
-	d_flag = false;
+	i = -1;
+	flag = 0;
 	if (!quote_count(input))
 		return (0);
-	while (input[i])
+	while (input[++i])
 	{
-		if (input[i] == '"')
-			s_flag = !s_flag;
-		if (input[i] == '"')
-			d_flag = !d_flag;
-		i++;
-		if (s_flag || d_flag)
+		flag = identify_quote(input[i], flag);
+		if (!flag)
 		{
 			if (input[i] == '|')
-				input[i] = 127;
+				input[i] = '\2';
 			else if (input[i] == ' ')
-				input[i] = 8;
+				input[i] = '\3';
 		}
 	}
 	return (1);
 }
 
-void	revert_quote(char **line)
+void	find_quotes(char *str, int i)
+{
+	int		j;
+	char	quote;
+
+	if (!str[i])
+		return ;
+	j = 0;
+	if (str[i] == '"' || str[i] == '\'' || str[i] == '!')
+	{
+		quote = str[i];
+		j = i + 1;
+		while (str[j] && str[j] != quote)
+			j++;
+		if (str[j] == quote)
+		{
+			ft_memmove(str + j, str + j + 1, ft_strlen(str + j + 1) + 1);
+			ft_memmove(str + i, str + i + 1, ft_strlen(str + i + 1) + 1);
+			find_quotes(str, j - 1);
+			return ;
+		}
+	}
+	find_quotes(str, i + 1);
+}
+
+void	remove_slash2(char *str)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	while (line[i])
+	while (str[i])
 	{
-		j = 0;
-		while (line[i][j])
+		if (str[i] == '!')
 		{
-			if (line[i][j] == 127)
-				line[i][j] = '|';
-			else if (line[i][j] == 8)
-				line[i][j] = ' ';
-			j++;
+			if (str[i] + 1)
+				ft_memmove(str + i, str + i + 1, ft_strlen(str));
+			else
+				str[i] = 0;
 		}
 		i++;
 	}
 }
 
-int	count_redir(char *str)
+void	remove_quotes(t_cmd *head)
 {
 	int		i;
-	char	c;
+	t_cmd	*node;
 
-	i = 0;
-	c = str[i];
-	while (str[i] == '<' || str[i] == '>')
+	node = head;
+	while (node)
 	{
-		if (str[i] == c)
+		i = 0;
+		while (node->args[i])
+		{
+			find_quotes(node->args[i], 0);
+			remove_slash2(node->args[i]);
 			i++;
-		else
-			return (0);
+		}
+		node = node->next;
 	}
-	return (i > 2);
+}
+
+char	identify_quote(char c, char flag)
+{
+	if (c == '"' || c == '\'')
+	{
+		if (c == flag)
+			return (0);
+		else if (flag == 0)
+			return (c);
+	}
+	return (flag);
 }

@@ -65,8 +65,8 @@ void				ft_exit(int status);
 //=======================EXECUTION========================
 
 char				*get_absolute_path(t_map *env, char *cmd);
-int    				is_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
-void   				execute_heredocs(t_cmd *cmd, t_exec *exec);
+int					is_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
+void				execute_heredocs(t_cmd *cmd, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 void				handling_errors(t_exec *exec, char *arg, int error_id);
 void				handle_path_not_found(char *path, char **cmd);
@@ -78,13 +78,14 @@ t_cmd				*new_node(char **new, t_map *env);
 t_cmd				*separate_args(t_cmd *head, char *line, t_map *env);
 t_cmd				*parsing(char *input, t_cmd *all, t_map *env);
 int					quote_handler(char *input);
-void				revert_quote(char **line);
 char				*unlink_redir(char *str);
 int					count_redir(char *str);
 int					init_redir(t_cmd *head);
 t_redir				*new_redir(t_cmd *head, int i);
 int					remove_redir(t_cmd *head, int i);
 int					change_expansion(t_cmd *head, t_map *env);
+void				remove_quotes(t_cmd *head);
+t_redir				*redir_start(t_cmd *head, int i);
 
 //==========================UTILS=========================
 
@@ -103,7 +104,7 @@ void				error_exit(char *s, int code);
 char				*ft_realloc_str(char *str, int len);
 int					arr_count(char **arr);
 char				*get_next_line(int fd);
-
+char				identify_quote(char c, char flag);
 
 //=========================LIBFT==========================
 
@@ -124,6 +125,8 @@ int					ft_lstsize(t_cmd *lst);
 void				*ft_memmove(void *dest, const void *src, size_t n);
 char				*ft_strdup(const char *s);
 void				*ft_memcpy(void *dest, const void *src, size_t n);
+int					ft_isalnum_modified(int c);
+int					ft_isdigit(int c);
 
 # define COPY ft_strdup
 

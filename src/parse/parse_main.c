@@ -36,29 +36,6 @@ void	print_struct(t_cmd *head)
 	}
 }
 
-int	check_sintax(t_cmd *head)
-{
-	int		i;
-	t_redir	*node;
-
-	node = head->redir;
-	while (node)
-	{
-		i = 0;
-		while (node->args[i])
-		{
-			if (count_redir(node->args[i]))
-			{
-				printf("minishell: syntax error near unexpected token\n");
-				return (0);
-			}
-			i++;
-		}
-		node = node->next;
-	}
-	return (1);
-}
-
 int	remove_redir(t_cmd *head, int i)
 {
 	int		len;
@@ -106,48 +83,6 @@ char	*primary_check(char *input)
 	return (dup);
 }
 
-void find_quotes(char *str, int i)
-{
-	int j = 0;
-	char quote;
-
-	if (!str[i])
-		return;
-	if (str[i] == '"' || str[i] == '\'')
-	{
-		quote = str[i];
-		j = i + 1;
-		while (str[j] && str[j] != quote)
-			j++;
-		if (str[j] == quote)
-		{
-			ft_memmove(str + j, str + j + 1, ft_strlen(str + j + 1) + 1);
-			ft_memmove(str + i, str + i + 1, ft_strlen(str + i + 1) + 1);
-			find_quotes(str, i);
-			return;
-		}
-	}
-	find_quotes(str, i + 1);
-}
-
-void remove_quotes(t_cmd *head)
-{
-	int i = 0;;
-	t_cmd *node;
-
-	node = head;
-	while (node)
-	{
-		i = 0;
-		while (node->args[i])
-		{
-			find_quotes(node->args[i], 0);
-			i++;
-		}
-		node = node->next;
-	}
-}
-
 t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 {
 	int		i;
@@ -156,7 +91,7 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 	input = primary_check(input);
 	if (!input)
 		return (NULL);
-	line = ft_split(input, '|');
+	line = ft_split(input, '\2');
 	if (!line)
 		return (perror("Allocation Error"), NULL);
 	i = 0;
@@ -169,10 +104,10 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 	}
 	free(input);
 	free_double(line);
-	if (!init_redir(head) || !check_sintax(head))
+	if (!init_redir(head))
 		return (NULL);
 	if (!change_expansion(head, env))
 		return (NULL);
-	//remove_quotes(head);
+	remove_quotes(head);
 	return (head);
 }

@@ -67,3 +67,20 @@ char	*ft_strrchr(const char *s, int c)
 	}
 	return (NULL);
 }
+
+int	ft_isalnum_modified(int c)
+{
+	if (((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) || (c >= '0'
+			&& c <= '9') || c == '_')
+		return (1);
+	else
+		return (0);
+}
+
+int	ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	else
+		return (0);
+}

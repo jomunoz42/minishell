@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_cmd *new_node(char **args, t_map *env)
+t_cmd	*new_node(char **args, t_map *env)
 {
 	t_cmd	*node;
 
@@ -10,7 +10,6 @@ t_cmd *new_node(char **args, t_map *env)
 	node->args = args;
 	node->args[0] = get_absolute_path(env, node->args[0]);
 	node->redir = NULL;
-	
 	node->next = NULL;
 	return (node);
 }
@@ -21,10 +20,9 @@ t_cmd	*separate_args(t_cmd *head, char *line, t_map *env)
 	t_cmd	*node;
 	t_cmd	*current;
 
-	args = ft_split(line, ' ');
+	args = ft_split(line, '\3');
 	if (!args)
 		return (perror("Allocation Error"), NULL);
-	revert_quote(args);
 	if (!head)
 		head = new_node(args, env);
 	else
@@ -58,4 +56,30 @@ t_redir	*new_redir(t_cmd *head, int i)
 	new->next = NULL;
 	new->fd = 0;
 	return (new);
+}
+
+int	init_redir(t_cmd *head)
+{
+	int		i;
+	t_cmd	*node;
+
+	node = head;
+	while (node)
+	{
+		i = 0;
+		while (node->args[i])
+		{
+			if (node->args[i][0] == '>' || node->args[i][0] == '<')
+			{
+				if (!node->args[i + 1])
+					return (1);
+				if (!redir_start(node, i))
+					return (0);
+				continue ;
+			}
+			i++;
+		}
+		node = node->next;
+	}
+	return (1);
 }
