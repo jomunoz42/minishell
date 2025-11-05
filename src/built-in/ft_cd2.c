@@ -81,7 +81,7 @@ void handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
     free(current_pwd);
 }
 
-void    goes_nowhere(t_map *env, char *current_pwd)
+int    goes_nowhere(t_map *env, char *current_pwd)
 {
     if (chdir(current_pwd) != 0)
     {
@@ -89,8 +89,9 @@ void    goes_nowhere(t_map *env, char *current_pwd)
             handle_cd_errors(".", 4, env);
         else if (errno == ENOENT)
             handle_cd_errors(".", 2, env);
-        return ;
+        return (1);
     }
     env->put(env, "?", ft_strdup("0"));
     free(current_pwd);
+    return (0);
 }

@@ -1,7 +1,8 @@
 
 #include "minishell.h"
 
-int			is_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
+int    		is_it_built_in(char *cmd);
+int			exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
 char		*get_absolute_path(t_map *env, char *cmd);
 
 static void	waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
@@ -66,6 +67,28 @@ static void	redirections(t_redir *redir, t_exec *exec)
 	}
 }
 
+static void	handle_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
+{
+	int	status;
+
+	if (is_it_built_in(cmd->args[0]))
+	{
+		// if (exec->no_file == true)
+		// 	exit(1);
+		// if (exec->no_permission == true)
+		// 	exit(126);                              ????
+		status = exec_built_in(cmd, env, exec);
+		// printf("%d\n", status);
+		close(exec->in);
+		close(exec->out);
+		if (exec->pipefd[0])
+			close(exec->pipefd[0]);
+		exit(status);  //  use my exit for LEAKS
+	}
+	else
+		cmd->args[0] = get_absolute_path(env, cmd->args[0]);
+}
+
 void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	cmd->pid = fork();
@@ -73,6 +96,7 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 		handling_errors(exec, NULL, 4);
 	if (!cmd->pid)
 	{
+		handle_built_in(cmd, env, exec);
 		dup2(exec->in, 0);
 		close(exec->in);
 		dup2(exec->out, 1);
@@ -83,10 +107,6 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 			exit(1);
 		if (exec->no_permission == true)
 			exit(126);
-		if (is_built_in(cmd, env, exec))
-			exit(1);
-		else
-			cmd->args[0] = get_absolute_path(env, cmd->args[0]);
 		execve(cmd->args[0], cmd->args, env->to_str(env));
 		handle_path_not_found(cmd->args[0], cmd->args);
 	}
@@ -112,7 +132,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 			close(exec->out);
 			exec->out = exec->pipefd[1];
 		}
-		printf("%d\n", exec->out);
+		// printf("%d\n", exec->out);
 		redirections(temp->redir, exec);
 		create_children(temp, env, exec);
 		exec->in = exec->pipefd[0];
@@ -137,3 +157,14 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 // in heredoc content unless quotes are used around delimiters.
 
 // cat /dev/random | echo a
+
+
+
+// Built-in	Works    in Pipeline?	Lasting Effect on Shell?
+// echo	                 Yes	        No (just outputs)
+// env	                 Yes	        No (just outputs)
+// pwd	 				Yes				No (just outputs)
+// cd					No*				No
+// export				Yes				No
+// unset				Yes				No	
+// exit					Yes				No

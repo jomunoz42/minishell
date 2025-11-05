@@ -33,7 +33,7 @@ char	*get_absolute_path(t_map *env, char *cmd)
 	return (cmd);
 }
 
-int    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
+int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
 {
     if (!cmd || !cmd->args)
 	{
@@ -41,17 +41,17 @@ int    is_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
         return (0);     
 	}
     if (!ft_strncmp(cmd->args[0], "cd", 3))
-        return (ft_cd(cmd, env), 1);
+        return (ft_cd(cmd, env));
     if (!ft_strncmp(cmd->args[0], "echo", 5))
-        return (ft_echo(cmd, env, exec), 1);
+        return (ft_echo(cmd, env, exec));
     if (!ft_strncmp(cmd->args[0], "pwd", 4))
-        return (ft_pwd(env), 1);
+        return (ft_pwd(env));
     if (!ft_strncmp(cmd->args[0], "env", 4))
-        return (ft_env(cmd, env), 1);
+        return (ft_env(cmd, env));
     if (!ft_strncmp(cmd->args[0], "export", 7))
-        return (ft_export(cmd, env), 1);
+        return (ft_export(cmd, env));
     if (!ft_strncmp(cmd->args[0], "unset", 6))
-       return (ft_unset(cmd, env, exec), 1);
+       return (ft_unset(cmd, env, exec));
 	return (0);
 }
 

@@ -16,7 +16,13 @@ static int	only_ns(char *arg)
 	return (1);
 }
 
-void	ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
+// static int handle_flags(t_cmd *cmd, t_map *env, int i, int j)
+// {
+// 	if (ft_strncmp(&cmd->args[i][j], "-n", 2))
+// 		write(1, "Minishell subject: echo with option -n", 38);
+// }
+
+int	ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	int		i;
 	int		j;
@@ -26,7 +32,6 @@ void	ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
 	i = 0;
 	n_option = false;
 	over = false;
-	printf("%d\n", exec->out);
 	while (cmd->args[++i])
 	{
 		j = 0;
@@ -43,7 +48,5 @@ void	ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
 	}
 	if (!n_option)
 		write(exec->out, "\n", 1);
-	env->put(env, "?", ft_strdup("0"));
+	return (env->put(env, "?", ft_strdup("0")), 0);
 }
-
-///// HANDLE FD REDIRECTION

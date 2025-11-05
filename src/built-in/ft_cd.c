@@ -5,9 +5,9 @@
 int					handle_folder_errors(t_cmd *cmd, char *path, t_map *env);
 char				*find_last_slash(char *current_pwd);
 void                handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd);
-void                goes_nowhere(t_map *env, char *current_pwd);
+int                goes_nowhere(t_map *env, char *current_pwd);
 
-static void    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
+static int    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
 {
     char *path;
     
@@ -22,7 +22,6 @@ static void    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
                 handle_cd_errors(path, 4, env);
             else
                 (perror("bash: cd"), env->put(env, "?", ft_strdup("1")));
-            free(path);
             free(current_pwd);
             return ;
         }
@@ -31,11 +30,10 @@ static void    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
         env->put(env, "?", ft_strdup("0"));
     }
     else
-        env->put(env, "?", ft_strdup("1"));
-    free(path);
+        (env->put(env, "?", ft_strdup("1")), free(current_pwd));
 }
 
-static void    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
+static int    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
 {
     char *path;
     
@@ -50,7 +48,6 @@ static void    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
                 handle_cd_errors(path, 4, env);
             else
                 (perror("bash: cd"), env->put(env, "?", ft_strdup("1")));
-            free(path);
             free(current_pwd);
             return ;
         }
@@ -60,11 +57,10 @@ static void    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
         env->put(env, "?", ft_strdup("0"));
     }
     else
-        env->put(env, "?", ft_strdup("1"));
-    free(path);
+        (env->put(env, "?", ft_strdup("1")), free(current_pwd));
 }
 
-static void    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
+static int    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
 {
     char *path;
 
@@ -77,15 +73,15 @@ static void    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
             (perror("bash: cd"), env->put(env, "?", ft_strdup("1")));
         free(path);
         free(current_pwd);
-        return ;
+        return (1);
     }
     env->put(env, "PWD", ft_strdup(path));
     env->put(env, "OLDPWD", current_pwd);
     env->put(env, "?", ft_strdup("0"));
-    free(path);
+    return (free(path), 0);
 }
 
-static void    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
+static int    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
 {
     char *path;
 
@@ -103,16 +99,18 @@ static void    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
             handle_folder_errors(cmd, path, env);
             free(path);
             free(current_pwd);
-            return ;
+            return (1);
         }
         env->put(env, "OLDPWD", current_pwd);
         env->put(env, "PWD", ft_strdup(path));
         env->put(env, "?", ft_strdup("0"));
     }
-    free(path);
+    else
+        return((env->put(env, "?", ft_strdup("1")), free(current_pwd)), 1);
+    return (free(path), 0);
 }
 
-void	ft_cd(t_cmd *cmd, t_map *env)
+int	ft_cd(t_cmd *cmd, t_map *env)
 {
     char    *current_pwd;
 
@@ -121,22 +119,37 @@ void	ft_cd(t_cmd *cmd, t_map *env)
     {
         current_pwd = env->get(env, "PWD");
         if (!current_pwd || current_pwd[0] == '\0')
-            handle_cd_errors(NULL, 0, env);
+        return (handle_cd_errors(NULL, 0, env), 1);
     }
     if (cmd->args[1] && cmd->args[2])
-        handle_cd_errors(NULL, 1, env);
+        return (handle_cd_errors(NULL, 1, env));
     else if (!cmd->args[1] || !ft_strncmp(cmd->args[1], "~", 2))
-        goes_home(cmd, env, current_pwd);
+        return (goes_home(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], "-", 2))
-        goes_last_dir(cmd, env, current_pwd);
+        return (goes_last_dir(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], "-", 1))
-        handle_cd_options(cmd, env, current_pwd);
+        return (handle_cd_options(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], "..", 3))
-        goes_up(cmd, env, current_pwd);
+        return (goes_up(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], ".", 2))
-        goes_nowhere(env, current_pwd);
+        return (goes_nowhere(env, current_pwd));
     else
-        absolute_and_relative(cmd, env, current_pwd);
+        return (absolute_and_relative(cmd, env, current_pwd));
 }
 
 //      LEAKS
+
+
+// Ver resto dos returns desta funcoes
+
+
+// omunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ chmod -x zz
+// jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ ls | cd zz
+// bash: cd: zz: Permission denied
+// jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ echo $?
+// 1
+
+// jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ chmod +x zz
+// jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ ls | cd zz
+// jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ echo $?
+// 0

@@ -52,13 +52,13 @@ typedef struct s_cmd
 
 //========================BUILTINS========================
 
-void				ft_echo(t_cmd *cmd, t_map *env, t_exec *exec);
-void				ft_cd(t_cmd *cmd, t_map *env);
-void				ft_pwd(t_map *env);
-void				ft_export(t_cmd *cmd, t_map *env);
-void				ft_unset(t_cmd *cmd, t_map *env, t_exec *exec);
-void				ft_env(t_cmd *cmd, t_map *env);
-void				ft_exit(int status);//  return
+int				ft_echo(t_cmd *cmd, t_map *env, t_exec *exec);
+int				ft_cd(t_cmd *cmd, t_map *env);
+int				ft_pwd(t_map *env);
+int				ft_export(t_cmd *cmd, t_map *env);
+int				ft_unset(t_cmd *cmd, t_map *env, t_exec *exec);
+int				ft_env(t_cmd *cmd, t_map *env);
+int				ft_exit(int status);   //  return
 
 //=======================EXECUTION========================
 

@@ -1,14 +1,18 @@
                                    < BUILT-INS >
 
+---> ECHO
+
+
+
 ---> ENV
 
 Do the 3 variables that have 2 or more equals have them ?
 
 Is SHLVL = 3 ?
 
-env * 5
+env + export + env + export + env
 
-
+Variaveis exportadas sem valor e sem igual nao aparecem no env
 
 ---> EXPORT
 
@@ -18,12 +22,18 @@ Is export sorted ?
 
 Does the value has "value" ?
 
+export a=
+Tem que ficar com aspas
+$? = 0
 
 export a=a
 export a
 It doesn't substitute the value if there is no equal
 $? = 0
 
+export a=c b=a c=t   
+$a$b$c
+cat must happen
 
 
 ---> CD 
