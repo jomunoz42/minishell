@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+int	quote_count(char *str);
+
 int	check_size(char *str)
 {
 	int	i;
@@ -34,22 +36,22 @@ int	verify_var_sintax(char *str)
 char	*get_expansion(char *var, t_map *env)
 {
 	char	*tmp;
-	char	*str;
-	int		len;
 
+	// char	*str;
+	// int		len;
 	if (var[0] == '0')
 		tmp = ft_strdup("bash");
 	else
 		tmp = ft_strdup(env->get(env, var));
 	if (!tmp)
 		return (NULL);
-	len = ft_strlen(tmp);
-	str = ft_calloc(len + 2, 1);
-	str[0] = '!';
-	ft_memcpy(str + 1, tmp, len);
-	str[len + 1] = '!';
-	free(tmp);
-	return (str);
+	// len = ft_strlen(tmp);
+	// str = ft_calloc(len + 2, 1);
+	// str[0] = '!';
+	// ft_memcpy(str + 1, tmp, len);
+	// str[len + 1] = '!';
+	// free(tmp);
+	return (tmp);
 }
 
 char	*verify_var(char *str, t_map *env)
@@ -91,13 +93,14 @@ char	*expand_str(char *dest, char *src, int index)
 	tail_len = ft_strlen(dest + index + var_size);
 	if (*src)
 	{
-		tmp = ft_realloc_str(dest, s_len + d_len - var_size + 1);
+		tmp = ft_realloc_str(dest, s_len + d_len - var_size + 2);
 		if (!tmp)
 			return (NULL);
 		dest = tmp;
 	}
-	ft_memmove(dest + index + s_len, dest + index + var_size, tail_len + 1);
-	ft_memcpy(dest + index, src, s_len);
+	ft_memmove(dest + index + s_len + 1, dest + index + var_size, tail_len + 1);
+	ft_memcpy(dest + index + 1, src, s_len);
+	dest[index] = '&';
 	return (dest);
 }
 
@@ -154,6 +157,24 @@ int	organize_args(char **args)
 	return (1);
 }
 
+char	*teste(char *splited, int gambiarra)
+{
+	int		len;
+	char	*str;
+
+	len = ft_strlen(splited);
+	str = ft_calloc(len + gambiarra + 2, 1);
+	if (!str)
+		return (NULL);
+	if (splited[0] == '&')
+		splited++;
+	str[0] = '!';
+	ft_memcpy(str + 1, splited, len + 1);
+	str[len + gambiarra] = '!';
+	str[len + gambiarra + 1] = 0;
+	return (str);
+}
+
 char	**new_args_expanded(char **splited, t_cmd *node, int start)
 {
 	int		j;
@@ -171,13 +192,36 @@ char	**new_args_expanded(char **splited, t_cmd *node, int start)
 		{
 			j = -1;
 			while (++j < arr_count(splited))
-				new_args[i + j] = splited[j];
+				new_args[i + j] = teste(splited[j], 1);
 		}
 		else
 			new_args[i] = node->args[i];
-		i++;
+		i = i + arr_count(splited);
 	}
+	free_double(splited);
 	return (new_args);
+}
+
+int	split_expansion_helper(t_cmd *node, int i)
+{
+	char	**tmp;
+
+	tmp = ft_split(node->args[i], '\3');
+	if (!tmp)
+		return (0);
+	if (arr_count(tmp) > 1)
+	{
+		node->args = new_args_expanded(tmp, node, i);
+		if (!node->args)
+			return (0);
+	}
+	else if (node->args[i][0] == '&')
+	{
+		node->args[i] = teste(node->args[i], 0);
+		printf("NEW_ARGS: %s\n", node->args[i]);
+		free_double(tmp);
+	}
+	return (1);
 }
 
 int	split_expansion(t_cmd *head)
@@ -189,20 +233,12 @@ int	split_expansion(t_cmd *head)
 	node = head;
 	while (node)
 	{
-		i = 0;
-		while (node->args[i])
+		i = -1;
+		while (node->args[++i])
 		{
 			quote_handler(node->args[i]);
-			tmp = ft_split(node->args[i], '\3');
-			if (!tmp)
+			if (!split_expansion_helper(node, i))
 				return (0);
-			if (arr_count(tmp) > 1)
-			{
-				node->args = new_args_expanded(tmp, node, i);
-				if (!node->args)
-					return (0);
-			}
-			i++;
 		}
 		node = node->next;
 	}
