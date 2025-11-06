@@ -54,10 +54,10 @@ typedef struct s_cmd
 
 int				ft_echo(t_cmd *cmd, t_map *env, t_exec *exec);
 int				ft_cd(t_cmd *cmd, t_map *env);
-int				ft_pwd(t_map *env);
-int				ft_export(t_cmd *cmd, t_map *env);
-int				ft_unset(t_cmd *cmd, t_map *env, t_exec *exec);
-int				ft_env(t_cmd *cmd, t_map *env);
+int				ft_pwd(t_map *env, t_exec *exec);
+int				ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
+int				ft_unset(t_cmd *cmd, t_map *env);
+int				ft_env(t_cmd *cmd, t_map *env, t_exec *exec);
 int				ft_exit(int status);   //  return
 
 //=======================EXECUTION========================
@@ -90,7 +90,7 @@ void				copy_env(t_map *map, char **env, t_exec *exec);
 int					length_of_equal(char *vars);
 int					is_there_equal(char *vars);
 int					is_there_value(char *vars);
-void				handle_cd_errors(char *path, int error_id, t_map *env);
+int					handle_cd_errors(char *path, int error_id, t_map *env);
 int                 file_or_directory(char *path, t_map *env);
 char				*ft_strjoin_free(char *s1, char *s2);
 void				free_double(char **arg);

@@ -120,6 +120,12 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	temp = cmd;
 	exec->in = -1;
 	exec->out = -1;
+	if (!temp->next && is_it_built_in(cmd->args[0])) // wrong no redir its only cd and unset
+	{
+		exec->out = 1;
+		exec_built_in(cmd, env, exec);
+		return ;
+	}
 	execute_heredocs(cmd, exec);
 	exec->in = dup(0);
 	while (temp)
@@ -164,7 +170,8 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 // echo	                 Yes	        No (just outputs)
 // env	                 Yes	        No (just outputs)
 // pwd	 				Yes				No (just outputs)
-// cd					No*				No
-// export				Yes				No
+// export				Yes				No (just outputs)
+
 // unset				Yes				No	
 // exit					Yes				No
+// cd					No*				No

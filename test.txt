@@ -35,6 +35,19 @@ export a=c b=a c=t
 $a$b$c
 cat must happen
 
+export aa.aa
+bash: export: `aa.aa': not a valid identifier
+$? = 1
+
+export 1=2
+bash: export: `1=2': not a valid identifier
+$? = 1
+
+export a=a 1=2 c=c d=d
+bash: export: `1=2': not a valid identifier
+Mas exporta as validas e devolve:
+$? = 1
+
 
 ---> CD 
 

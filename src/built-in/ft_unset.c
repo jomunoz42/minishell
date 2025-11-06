@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-void    ft_unset(t_cmd *cmd, t_map *env, t_exec *exec)
+int    ft_unset(t_cmd *cmd, t_map *env, t_exec *exec)
 {
     int i;
 
@@ -15,4 +15,5 @@ void    ft_unset(t_cmd *cmd, t_map *env, t_exec *exec)
         }
     }
     env->put(env, "?", ft_strdup("0"));
+    return (0);
 }

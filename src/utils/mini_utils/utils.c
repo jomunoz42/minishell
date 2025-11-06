@@ -58,3 +58,14 @@ int    is_it_built_in(char *cmd)
         return (1);
 	return (0);
 }
+
+int     exec_cd_unset_exit(t_cmd *cmd, t_map *env, t_exec *exec)
+{
+    if (!cmd || !cmd->args)
+        return (0);     
+    if (!ft_strncmp(cmd->args[0], "cd", 3))
+        return (ft_cd(cmd, env));
+    if (!ft_strncmp(cmd->args[0], "unset", 6))
+       return (ft_unset(cmd, env));
+	return (0);
+}

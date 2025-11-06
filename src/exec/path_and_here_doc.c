@@ -45,13 +45,13 @@ int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
     if (!ft_strncmp(cmd->args[0], "echo", 5))
         return (ft_echo(cmd, env, exec));
     if (!ft_strncmp(cmd->args[0], "pwd", 4))
-        return (ft_pwd(env));
+        return (ft_pwd(env, exec));
     if (!ft_strncmp(cmd->args[0], "env", 4))
-        return (ft_env(cmd, env));
+        return (ft_env(cmd, env, exec));
     if (!ft_strncmp(cmd->args[0], "export", 7))
-        return (ft_export(cmd, env));
+        return (ft_export(cmd, env, exec));
     if (!ft_strncmp(cmd->args[0], "unset", 6))
-       return (ft_unset(cmd, env, exec));
+       return (ft_unset(cmd, env));
 	return (0);
 }
 

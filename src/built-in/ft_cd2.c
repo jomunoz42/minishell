@@ -1,19 +1,19 @@
 
 #include "minishell.h"
 
-void handle_cd_errors(char *path, int error_id, t_map *env)
+int handle_cd_errors(char *path, int error_id, t_map *env)
 {
     if (error_id == 0)
     {
         fprintf(stderr, "bash: cd: error retrieving current directory: getcwd: %s\n", strerror(errno));
         env->put(env, "?", ft_strdup("1"));
-        return ;
+        return (1);
     }
     if (error_id == 1)     
     {
         write(2, "bash: cd: too many arguments\n", 30);
         env->put(env, "?", ft_strdup("1"));
-        return ;
+        return (1);
     }
     write(2, "bash: cd: ", 11);
     if (path)
@@ -24,6 +24,7 @@ void handle_cd_errors(char *path, int error_id, t_map *env)
         (write(2, ": Not a directory\n", 19), env->put(env, "?", ft_strdup("1")));
     else if (error_id == 4)   
         (write(2, ": Permission denied\n", 21), env->put(env, "?", ft_strdup("1")));
+    return (1);
 }
 
 int file_or_directory(char *path, t_map *env)
@@ -67,6 +68,8 @@ void handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
     {
         write(1, "Minishell subject: cd with only a relative or absolute path\n", 61);
         env->put(env, "?", ft_strdup("0"));
+        free(current_pwd);
+        return (0);
     }
     else
     {
@@ -77,8 +80,9 @@ void handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
 		write(2, ": invalid option\n", 18); 
         write(2, "cd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n", 41);
         env->put(env, "?", ft_strdup("2"));
+        free(current_pwd);
+        return (2);
     }
-    free(current_pwd);
 }
 
 int    goes_nowhere(t_map *env, char *current_pwd)

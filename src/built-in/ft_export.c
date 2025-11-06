@@ -4,8 +4,9 @@
 
 char		**sort_vars(char **vars);
 int			if_key_exists(char *arg, t_map *env);
+int			handle_invalid_export(char *arg, t_map *env);
 
-static void	print_export(char **vars, t_map *env)
+static void	print_export(char **vars, t_map *env, t_exec *exec)
 {
 	int	i;
 
@@ -15,38 +16,21 @@ static void	print_export(char **vars, t_map *env)
 		if (!ft_strncmp(vars[i], "_=\"./minishell\"", 16)
 			|| !ft_strncmp(vars[i], "?", 1) || !ft_strncmp(vars[i], "$", 1))
 			continue ;
-		printf("declare -x %s\n", vars[i]);
+		write(exec->out, "declare -x ", 11);
+		write(exec->out, vars[i], ft_strlen(vars[i]));
+		write(exec->out, "\n\"", 4);
 	}
 	free(vars);
 	env->put(env, "?", ft_strdup("0"));
 }
 
-static int	handle_invalid_export(char *arg, t_map *env)
-{
-	int	i;
-
-	i = -1;
-	while (arg[++i] && arg[i] != '=')
-	{
-		if (ft_isdigit(arg[0]) || !ft_isalnum_modified(arg[i]))
-		{
-			write(2, "bash: export: `", 15);
-			write(2, arg, ft_strlen(arg));
-			write(2, "': not a valid identifier\n", 27);
-			env->put(env, "?", ft_strdup("1"));
-			return (1);
-		}
-	}
-	return (0);
-}
-
-static void	add_export(char *arg, t_map *env)
+static int	add_export(char *arg, t_map *env)
 {
 	char	**vars;
 	int		j;
 
 	if (handle_invalid_export(arg, env))
-		return ;
+		return (1);
 	vars = ft_calloc(sizeof(char *), 3);
 	if (!vars)
 		ft_exit(1);
@@ -63,10 +47,10 @@ static void	add_export(char *arg, t_map *env)
 	else
 	{
 		if (if_key_exists(arg, env))
-			return ;
+			return (1);
 		env->put(env, ft_strdup(arg), NULL);
 	}
-	env->put(env, "?", ft_strdup("0"));
+	return (env->put(env, "?", ft_strdup("0")), 0);
 }
 
 static char	*create_var(t_node *node)
@@ -87,7 +71,21 @@ static char	*create_var(t_node *node)
 	return (result);
 }
 
-void	ft_export(t_cmd *cmd, t_map *env)
+static int  export_var(t_cmd *cmd, t_map *env, int i)
+{
+	int invalid_export;
+
+	invalid_export = 0;
+	while (cmd->args[i])
+	{
+		if (add_export(cmd->args[i], env));
+			invalid_export = 1;
+		i++;
+	}
+	return (invalid_export);
+}
+
+void	ft_export(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	t_node	*node;
 	char	**copy;
@@ -95,10 +93,7 @@ void	ft_export(t_cmd *cmd, t_map *env)
 
 	i = 1;
 	if (cmd->args[i])
-	{
-		while (cmd->args[i])
-			add_export(cmd->args[i++], env);
-	}
+		return (export_var(cmd, env, i));
 	else
 	{
 		copy = ft_calloc(sizeof(char *), env->size + 1);
@@ -112,6 +107,7 @@ void	ft_export(t_cmd *cmd, t_map *env)
 			node = node->next;
 		}
 		copy[i] = NULL;
-		print_export(sort_vars(copy), env);
+		print_export(sort_vars(copy), env, exec);
+		return (0);
 	}
 }
