@@ -82,7 +82,6 @@ void	remove_quotes(t_cmd *head)
 		while (node->args[i])
 		{
 			find_quotes(node->args[i], 0);
-			//remove_slash2(node->args[i]);
 			i++;
 		}
 		node = node->next;

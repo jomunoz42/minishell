@@ -37,6 +37,7 @@ int	main(int argc, char **argv, char **environ)
 
 	env = new_map();
 	copy_env(env, environ, &exec);
+	cmd = NULL;
 	while (1)
 	{
 		input = readline("minishell$ ");

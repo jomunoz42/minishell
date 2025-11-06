@@ -70,7 +70,7 @@ void				close_everything(t_exec *exec);
 
 //========================PARSING=========================
 
-t_cmd				*new_node(char **new, t_map *env);
+t_cmd				*new_node(char **args, t_map *env);
 t_cmd				*separate_args(t_cmd *head, char *line, t_map *env);
 t_cmd				*parsing(char *input, t_cmd *all, t_map *env);
 int					quote_handler(char *input);
