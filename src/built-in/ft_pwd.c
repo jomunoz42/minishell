@@ -13,7 +13,6 @@ int    ft_pwd(t_map *env, t_exec *exec)
         if (!path || path[0] == '\0')
         {
             fprintf(stderr, "bash: pwd: error retrieving current directory: getcwd: %s\n", strerror(errno));
-            env->put(env, "?", ft_strdup("1"));
             return (1);
         }
         write(exec->out, path, ft_strlen(path));
@@ -22,9 +21,8 @@ int    ft_pwd(t_map *env, t_exec *exec)
     {
         write(exec->out, path, ft_strlen(path));
         free(path);
-        env->put(env, "?", ft_strdup("0"));
-        return (0);
     }
+    return (0);
 }
 
     // Possible Errors (errno)

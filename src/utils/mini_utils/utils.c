@@ -39,33 +39,3 @@ char  *find_last_slash(char *current_pwd)
     }
     return (current_pwd);
 }
-
-int    is_it_built_in(char *cmd)
-{
-    if (!cmd)
-        return (0);     
-    if (!ft_strncmp(cmd, "cd", 3))
-        return (1);
-    if (!ft_strncmp(cmd, "echo", 5))
-        return (1);
-    if (!ft_strncmp(cmd, "pwd", 4))
-        return (1);
-    if (!ft_strncmp(cmd, "env", 4))
-        return (1);
-    if (!ft_strncmp(cmd, "export", 7))
-        return (1);
-    if (!ft_strncmp(cmd, "unset", 6))
-        return (1);
-	return (0);
-}
-
-int     exec_cd_unset_exit(t_cmd *cmd, t_map *env, t_exec *exec)
-{
-    if (!cmd || !cmd->args)
-        return (0);     
-    if (!ft_strncmp(cmd->args[0], "cd", 3))
-        return (ft_cd(cmd, env));
-    if (!ft_strncmp(cmd->args[0], "unset", 6))
-       return (ft_unset(cmd, env));
-	return (0);
-}

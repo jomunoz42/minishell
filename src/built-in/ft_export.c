@@ -6,7 +6,7 @@ char		**sort_vars(char **vars);
 int			if_key_exists(char *arg, t_map *env);
 int			handle_invalid_export(char *arg, t_map *env);
 
-static void	print_export(char **vars, t_map *env, t_exec *exec)
+static int	print_export(char **vars, t_map *env, t_exec *exec)
 {
 	int	i;
 
@@ -18,10 +18,10 @@ static void	print_export(char **vars, t_map *env, t_exec *exec)
 			continue ;
 		write(exec->out, "declare -x ", 11);
 		write(exec->out, vars[i], ft_strlen(vars[i]));
-		write(exec->out, "\n\"", 4);
+		write(exec->out, "\n", 1);
 	}
 	free(vars);
-	env->put(env, "?", ft_strdup("0"));
+	return (0);
 }
 
 static int	add_export(char *arg, t_map *env)
@@ -50,7 +50,7 @@ static int	add_export(char *arg, t_map *env)
 			return (1);
 		env->put(env, ft_strdup(arg), NULL);
 	}
-	return (env->put(env, "?", ft_strdup("0")), 0);
+	return (0);
 }
 
 static char	*create_var(t_node *node)
@@ -78,14 +78,14 @@ static int  export_var(t_cmd *cmd, t_map *env, int i)
 	invalid_export = 0;
 	while (cmd->args[i])
 	{
-		if (add_export(cmd->args[i], env));
+		if (add_export(cmd->args[i], env))
 			invalid_export = 1;
 		i++;
 	}
 	return (invalid_export);
 }
 
-void	ft_export(t_cmd *cmd, t_map *env, t_exec *exec)
+int	ft_export(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	t_node	*node;
 	char	**copy;
@@ -107,7 +107,6 @@ void	ft_export(t_cmd *cmd, t_map *env, t_exec *exec)
 			node = node->next;
 		}
 		copy[i] = NULL;
-		print_export(sort_vars(copy), env, exec);
-		return (0);
+		return (print_export(sort_vars(copy), env, exec));
 	}
 }

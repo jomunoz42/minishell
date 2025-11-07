@@ -6,24 +6,22 @@ int handle_cd_errors(char *path, int error_id, t_map *env)
     if (error_id == 0)
     {
         fprintf(stderr, "bash: cd: error retrieving current directory: getcwd: %s\n", strerror(errno));
-        env->put(env, "?", ft_strdup("1"));
         return (1);
     }
     if (error_id == 1)     
     {
         write(2, "bash: cd: too many arguments\n", 30);
-        env->put(env, "?", ft_strdup("1"));
         return (1);
     }
     write(2, "bash: cd: ", 11);
     if (path)
         write(2, path, ft_strlen(path));
     if (error_id == 2)            
-        (write(2, ": No such file or directory\n", 29), env->put(env, "?", ft_strdup("1")));
+        (write(2, ": No such file or directory\n", 29));
     else if (error_id == 3)   
-        (write(2, ": Not a directory\n", 19), env->put(env, "?", ft_strdup("1")));
+        (write(2, ": Not a directory\n", 19));
     else if (error_id == 4)   
-        (write(2, ": Permission denied\n", 21), env->put(env, "?", ft_strdup("1")));
+        (write(2, ": Permission denied\n", 21));
     return (1);
 }
 
@@ -43,7 +41,7 @@ int file_or_directory(char *path, t_map *env)
     return (1);
 }
 
-void handle_folder_errors(t_cmd *cmd, char *path, t_map *env)
+void handle_folder_errors(t_cmd *cmd, char *path, t_map *env) /// ver returns
 {
     if (errno == EACCES)
     {
@@ -59,7 +57,7 @@ void handle_folder_errors(t_cmd *cmd, char *path, t_map *env)
     }
 }
 
-void handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
+int handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
 {
     int i;
 

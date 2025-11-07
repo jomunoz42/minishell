@@ -4,6 +4,9 @@
 int    		is_it_built_in(char *cmd);
 int			exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
 char		*get_absolute_path(t_map *env, char *cmd);
+int     	parent_built_ins(t_cmd *cmd, t_map *env, t_exec *exec);
+int 		is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec);
+void		handle_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
 
 static void	waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
 {
@@ -67,28 +70,6 @@ static void	redirections(t_redir *redir, t_exec *exec)
 	}
 }
 
-static void	handle_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
-{
-	int	status;
-
-	if (is_it_built_in(cmd->args[0]))
-	{
-		// if (exec->no_file == true)
-		// 	exit(1);
-		// if (exec->no_permission == true)
-		// 	exit(126);                              ????
-		status = exec_built_in(cmd, env, exec);
-		// printf("%d\n", status);
-		close(exec->in);
-		close(exec->out);
-		if (exec->pipefd[0])
-			close(exec->pipefd[0]);
-		exit(status);  //  use my exit for LEAKS
-	}
-	else
-		cmd->args[0] = get_absolute_path(env, cmd->args[0]);
-}
-
 void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	cmd->pid = fork();
@@ -120,12 +101,8 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	temp = cmd;
 	exec->in = -1;
 	exec->out = -1;
-	if (!temp->next && is_it_built_in(cmd->args[0])) // wrong no redir its only cd and unset
-	{
-		exec->out = 1;
-		exec_built_in(cmd, env, exec);
+	if (is_parent_built_ins(temp, env, exec))
 		return ;
-	}
 	execute_heredocs(cmd, exec);
 	exec->in = dup(0);
 	while (temp)
@@ -138,7 +115,6 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 			close(exec->out);
 			exec->out = exec->pipefd[1];
 		}
-		// printf("%d\n", exec->out);
 		redirections(temp->redir, exec);
 		create_children(temp, env, exec);
 		exec->in = exec->pipefd[0];
@@ -153,10 +129,6 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 
 // Temporary heredoc file handling:
 
-// You overwrite exec->in and exec->out multiple times          SEEMS CORRECT -
-
-// Close pipefd in parent processes properly:             SEEMS CORRECT -
-
 // Exit codes of commands
 
 // Variable expansion in heredocs: Bash may do expansions
@@ -166,12 +138,13 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 
 
 
-// Built-in	Works    in Pipeline?	Lasting Effect on Shell?
-// echo	                 Yes	        No (just outputs)
-// env	                 Yes	        No (just outputs)
-// pwd	 				Yes				No (just outputs)
-// export				Yes				No (just outputs)
+// parent built ins
 
+// export				Yes				No (just outputs)
 // unset				Yes				No	
 // exit					Yes				No
 // cd					No*				No
+
+
+// minishell$ echo $?
+// 0;

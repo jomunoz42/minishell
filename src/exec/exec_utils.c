@@ -1,0 +1,79 @@
+
+
+#include "minishell.h"
+
+int    is_it_built_in(char *cmd)
+{
+    if (!cmd)
+        return (0);     
+    if (!ft_strncmp(cmd, "cd", 3))
+        return (1);
+    if (!ft_strncmp(cmd, "echo", 5))
+        return (1);
+    if (!ft_strncmp(cmd, "pwd", 4))
+        return (1);
+    if (!ft_strncmp(cmd, "env", 4))
+        return (1);
+    if (!ft_strncmp(cmd, "export", 7))
+        return (1);
+    if (!ft_strncmp(cmd, "unset", 6))
+        return (1);
+	return (0);
+}
+
+int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
+{
+	int   status;
+
+    status = 0;
+    if (!cmd || !cmd->args)
+        return (status);     
+    if (!ft_strncmp(cmd->args[0], "cd", 3))
+        status = ft_cd(cmd, env);
+    if (!ft_strncmp(cmd->args[0], "echo", 5))
+        status = ft_echo(cmd, env, exec);
+    if (!ft_strncmp(cmd->args[0], "pwd", 4))
+        status = ft_pwd(env, exec);
+    if (!ft_strncmp(cmd->args[0], "env", 4))
+        status = ft_env(cmd, env, exec);
+    if (!ft_strncmp(cmd->args[0], "export", 7))
+        status = ft_export(cmd, env, exec);
+    if (!ft_strncmp(cmd->args[0], "unset", 6))
+        status = ft_unset(cmd, env);
+    env->put(env, "?", ft_itoa(status));
+	return (status);
+}
+
+void	handle_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
+{
+	int	status;
+
+	if (is_it_built_in(cmd->args[0]))
+	{
+		// if (exec->no_file == true)
+		// 	exit(1);
+		// if (exec->no_permission == true)
+		// 	exit(126);                              ????
+		status = exec_built_in(cmd, env, exec);
+		close(exec->in);
+		close(exec->out);
+		if (exec->pipefd[0])
+			close(exec->pipefd[0]);
+		exit(status);                //  use my exit for LEAKS
+	}
+	else
+		cmd->args[0] = get_absolute_path(env, cmd->args[0]);
+}
+
+int 	is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec)
+{
+	if (!temp->next && is_it_built_in(temp->args[0]))
+	{
+		exec->out = dup(1);
+		redirections(temp->redir, exec);
+		exec_built_in(temp, env, exec);
+		close(exec->out);
+		return (1);
+	}
+	return (0);
+}

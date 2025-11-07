@@ -44,6 +44,7 @@ void	copy_env(t_map *map, char **env, t_exec *exec)
 	}
 	else
 		handle_no_env(map);
+	handle_shell_lvl(map);
 	map->put(map, ft_strdup("?"), ft_strdup("0"));
 	map->put(map, ft_strdup("$"), ft_strdup("substituir")); //
 }
@@ -65,7 +66,7 @@ int	ft_env(t_cmd *cmd, t_map *env, t_exec *exec)
 		if (!ft_strncmp(vars[i], "?", 1) || !ft_strncmp(vars[i], "$", 1))
 			continue ;
 		write(exec->out, vars[i], ft_strlen(vars[i]));
+		write(exec->out, "\n", 1);
 	}
-	env->put(env, "?", ft_strdup("0"));
 	return (0);
 }

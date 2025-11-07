@@ -33,28 +33,6 @@ char	*get_absolute_path(t_map *env, char *cmd)
 	return (cmd);
 }
 
-int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
-{
-    if (!cmd || !cmd->args)
-	{
-		env->put(env, "?", ft_strdup("0"));
-        return (0);     
-	}
-    if (!ft_strncmp(cmd->args[0], "cd", 3))
-        return (ft_cd(cmd, env));
-    if (!ft_strncmp(cmd->args[0], "echo", 5))
-        return (ft_echo(cmd, env, exec));
-    if (!ft_strncmp(cmd->args[0], "pwd", 4))
-        return (ft_pwd(env, exec));
-    if (!ft_strncmp(cmd->args[0], "env", 4))
-        return (ft_env(cmd, env, exec));
-    if (!ft_strncmp(cmd->args[0], "export", 7))
-        return (ft_export(cmd, env, exec));
-    if (!ft_strncmp(cmd->args[0], "unset", 6))
-       return (ft_unset(cmd, env));
-	return (0);
-}
-
 static void	handling_here_doc(t_redir *redir, t_exec *exec)
 {
 	pid_t   pid;

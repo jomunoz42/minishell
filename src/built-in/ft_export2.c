@@ -10,10 +10,7 @@ int	if_key_exists(char *arg, t_map *env)
 	while (node)
 	{
 		if (!strncmp(node->key, arg, ft_strlen(arg) + 1))
-		{
-			env->put(env, "?", ft_strdup("1"));
 			return (1);
-		}
 		node = node->next;
 	}
 	return (0);
@@ -52,7 +49,6 @@ int	handle_invalid_export(char *arg, t_map *env)
 			write(2, "bash: export: `", 15);
 			write(2, arg, ft_strlen(arg));
 			write(2, "': not a valid identifier\n", 27);
-			env->put(env, "?", ft_strdup("1"));
 			return (1);
 		}
 	}

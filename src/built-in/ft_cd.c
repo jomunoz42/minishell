@@ -13,7 +13,7 @@ static int    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
     
     path = env->get(env, "HOME");
     if (!path || path[0] == '\0')
-        return (write(2, "bash: cd: HOME not set\n", 24), env->put(env, "?", ft_strdup("1")), 1);
+        return (write(2, "bash: cd: HOME not set\n", 24), 1);
     if (file_or_directory(path, env) == 0)
     {
         if (chdir(path) != 0)
@@ -21,16 +21,15 @@ static int    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
             if (errno == EACCES)
                 handle_cd_errors(path, 4, env);
             else
-                (perror("bash: cd"), env->put(env, "?", ft_strdup("1")));
+                perror("bash: cd");
             free(current_pwd);
             return (1);
         }
         env->put(env, "OLDPWD", current_pwd);
         env->put(env, "PWD", ft_strdup(path));
-        env->put(env, "?", ft_strdup("0"));
     }
     else
-        return(env->put(env, "?", ft_strdup("1")), free(current_pwd), 1);
+        return (free(current_pwd), 1);
     return (0);
 }
 
@@ -40,7 +39,7 @@ static int    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
     
     path = env->get(env, "OLDPWD");
     if (!path || path[0] == '\0')
-        return(write(2, "bash: cd: OLDPWD not set\n", 24), env->put(env, "?", ft_strdup("1")), 1);
+        return (write(2, "bash: cd: OLDPWD not set\n", 24), 1);
     if (file_or_directory(path, env) == 0)
     {
         if (chdir(path) != 0)
@@ -48,17 +47,16 @@ static int    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
             if (errno == EACCES)
                 handle_cd_errors(path, 4, env);
             else
-                (perror("bash: cd"), env->put(env, "?", ft_strdup("1")));
+                perror("bash: cd");
             free(current_pwd);
             return (1);
         }
         printf("%s\n", path);
         env->put(env, "PWD", ft_strdup(path));
         env->put(env, "OLDPWD", current_pwd);
-        env->put(env, "?", ft_strdup("0"));
     }
     else
-        return(env->put(env, "?", ft_strdup("1")), free(current_pwd), 1);
+        return(free(current_pwd), 1);
     return (0);
 }
 
@@ -72,14 +70,13 @@ static int    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
         if (errno == EACCES)
             handle_cd_errors(path, 4, env);
         else
-            (perror("bash: cd"), env->put(env, "?", ft_strdup("1")));
+            perror("bash: cd");
         free(path);
         free(current_pwd);
         return (1);
     }
     env->put(env, "PWD", ft_strdup(path));
     env->put(env, "OLDPWD", current_pwd);
-    env->put(env, "?", ft_strdup("0"));
     return (free(path), 0);
 }
 
@@ -105,10 +102,9 @@ static int    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
         }
         env->put(env, "OLDPWD", current_pwd);
         env->put(env, "PWD", ft_strdup(path));
-        env->put(env, "?", ft_strdup("0"));
     }
     else
-        return((env->put(env, "?", ft_strdup("1")), free(current_pwd)), 1);
+        return(free(current_pwd), 1);
     return (free(path), 0);
 }
 
@@ -142,6 +138,7 @@ int	ft_cd(t_cmd *cmd, t_map *env)
 
 //      LEAKS
 
+falta returns cd 2
 
 // Ver resto dos returns desta funcoes
 
