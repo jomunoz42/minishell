@@ -73,7 +73,7 @@ char	*expand_str(char *dest, char *src, int index)
 	}
 	ft_memmove(dest + index + s_len + 1, dest + index + var_size, tail_len + 1);
 	ft_memcpy(dest + index + 1, src, s_len);
-	dest[index] = '&';
+	dest[index] = '\2';
 	return (dest);
 }
 

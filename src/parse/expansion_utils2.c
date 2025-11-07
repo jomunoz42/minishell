@@ -7,14 +7,15 @@ char	**new_args_expanded(char **splited, t_cmd *node, int start)
 {
 	int		j;
 	int		i;
+	int		size;
 	char	**new_args;
 
-	new_args = ft_calloc(arr_count(node->args) + arr_count(splited) + 1,
-			sizeof(char *));
+	size = arr_count(node->args) + arr_count(splited);
+	new_args = ft_calloc(size + 1, sizeof(char *));
 	if (!new_args)
 		return (NULL);
-	i = -1;
-	while (node->args[++i])
+	i = 0;
+	while (i < size - 1)
 	{
 		if (i == start)
 		{
@@ -26,34 +27,35 @@ char	**new_args_expanded(char **splited, t_cmd *node, int start)
 		}
 		else
 			new_args[i] = node->args[i];
+		i++;
 	}
-	new_args[i] = NULL;
-	free_double(splited);
 	return (new_args);
 }
 
 int	split_expansion_helper(t_cmd *node, int i)
 {
-	char	**tmp;
-   // char	*tmp_str;
+	char	*tmp_str;
+	char	**splited;
+	char	**tmp_double;
 
-	tmp = ft_split(node->args[i], '\3');
-	if (!tmp)
+	splited = ft_split(node->args[i], '\3');
+	if (!splited)
 		return (0);
-	if (arr_count(tmp) > 1)
+	if (arr_count(splited) > 1)
 	{
-		free_double(node->args);
-		node->args = new_args_expanded(tmp, node, i);
+		tmp_double = node->args;
+		node->args = new_args_expanded(splited, node, i);
 		if (!node->args)
 			return (0);
+		free_double(tmp_double);
 	}
-	else if (node->args[i][0] == '&')
-	{	
-        //tmp_str = node->args[i];
-        node->args[i] = pseudo_quotes(node->args[i]);
-        //free(tmp_str);
-    }
-	free_double(tmp);
+	else if (node->args[i][0] == '\2')
+	{
+		tmp_str = node->args[i];
+		node->args[i] = pseudo_quotes(node->args[i]);
+		free(tmp_str);
+	}
+	free_double(splited);
 	return (1);
 }
 

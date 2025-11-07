@@ -53,7 +53,7 @@ void	find_quotes(char *str, int i)
 	if (!str[i])
 		return ;
 	j = 0;
-	if (str[i] == '"' || str[i] == '\'' || str[i] == '!')
+	if (str[i] == '"' || str[i] == '\'' || str[i] == '\3')
 	{
 		quote = str[i];
 		j = i + 1;

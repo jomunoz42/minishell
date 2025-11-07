@@ -68,7 +68,49 @@ int	is_empty(char *input)
 	return (flag == true);
 }
 
-char	*primary_check(char *input)
+int	verify_tolken(char *str)
+{
+	int	i;
+
+	i = 0;
+	// if (str[0] == '|')
+	// 	return (0);
+	// while (str[i])
+	// {
+	// 	if ()
+	// 		return (0);
+	// 	i++;
+	// }
+	return (1);
+}
+
+int	check_sintax(char *str, t_map *env)
+{
+	int		i;
+	char	flag;
+
+	i = 0;
+	flag = 0;
+	while (str[i])
+	{
+		flag = identify_quote(str[i], flag);
+		if (!flag)
+		{
+			while (str[i] == ' ')
+				i++;
+			if (!verify_tolken(str + i))
+			{
+				write(2, "bash: syntax error near unexpected token\n", 42);
+				env->put(env, "?", ft_strdup("2"));
+				return (0);
+			}
+		}
+		i++;
+	}
+	return (1);
+}
+
+char	*primary_check(char *input, t_map *env)
 {
 	char	*dup;
 
@@ -88,7 +130,7 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 	int		i;
 	char	**line;
 
-	input = primary_check(input);
+	input = primary_check(input, env);
 	if (!input)
 		return (NULL);
 	line = ft_split(input, '\2');
