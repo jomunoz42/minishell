@@ -2,6 +2,8 @@
 
 #include "minishell.h"
 
+char		*get_absolute_path(t_map *env, char *cmd);
+
 int    is_it_built_in(char *cmd)
 {
     if (!cmd)
@@ -28,17 +30,17 @@ int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
     status = 0;
     if (!cmd || !cmd->args)
         return (status);     
-    if (!ft_strncmp(cmd->args[0], "cd", 3))
+    else if (!ft_strncmp(cmd->args[0], "cd", 3))
         status = ft_cd(cmd, env);
-    if (!ft_strncmp(cmd->args[0], "echo", 5))
+    else if (!ft_strncmp(cmd->args[0], "echo", 5))
         status = ft_echo(cmd, env, exec);
-    if (!ft_strncmp(cmd->args[0], "pwd", 4))
+    else if (!ft_strncmp(cmd->args[0], "pwd", 4))
         status = ft_pwd(env, exec);
-    if (!ft_strncmp(cmd->args[0], "env", 4))
+    else if (!ft_strncmp(cmd->args[0], "env", 4))
         status = ft_env(cmd, env, exec);
-    if (!ft_strncmp(cmd->args[0], "export", 7))
+    else if (!ft_strncmp(cmd->args[0], "export", 7))
         status = ft_export(cmd, env, exec);
-    if (!ft_strncmp(cmd->args[0], "unset", 6))
+    else if (!ft_strncmp(cmd->args[0], "unset", 6))
         status = ft_unset(cmd, env);
     env->put(env, "?", ft_itoa(status));
 	return (status);
@@ -50,10 +52,8 @@ void	handle_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
 
 	if (is_it_built_in(cmd->args[0]))
 	{
-		// if (exec->no_file == true)
-		// 	exit(1);
-		// if (exec->no_permission == true)
-		// 	exit(126);                              ????
+		if (exec->no_file == true || exec->no_permission == true)
+			exit(1);                          
 		status = exec_built_in(cmd, env, exec);
 		close(exec->in);
 		close(exec->out);

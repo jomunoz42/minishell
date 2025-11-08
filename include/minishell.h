@@ -69,6 +69,8 @@ void				handle_path_not_found(char *path, char **cmd);
 void				close_everything(t_exec *exec);
 void 				close_and_reset(t_exec *exec);
 
+void				redirections(t_redir *redir, t_exec *exec);
+
 //========================PARSING=========================
 
 t_cmd				*new_node(char **new, t_map *env);

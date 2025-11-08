@@ -13,6 +13,8 @@ char	*get_absolute_path(t_map *env, char *cmd)
 	char	*str;
 	int		i;
 
+	if (!*cmd)
+		return ("");
 	if (is_it_built_in(cmd))
 		return (cmd);
 	if (access(cmd, X_OK) == 0)

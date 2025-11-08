@@ -41,7 +41,7 @@ int file_or_directory(char *path, t_map *env)
     return (1);
 }
 
-void handle_folder_errors(t_cmd *cmd, char *path, t_map *env) /// ver returns
+void handle_folder_errors(t_cmd *cmd, char *path, t_map *env)
 {
     if (errno == EACCES)
     {
@@ -51,10 +51,7 @@ void handle_folder_errors(t_cmd *cmd, char *path, t_map *env) /// ver returns
             handle_cd_errors(cmd->args[1], 4, env);
     }
     else
-    {
         perror("bash: cd");
-        env->put(env, "?", ft_strdup("1"));
-    }
 }
 
 int handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
@@ -65,7 +62,6 @@ int handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
     if (!ft_strncmp(cmd->args[1], "-P", 3) || !ft_strncmp(cmd->args[1], "-L", 3))
     {
         write(1, "Minishell subject: cd with only a relative or absolute path\n", 61);
-        env->put(env, "?", ft_strdup("0"));
         free(current_pwd);
         return (0);
     }
@@ -77,7 +73,6 @@ int handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
 		write(2, &cmd->args[1][i], 1);
 		write(2, ": invalid option\n", 18); 
         write(2, "cd: usage: cd [-L|[-P [-e]] [-@]] [dir]\n", 41);
-        env->put(env, "?", ft_strdup("2"));
         free(current_pwd);
         return (2);
     }
@@ -93,7 +88,6 @@ int    goes_nowhere(t_map *env, char *current_pwd)
             handle_cd_errors(".", 2, env);
         return (1);
     }
-    env->put(env, "?", ft_strdup("0"));
     free(current_pwd);
     return (0);
 }

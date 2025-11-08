@@ -3,7 +3,6 @@
 
 int    		is_it_built_in(char *cmd);
 int			exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
-char		*get_absolute_path(t_map *env, char *cmd);
 int     	parent_built_ins(t_cmd *cmd, t_map *env, t_exec *exec);
 int 		is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec);
 void		handle_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
@@ -43,7 +42,7 @@ static void	redirections2(t_redir *temp, t_exec *exec)
 	}
 }
 
-static void	redirections(t_redir *redir, t_exec *exec)
+void	redirections(t_redir *redir, t_exec *exec)
 {
 	t_redir	*temp;
 
@@ -84,10 +83,8 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 		close(exec->out);
 		if (exec->pipefd[0])
 			close(exec->pipefd[0]);
-		if (exec->no_file == true)
+		if (exec->no_file == true || exec->no_permission == true)
 			exit(1);
-		if (exec->no_permission == true)
-			exit(126);
 		execve(cmd->args[0], cmd->args, env->to_str(env));
 		handle_path_not_found(cmd->args[0], cmd->args);
 	}

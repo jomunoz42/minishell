@@ -19,7 +19,7 @@ static void handle_shell_lvl(t_map *map)
 
 static void	handle_no_env(t_map *map)
 {
-	map->put(map, ft_strdup("SHLVL"), ft_strdup("2"));
+	map->put(map, ft_strdup("SHLVL"), ft_strdup("3"));
 	map->put(map, ft_strdup("PWD"), ft_strdup(getcwd(NULL, 0)));
 	map->put(map, ft_strdup("PATH"),
 		ft_strdup("/home/jomunoz/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"));

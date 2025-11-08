@@ -78,7 +78,7 @@ void	handle_path_not_found(char *path, char **cmd)
 		error_messages(path);
 	else
 	{
-		if (path && ft_strncmp(path, "\"\"", 1) == 0)   //  "" > 2.txt
+		if (path && ft_strncmp(path, "", 1) == 0)   //  "" > 2.txt
 			write(2, "Command '' not found\n", 22);
 		else
 		{

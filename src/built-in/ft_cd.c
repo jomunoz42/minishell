@@ -138,8 +138,6 @@ int	ft_cd(t_cmd *cmd, t_map *env)
 
 //      LEAKS
 
-falta returns cd 2
-
 // Ver resto dos returns desta funcoes
 
 

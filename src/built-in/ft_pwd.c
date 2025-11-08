@@ -16,10 +16,12 @@ int    ft_pwd(t_map *env, t_exec *exec)
             return (1);
         }
         write(exec->out, path, ft_strlen(path));
+        write(exec->out, "\n", 1);
     }
     else
     {
         write(exec->out, path, ft_strlen(path));
+        write(exec->out, "\n", 1);
         free(path);
     }
     return (0);
