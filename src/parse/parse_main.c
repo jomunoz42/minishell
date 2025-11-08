@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+int		check_sintax(char *str, t_map *env);
+
 void	print_struct(t_cmd *head)
 {
 	t_cmd	*node;
@@ -68,53 +70,12 @@ int	is_empty(char *input)
 	return (flag == true);
 }
 
-int	verify_tolken(char *str)
-{
-	int	i;
-
-	i = 0;
-	// if (str[0] == '|')
-	// 	return (0);
-	// while (str[i])
-	// {
-	// 	if ()
-	// 		return (0);
-	// 	i++;
-	// }
-	return (1);
-}
-
-// int	check_sintax(char *str, t_map *env)
-// {
-// 	int		i;
-// 	char	flag;
-
-// 	i = 0;
-// 	flag = 0;
-// 	while (str[i])
-// 	{
-// 		flag = identify_quote(str[i], flag);
-// 		if (!flag)
-// 		{
-// 			while (str[i] == ' ')
-// 				i++;
-// 			if (!verify_tolken(str + i))
-// 			{
-// 				write(2, "bash: syntax error near unexpected token\n", 42);
-// 				env->put(env, "?", ft_strdup("2"));
-// 				return (0);
-// 			}
-// 		}
-// 		i++;
-// 	}
-// 	return (1);
-// }
-
 char	*primary_check(char *input, t_map *env)
 {
 	char	*dup;
 
-	if (!input || !is_empty(input) || !quote_handler(input))
+	if (!input || !is_empty(input) || !check_sintax(input, env)
+		|| !quote_handler(input))
 		return (NULL);
 	dup = ft_strdup(input);
 	if (!dup)
