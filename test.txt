@@ -2,7 +2,68 @@
 
 ---> ECHO
 
+Todos os testes do echo teem  $? = 0
 
+echo "olá mundo"                -   olá mundo
+echo 'olá mundo'                -   olá mundo
+echo "olá 'mundo'"              -   olá 'mundo'
+echo 'olá "mundo"'              -   olá "mundo"
+
+echo "\"aspas duplas dentro de duplas\""      -   "aspas duplas dentro de duplas"
+
+export VAR="mundo"
+
+echo $VAR                       -    mundo
+echo "$VAR"                     -    mundo
+echo '$VAR'                     -    $VAR
+echo "olá $VAR"                 -    olá mundo
+echo 'olá $VAR'                 -    olá $VAR
+echo "$VAR!"'!!'                -    mundo!!!
+
+export VAR="palavra com espaço" -    palavra com espaço
+echo $VAR                       -    palavra com espaço
+echo "$VAR"                     -    palavra com espaço
+echo "$VAR e mais"              -    palavra com espaço e mais
+echo "$VAR\ e\ escape"          -       
+
+unset VAR
+echo "$VAR"                     -    \n
+
+export X=foo Y=bar           
+echo "$X$Y"                     -      foobar
+echo '$X$Y'                     -      $X$Y 
+echo "$X""$Y"                   -      foobar
+echo "$X"'$Y'                   -      foo$Y
+
+
+echo \"aqui\"                   -      "aqui"
+echo "aqui\"também\""           -      aqui"também"
+echo 'aqui\'não\''              -
+echo "barra invertida \\ dentro de aspas"    -    barra invertida \ dentro de aspas  
+
+echo "Resultado: `echo ola`"    -      Resultado: ola
+echo 'Resultado: `echo ola`'    -      Resultado: `echo ola`
+
+echo "abc'def"                  -      abc'def
+echo 'abc"def'                  -      abc"def
+echo "'"                        -      '
+echo '"'                        -      "
+echo "\"'"                      -      "'
+echo "'\""                      -      '"
+echo "a'b'c"d"e"                -      a'b'cde
+echo "a'b'c" 'd"e"f'            -      a'b'c d"e"f
+echo "  espaço no fim "                    -      |  espaço no fim |
+echo "   vários    espaços   no meio   "   -      |   vários    espaços   no meio   |
+echo "'   espaços dentro de aspas   '"     -      '   espaços dentro de aspas   '
+
+ls | echo hello world
+hello world
+
+ls | echo -nnnnnn -n hello -n > out.txt
+out.txt: hello -n
+
+ls | echo -nnnnnn -n hello -n < 2.txt | cat
+hello -nminishell$
 
 ---> ENV
 
@@ -12,7 +73,7 @@ Is SHLVL = 3 ?
 
 env + export + env + export + env
 
-Variaveis exportadas sem valor e sem igual nao aparecem no env
+Confirmar se variaveis exportadas sem valor aparecem no env
 
 ---> EXPORT
 
@@ -22,25 +83,13 @@ Is export sorted ?
 
 Does the value has "value" ?
 
-export a=
-Tem que ficar com aspas
+export VAR_1=123                        sim
+export _oculto="123"                    sim
 $? = 0
 
-export a=a
-export a
-It doesn't substitute the value if there is no equal
-$? = 0
-
-export a=c b=a c=t   
-$a$b$c
-cat must happen
-
-export aa.aa
-bash: export: `aa.aa': not a valid identifier
-$? = 1
-
-export 1=2
-bash: export: `1=2': not a valid identifier
+export 1VAR=teste                      # começa com número ❌
+export meu-nome="a"                    # hífen ❌
+export nome.sobrenome="b"              # ponto ❌
 $? = 1
 
 export a=a 1=2 c=c d=d
@@ -48,6 +97,19 @@ bash: export: `1=2': not a valid identifier
 Mas exporta as validas e devolve:
 $? = 1
 
+export a b= c=c
+declare -x a
+declare -x b=""
+declare -x c="c"
+$? = 0
+
+export c
+declare -x c="c"
+$? = 0
+
+export a=c b=a c=t   
+$a$b$c
+cat must happen
 
 ---> CD 
 
@@ -164,8 +226,7 @@ bash: nofile: No such file or directory          confirm $? = 0
 
 cat < in.txt | ls > nofile            creates file?
 
-cat < no_file
-$? = 1
+
 
 
 
@@ -175,68 +236,3 @@ $? = 1
 
 
 
-
-
-echo "olá mundo"
-echo 'olá mundo'
-echo "olá 'mundo'"
-echo 'olá "mundo"'
-#######echo "\"aspas duplas dentro de duplas\""
-#######echo '\'aspas simples dentro de simples?\''
-
-export VAR="mundo"
-
-echo $VAR
-echo "$VAR"
-echo '$VAR'
-echo "olá $VAR"
-echo 'olá $VAR'
-echo "$VAR!"'!!'
-
-unset VAR
-echo "$VAR"
-
-
-#######echo \"aqui\"
-#######echo "aqui\"também\""
-#######echo 'aqui\'não\''
-#######echo "barra invertida \\ dentro de aspas"
-
-#######echo "Resultado: `echo ola`"
-#######echo 'Resultado: `echo ola`'
-
-export X=foo
-export Y=bar
-echo "$X$Y"
-echo '$X$Y'
-echo "$X""$Y"
-echo "$X"'$Y'
-
-echo "abc'def"
-echo 'abc"def'
-echo "'"
-echo '"'
-#######echo "\"'"
-#######echo "'\""
-echo "a'b'c"d"e"
-echo "a'b'c" 'd"e"f'
-echo "  espaço no fim "    
-echo "   vários    espaços   no meio   "
-echo "'   espaços dentro de aspas   '"
-
-export VAR="palavra com espaço"
-echo $VAR
-echo "$VAR"
-echo "$VAR e mais"
-echo "$VAR\ e\ escape"
-
-
-Unicas formas possiveis
-
-export NOME="João"
-export VAR_1=123
-export _oculto="sim"
-
-export 1VAR=teste     # começa com número ❌
-export meu-nome="a"   # hífen ❌
-export nome.sobrenome="b"  # ponto ❌

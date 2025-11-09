@@ -61,15 +61,3 @@ int	main(int argc, char **argv, char **environ)
 
 //          minishell$ cat < 2.txt wc < 3.txt
 //          Segmentation fault (core dumped)
-
-//          com printfs nao acontece e fica correto
-
-
-
-// export a=c b=a c=t   &a&b&c
-
-// export a nao tira o valor de a
-
-// echo dentro de fork
-
-//    unset e cd e exit nao funcionam de pipe

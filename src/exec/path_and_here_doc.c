@@ -15,9 +15,7 @@ char	*get_absolute_path(t_map *env, char *cmd)
 
 	if (!*cmd)
 		return ("");
-	if (is_it_built_in(cmd))
-		return (cmd);
-	if (access(cmd, X_OK) == 0)
+	if (is_it_built_in(cmd) || access(cmd, X_OK) == 0)
 		return (cmd);
 	str = env->get(env, "PATH");
 	if (!str || str[0] == '\0')
@@ -33,6 +31,17 @@ char	*get_absolute_path(t_map *env, char *cmd)
 		free(path);
 	}
 	return (cmd);
+}
+
+static int	here_doc_util(t_redir *redir, char *line, int size)
+{
+	if (!line || !*line || ((ft_strncmp(redir->args[1], line, size) == 0)
+			&& line[size] == '\n'))
+	{
+		free(line);
+		return (1);
+	}
+	return (0);
 }
 
 static void	handling_here_doc(t_redir *redir, t_exec *exec)
@@ -53,12 +62,8 @@ static void	handling_here_doc(t_redir *redir, t_exec *exec)
 		while (1)
 		{
 			line = get_next_line(0);
-			if (!line || !*line || ((ft_strncmp(redir->args[1], line, size) == 0)
-					&& line[size] == '\n'))
-			{
-				free(line);
+			if (here_doc_util(redir, line, size))
 				break ;
-			}
 			(write(redir->fd, line, ft_strlen(line)), free(line));
 		}
 		(close(redir->fd), exit(0));

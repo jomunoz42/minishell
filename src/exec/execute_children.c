@@ -54,8 +54,7 @@ void	redirections(t_redir *redir, t_exec *exec)
 			close(exec->in);
 			exec->in = open("/tmp/mini_temp", O_RDONLY);
 			if (exec->in == -1)
-				handling_errors(exec, temp->args[1], 1);
-					// errado e check this error id   1??
+				handling_errors(exec, "/tmp/mini_temp", 1);
 		}
 		if (ft_strncmp(temp->args[0], "<", 2) == 0)
 		{
@@ -119,29 +118,3 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	}
 	waiting_proccesses(cmd, exec, env);
 }
-
-//    ./minishell ls >> END cat < fd | wc     SEG FAULT
-
-//    cat < 2.txt < 1.txt | cat > 3.txt
-
-// Temporary heredoc file handling:
-
-// Exit codes of commands
-
-// Variable expansion in heredocs: Bash may do expansions
-// in heredoc content unless quotes are used around delimiters.
-
-// cat /dev/random | echo a
-
-
-
-// parent built ins
-
-// export				Yes				No (just outputs)
-// unset				Yes				No	
-// exit					Yes				No
-// cd					No*				No
-
-
-// minishell$ echo $?
-// 0;

@@ -1,18 +1,14 @@
 
 #include "minishell.h"
 
+int   is_there_slash(char *path);
+
 void	handling_errors(t_exec *exec, char *arg, int error_id)
 {
 	if (error_id == 1)
-	{
-		write(2, "bash: ", 6);
-		perror(arg);
-	}
+		(write(2, "bash: ", 6), perror(arg));
 	if (error_id == 2)
-	{
-		write(2, "bash: ", 6);
-		perror(arg);
-	}
+		(write(2, "bash: ", 6), perror(arg));
 	if (errno == ENOENT) 
 		exec->no_file = true;
 	else if (errno == EACCES)
@@ -21,29 +17,14 @@ void	handling_errors(t_exec *exec, char *arg, int error_id)
 	{
 		perror("pipe");
 		close_everything(exec); // check
-		exit(1);                // free everything
+		ft_exit(1);                // free everything
 	}
 	if (error_id == 4)
 	{
 		perror("fork");
 		close_everything(exec); // check
-		exit(1);                // free everything
+		ft_exit(1);                // free everything
 	}
-}
-
-static int   is_there_slash(char *path)
-{
-	int i;
-
-	i = 0;
-	if (!path)
-		return (0);
-	while(path[i])
-	{
-		if (path[i++] == '/')
-			return (1);
-	}
-	return (0);
 }
 
 static void	 error_messages(char *path)

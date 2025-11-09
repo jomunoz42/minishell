@@ -25,14 +25,19 @@ int handle_cd_errors(char *path, int error_id, t_map *env)
     return (1);
 }
 
-int file_or_directory(char *path, t_map *env)
+int file_or_directory(char *path, t_map *env, t_cmd *cmd)
 {
     struct stat buf;
     
     if (stat(path, &buf) != 0) 
     {
         if (errno == ENOENT)
-            return (handle_cd_errors(path, 2, env), 1);
+        {
+            if (cmd->args[1][0] == '/')
+                return (handle_cd_errors(path, 2, env));
+            else
+                return (handle_cd_errors(cmd->args[1], 2, env));
+        }
     }
     else if (S_ISREG(buf.st_mode))
         return (handle_cd_errors(path, 3, env), 1);
@@ -61,9 +66,9 @@ int handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
     i = 1;
     if (!ft_strncmp(cmd->args[1], "-P", 3) || !ft_strncmp(cmd->args[1], "-L", 3))
     {
-        write(1, "Minishell subject: cd with only a relative or absolute path\n", 61);
+        write(2, "Minishell subject: cd with only a relative or absolute path\n", 61);
         free(current_pwd);
-        return (0);
+        return (1);
     }
     else
     {

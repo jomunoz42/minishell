@@ -50,6 +50,17 @@ int is_there_value(char *vars)
     return (0);
 }
 
+int   is_there_slash(char *path)
+{
+	int i;
 
-
-
+	i = 0;
+	if (!path)
+		return (0);
+	while(path[i])
+	{
+		if (path[i++] == '/')
+			return (1);
+	}
+	return (0);
+}

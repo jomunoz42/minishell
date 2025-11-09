@@ -14,7 +14,7 @@ static int    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
     path = env->get(env, "HOME");
     if (!path || path[0] == '\0')
         return (write(2, "bash: cd: HOME not set\n", 24), 1);
-    if (file_or_directory(path, env) == 0)
+    if (file_or_directory(path, env, cmd) == 0)
     {
         if (chdir(path) != 0)
         {
@@ -40,7 +40,7 @@ static int    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
     path = env->get(env, "OLDPWD");
     if (!path || path[0] == '\0')
         return (write(2, "bash: cd: OLDPWD not set\n", 24), 1);
-    if (file_or_directory(path, env) == 0)
+    if (file_or_directory(path, env, cmd) == 0)
     {
         if (chdir(path) != 0)
         {
@@ -65,18 +65,23 @@ static int    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
     char *path;
 
     path = find_last_slash(ft_strdup(current_pwd));
-    if (chdir(path) != 0)
+    if (file_or_directory(path, env, cmd) == 0)
     {
-        if (errno == EACCES)
-            handle_cd_errors(path, 4, env);
-        else
-            perror("bash: cd");
-        free(path);
-        free(current_pwd);
-        return (1);
+        if (chdir(path) != 0)
+        {
+            if (errno == EACCES)
+                handle_cd_errors(path, 4, env);
+            else
+                perror("bash: cd");
+            free(path);
+            free(current_pwd);
+            return (1);
+        }
+        env->put(env, "PWD", ft_strdup(path));
+        env->put(env, "OLDPWD", current_pwd);
     }
-    env->put(env, "PWD", ft_strdup(path));
-    env->put(env, "OLDPWD", current_pwd);
+    else
+        return(free(current_pwd), 1);
     return (free(path), 0);
 }
 
@@ -91,7 +96,7 @@ static int    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
         path = ft_strjoin(env->get(env, "PWD"), "/");
         path = ft_strjoin_free(path, cmd->args[1]);
     }
-    if (file_or_directory(path, env) == 0)
+    if (file_or_directory(path, env, cmd) == 0)
     {
         if (chdir(path) != 0)
         {
@@ -136,10 +141,6 @@ int	ft_cd(t_cmd *cmd, t_map *env)
     return (0);
 }
 
-//      LEAKS
-
-// Ver resto dos returns desta funcoes
-
 
 // omunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ chmod -x zz
 // jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ ls | cd zz
@@ -151,3 +152,15 @@ int	ft_cd(t_cmd *cmd, t_map *env)
 // jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ ls | cd zz
 // jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ echo $?
 // 0
+
+
+// bash: cd: No such file or directory
+// minishell$ echo $?
+// 1
+// minishell$ cd -
+// bash: cd: -: No such file or directory
+// free(): invalid pointer
+// Aborted (core dumped)
+
+
+// SOLVED, TESTAR COM BUEDA FORCA

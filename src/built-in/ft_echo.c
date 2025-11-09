@@ -16,48 +16,26 @@ static int	only_ns(char *arg)
 	return (1);
 }
 
-static int invalid_flag(t_cmd *cmd, t_map *env, int i, int over)
+int ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
 {
-	if (cmd->args[i][0] == '-' && cmd->args[i][1] != 'n' && !over)
-	{
-		write(1, "Minishell subject: echo with option -n", 38);
-		return (1);
-	}
-	return (0);
-}
+    int i;
+    bool n_option;
 
-static void ft_echo_util(t_cmd *cmd, t_exec *exec, int i, int j)
-{
-	while (cmd->args[i][j])
-		write(exec->out, &cmd->args[i][j++], 1);
-	if (cmd->args[i + 1])
-		write(exec->out, " ", 1);
-}
-
-int	ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
-{
-	int		i;
-	int		j;
-	bool	n_option;
-	bool	over;
-
-	i = 0;
+	i = 1;
 	n_option = false;
-	over = false;
-	while (cmd->args[++i])
-	{
-		j = 0;
-		if (invalid_flag(cmd, env, i, over))
-			return (1);
-		if (!ft_strncmp(&cmd->args[i][j], "-n", 2) && !over && only_ns(cmd->args[i]))
-			n_option = true;
-		else
-		{
-			over = true;
-			ft_echo_util(cmd, exec, i, j);
-		}
-	}
-	if (!n_option)
-		write(exec->out, "\n", 1);
-	return (0);
+    while (cmd->args[i] && cmd->args[i][0] == '-' && only_ns(cmd->args[i]))
+    {
+        n_option = true;
+        i++;
+    }
+    while (cmd->args[i])
+    {
+        write(exec->out, cmd->args[i], ft_strlen(cmd->args[i]));
+        if (cmd->args[i + 1])
+            write(exec->out, " ", 1);
+        i++;
+    }
+    if (!n_option)
+        write(exec->out, "\n", 1);
+    return (0);
 }

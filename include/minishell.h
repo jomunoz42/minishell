@@ -93,7 +93,7 @@ int					length_of_equal(char *vars);
 int					is_there_equal(char *vars);
 int					is_there_value(char *vars);
 int					handle_cd_errors(char *path, int error_id, t_map *env);
-int                 file_or_directory(char *path, t_map *env);
+int                 file_or_directory(char *path, t_map *env, t_cmd *cmd);
 char				*ft_strjoin_free(char *s1, char *s2);
 void				free_double(char **arg);
 void				error_exit(char *s, int code);
