@@ -10,6 +10,7 @@
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdarg.h>
 # include <stdbool.h>
 # include <stddef.h>
@@ -29,7 +30,7 @@ typedef struct s_exec
 {
 	int				in;
 	int				out;
-	int				pipefd[2];  //   verificar se da para tirar sem problema
+	int pipefd[2]; //   verificar se da para tirar sem problema
 	int				status;
 	bool			no_permission;
 	bool			no_file;
@@ -58,7 +59,7 @@ void				ft_pwd(t_map *env);
 void				ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
 void				ft_unset(t_cmd *cmd, t_map *env, t_exec *exec);
 void				ft_env(t_cmd *cmd, t_map *env);
-void				ft_exit(int status);//  return
+void	ft_exit(int status); //  return
 
 //=======================EXECUTION========================
 
@@ -82,6 +83,7 @@ int					remove_redir(t_cmd *head, int i);
 int					change_expansion(t_cmd *head, t_map *env);
 void				remove_quotes(t_cmd *head);
 t_redir				*redir_start(t_cmd *head, int i);
+void				signals(void);
 
 //==========================UTILS=========================
 
@@ -90,7 +92,7 @@ int					length_of_equal(char *vars);
 int					is_there_equal(char *vars);
 int					is_there_value(char *vars);
 void				handle_cd_errors(char *path, int error_id, t_map *env);
-int                 file_or_directory(char *path, t_map *env);
+int					file_or_directory(char *path, t_map *env);
 char				*ft_strjoin_free(char *s1, char *s2);
 void				free_double(char **arg);
 void				error_exit(char *s, int code);

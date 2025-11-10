@@ -25,6 +25,8 @@ int	organize_args(char **args, t_cmd *node)
 		}
 		i++;
 	}
+	if (node->redir)
+		return (1);
 	if (!*args[0] || (*args[0] == '\2' && ft_strlen(args[0]) == 1))
 		return (free_list(node), 0);
 	return (1);

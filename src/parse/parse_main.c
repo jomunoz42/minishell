@@ -105,7 +105,7 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 			return (free_double(line), NULL);
 		i++;
 	}
-	free(input);
+	free(input), 
 	free_double(line);
 	if (!init_redir(head))
 		return (NULL);
