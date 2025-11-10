@@ -53,18 +53,26 @@ static void	 error_messages(char *path)
 	}
 }
 
-void	handle_path_not_found(char *path, char **cmd)
+void	handle_execve_errors(char *path, char **cmd, t_map *env)
 {
 	if (is_there_slash(path))
 		error_messages(path);
 	else
 	{
-		if (path && ft_strncmp(path, "", 1) == 0)   //  "" > 2.txt
-			write(2, "Command '' not found\n", 22);
+		if (env->get(env, "PATH") == NULL || env->get(env, "PATH")[0] == '\0')
+		{
+			write(2, "bash: ", 6);
+			perror(cmd[0]);
+		}
 		else
 		{
-			write(2, cmd[0], ft_strlen(cmd[0]));
-			write(2, ": command not found\n", 21);
+			if (path && ft_strncmp(path, "", 1) == 0)
+				write(2, "Command '' not found\n", 22);
+			else
+			{
+				write(2, cmd[0], ft_strlen(cmd[0]));
+				write(2, ": command not found\n", 21);
+			}
 		}
 		if (path && path != cmd[0] && path[0] != '\0')
 			free(path);

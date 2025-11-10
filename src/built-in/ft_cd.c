@@ -142,18 +142,6 @@ int	ft_cd(t_cmd *cmd, t_map *env)
 }
 
 
-// omunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ chmod -x zz
-// jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ ls | cd zz
-// bash: cd: zz: Permission denied
-// jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ echo $?
-// 1
-
-// jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ chmod +x zz
-// jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ ls | cd zz
-// jomunoz@c2r1s11:~/Common_Core_42/Milestone3/minishell$ echo $?
-// 0
-
-
 // bash: cd: No such file or directory
 // minishell$ echo $?
 // 1

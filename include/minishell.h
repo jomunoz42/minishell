@@ -29,7 +29,7 @@ typedef struct s_exec
 {
 	int				in;
 	int				out;
-	int				pipefd[2];  //   verificar se da para tirar sem problema
+	int pipefd[2]; //   verificar se da para tirar sem problema
 	int				status;
 	bool			no_permission;
 	bool			no_file;
@@ -52,22 +52,22 @@ typedef struct s_cmd
 
 //========================BUILTINS========================
 
-int				ft_echo(t_cmd *cmd, t_map *env, t_exec *exec);
-int				ft_cd(t_cmd *cmd, t_map *env);
-int				ft_pwd(t_map *env, t_exec *exec);
-int				ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
-int				ft_unset(t_cmd *cmd, t_map *env);
-int				ft_env(t_cmd *cmd, t_map *env, t_exec *exec);
-int				ft_exit(int status);   //  return
+int					ft_echo(t_cmd *cmd, t_map *env, t_exec *exec);
+int					ft_cd(t_cmd *cmd, t_map *env);
+int					ft_pwd(t_map *env, t_exec *exec);
+int					ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
+int					ft_unset(t_cmd *cmd, t_map *env);
+int					ft_env(t_cmd *cmd, t_map *env, t_exec *exec);
+int			ft_exit(int status); //  return
 
 //=======================EXECUTION========================
 
 void				execute_heredocs(t_cmd *cmd, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 void				handling_errors(t_exec *exec, char *arg, int error_id);
-void				handle_path_not_found(char *path, char **cmd);
+void				handle_execve_errors(char *path, char **cmd, t_map *env);
 void				close_everything(t_exec *exec);
-void 				close_and_reset(t_exec *exec);
+void				close_and_reset(t_exec *exec);
 
 void				redirections(t_redir *redir, t_exec *exec);
 
@@ -93,7 +93,7 @@ int					length_of_equal(char *vars);
 int					is_there_equal(char *vars);
 int					is_there_value(char *vars);
 int					handle_cd_errors(char *path, int error_id, t_map *env);
-int                 file_or_directory(char *path, t_map *env, t_cmd *cmd);
+int					file_or_directory(char *path, t_map *env, t_cmd *cmd);
 char				*ft_strjoin_free(char *s1, char *s2);
 void				free_double(char **arg);
 void				error_exit(char *s, int code);

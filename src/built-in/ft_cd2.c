@@ -40,7 +40,12 @@ int file_or_directory(char *path, t_map *env, t_cmd *cmd)
         }
     }
     else if (S_ISREG(buf.st_mode))
-        return (handle_cd_errors(path, 3, env), 1);
+    {
+        if (cmd->args[1][0] == '/')
+            return (handle_cd_errors(path, 3, env));
+        else
+            return (handle_cd_errors(cmd->args[1], 3, env));
+    }
     if (S_ISDIR(buf.st_mode)) 
         return (0);
     return (1);

@@ -82,10 +82,11 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 		close(exec->out);
 		if (exec->pipefd[0])
 			close(exec->pipefd[0]);
-		if (exec->no_file == true || exec->no_permission == true)
+		if (exec->no_file || exec->no_permission)
 			exit(1);
+		// printf("%s\n", cmd->args[0]);
 		execve(cmd->args[0], cmd->args, env->to_str(env));
-		handle_path_not_found(cmd->args[0], cmd->args);
+		handle_execve_errors(cmd->args[0], cmd->args, env);
 	}
 	close_and_reset(exec);
 }

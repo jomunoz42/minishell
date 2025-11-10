@@ -59,5 +59,29 @@ int	main(int argc, char **argv, char **environ)
 	unlink("/tmp/mini_temp");
 }
 
-//          minishell$ cat < 2.txt wc < 3.txt
-//          Segmentation fault (core dumped)
+// jomunoz@c2r3s6:~/Common_Core_42/Milestone3/minishell$ export var="cat Makefile | cat | cat | cat | cat"
+// jomunoz@c2r3s6:~/Common_Core_42/Milestone3/minishell$ $var
+
+// cat: '|': No such file or directory
+// cat: cat: No such file or directory
+// cat: '|': No such file or directory
+// cat: cat: No such file or directory
+// cat: '|': No such file or directory
+// cat: cat: No such file or directory
+// cat: '|': No such file or directory
+// cat: cat: No such file or directory
+
+// minishell$ export var="cat Makefile | cat | cat | cat | cat"
+// minishell$ $var
+
+// /usr/bin/cat: ''$'\002': No such file or directory
+// /usr/bin/cat: cat: No such file or directory
+// /usr/bin/cat: ''$'\002': No such file or directory
+// /usr/bin/cat: cat: No such file or directory
+// /usr/bin/cat: ''$'\002': No such file or directory
+// /usr/bin/cat: cat: No such file or directory
+// /usr/bin/cat: ''$'\002': No such file or directory
+// /usr/bin/cat: cat: No such file or directory
+
+
+// dentro de variaveis funciona apenas o primeiro comando e nao funcionam redirecoes

@@ -1,6 +1,7 @@
                                    < BUILT-INS >
 
----> ECHO
+
+---------->   ECHO
 
 Todos os testes do echo teem  $? = 0
 
@@ -65,7 +66,14 @@ out.txt: hello -n
 ls | echo -nnnnnn -n hello -n < 2.txt | cat
 hello -nminishell$
 
----> ENV
+---------->   PWD
+
+unset PWD
+pwd
+/home/jomunoz/Common_Core_42/Milestone3/minishell
+$? = 0
+
+---------->   ENV
 
 Do the 3 variables that have 2 or more equals have them ?
 
@@ -75,7 +83,7 @@ env + export + env + export + env
 
 Confirmar se variaveis exportadas sem valor aparecem no env
 
----> EXPORT
+---------->   EXPORT
 
 Does export have   declare -x ?
 
@@ -111,7 +119,7 @@ export a=c b=a c=t
 $a$b$c
 cat must happen
 
----> CD 
+---------->   CD 
 
 -> cd aaa aaa
 bash: cd: too many arguments
@@ -156,7 +164,7 @@ Sem permissoes
 bash: cd: /absolute_path: Permission denied
 $? = 1
 
-cd /src     (Valid directory and valid file and invalid input)
+cd /src     (Valid directory and invalid input)
 bash: cd: /src: No such file or directory
 $? = 1
 
@@ -167,9 +175,18 @@ $? = 1
 cd / e pwd     correct = /
 $? = 0
 
-TEST BUILT-INS IN THE Pipeline
+chmod -x zz
+ls | cd zz | cd ..
+bash: cd: zz: Permission denied
+echo $?
+$? = 0
 
-
+chmod +x zz
+cat < nofile | ls | cd zz
+bash: cd: zz: Permission denied
+bash: nofile: No such file or directory
+echo $?
+$? = 1
 
 --------------------------------------------------------------------------------------
 
@@ -200,7 +217,6 @@ Valid File com absolute path:
 /home/.../minishell/ficheiro   =  "bash: /home/.../minishell/ficheiro: Permission denied"
 $? = 126
 
-
 Sem barra:
 test.txt     =    "test.txt: command not found"
 $? = 127
@@ -208,31 +224,101 @@ $? = 127
 ---> Pipeline
 
 ls
+$? = 0
 
 ls | cat
+$? = 0
 
 ls | cat | cat | cat | cat | wc -l
+$? = 0
 
 cat < in.txt
+$? = 0
 
 cat < in.txt | cat > out.txt
+$? = 0
 
 cat < in.txt | cat >> out.txt
+$? = 0
 
 cat << aa | cat > out.txt
+$? = 0
 
 cat < nofile | cat > out.txt
-bash: nofile: No such file or directory          confirm $? = 0
+bash: nofile: No such file or directory         
+$? = 0
 
-cat < in.txt | ls > nofile            creates file?
+cat < nofile | ls > nofile2            creates nofile2?
+$? = 0
 
-
-
-
+<< aa
+$? = 0
 
 wc < 2.txt cat < 3.txt                          wc < 2.txt aaa < 3.txt
 wc: cat: No such file or directory              wc: aaa: No such file or directory
+$? = 1                                          $? = 1
+
+cat << EOF | grep a | grep b      no a and b input
 $? = 1
 
+echo test > a > b > c
+cat a b c
+test
+$? = 0
+
+echo $HOME | cat > out.txt
+cat out.txt
+/home/jomunoz
+$? = 0
+
+env | grep PATH
+$? = 0
+
+ls | cat | grep 0
+$? = 1
+
+unset PATH
+ls | cat | grep 0
+bash: ls: No such file or directory
+bash: bash: cat: No such file or directory
+grep: No such file or directory
+$? = 127
+
+export var="echo hello > out.txt"
+$var
+hello > out.txt
+$? = 0
 
 
+
+
+
+
+
+-------------------------------------------------------------------------
+
+handle this:
+export a="|"
+$a
+|: command not found
+
+export var="cat | cat"
+$var
+/usr/bin/cat: ''$'\002': No such file or directory
+/usr/bin/cat: cat: No such file or directory
+
+
+export var="cat | echo $HOME"
+free(): invalid pointer
+Aborted (core dumped)
+
+
+export var="echo hello > out.txt | ls | cat | echo $HOME"
+Segmentation fault (core dumped)
+
+minishell$ export a="echo $HOME $OLDPWD"
+Segmentation fault (core dumped)
+
+
+minishell$ ./minishell
+bash: ./minishell: Is a directory

@@ -110,3 +110,4 @@ int	ft_export(t_cmd *cmd, t_map *env, t_exec *exec)
 		return (print_export(sort_vars(copy), env, exec));
 	}
 }
+
