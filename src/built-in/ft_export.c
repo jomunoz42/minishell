@@ -98,7 +98,7 @@ int	ft_export(t_cmd *cmd, t_map *env, t_exec *exec)
 	{
 		copy = ft_calloc(sizeof(char *), env->size + 1);
 		if (!copy)
-			ft_exit(1, exec, env);
+			ft_exit(1, exec, cmd);
 		node = env->head;
 		i = 0;
 		while (node)

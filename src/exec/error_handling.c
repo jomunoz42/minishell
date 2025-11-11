@@ -79,7 +79,7 @@ void	handle_execve_errors(t_cmd *cmd, t_map *env, t_exec *exec)
 		}
 		if (cmd->args[0] && cmd->args[0][0] != '\0')
 			free(cmd->args[0]);
-		free_double(cmd->args[0]);
+		free_double(cmd->args);
 		ft_exit(127, exec, cmd);
 	}
 }

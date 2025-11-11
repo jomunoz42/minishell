@@ -8,7 +8,7 @@ t_cmd	*new_node(char **args, t_map *env)
 
 	node = malloc(sizeof(t_cmd));
 	if (!node)
-		ft_exit(1);
+		return (NULL);
 	node->args = args;
 	node->redir = NULL;
 	node->next = NULL;
