@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+int		check_sintax(char *str, t_map *env);
+
 void	print_struct(t_cmd *head)
 {
 	t_cmd	*node;
@@ -68,11 +70,12 @@ int	is_empty(char *input)
 	return (flag == true);
 }
 
-char	*primary_check(char *input)
+char	*primary_check(char *input, t_map *env)
 {
 	char	*dup;
 
-	if (!input || !is_empty(input) || !quote_handler(input))
+	if (!input || !is_empty(input) || !check_sintax(input, env)
+		|| !quote_handler(input))
 		return (NULL);
 	dup = ft_strdup(input);
 	if (!dup)
@@ -88,7 +91,7 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 	int		i;
 	char	**line;
 
-	input = primary_check(input);
+	input = primary_check(input, env);
 	if (!input)
 		return (NULL);
 	line = ft_split(input, '\2');
@@ -102,7 +105,7 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 			return (free_double(line), NULL);
 		i++;
 	}
-	free(input);
+	free(input), 
 	free_double(line);
 	if (!init_redir(head))
 		return (NULL);

@@ -10,6 +10,7 @@
 # include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 # include <stdarg.h>
 # include <stdbool.h>
 # include <stddef.h>
@@ -73,7 +74,7 @@ void				redirections(t_redir *redir, t_exec *exec);
 
 //========================PARSING=========================
 
-t_cmd				*new_node(char **new, t_map *env);
+t_cmd				*new_node(char **args, t_map *env);
 t_cmd				*separate_args(t_cmd *head, char *line, t_map *env);
 t_cmd				*parsing(char *input, t_cmd *all, t_map *env);
 int					quote_handler(char *input);
@@ -85,6 +86,7 @@ int					remove_redir(t_cmd *head, int i);
 int					change_expansion(t_cmd *head, t_map *env);
 void				remove_quotes(t_cmd *head);
 t_redir				*redir_start(t_cmd *head, int i);
+void				sig_handler(void);
 
 //==========================UTILS=========================
 
@@ -101,6 +103,7 @@ char				*ft_realloc_str(char *str, int len);
 int					arr_count(char **arr);
 char				*get_next_line(int fd);
 char				identify_quote(char c, char flag);
+t_map				*get_map_addr(t_map *env);
 
 //=========================LIBFT==========================
 

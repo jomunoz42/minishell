@@ -53,7 +53,7 @@ void	find_quotes(char *str, int i)
 	if (!str[i])
 		return ;
 	j = 0;
-	if (str[i] == '"' || str[i] == '\'' || str[i] == '!')
+	if (str[i] == '"' || str[i] == '\'' || str[i] == '\3')
 	{
 		quote = str[i];
 		j = i + 1;
@@ -70,24 +70,6 @@ void	find_quotes(char *str, int i)
 	find_quotes(str, i + 1);
 }
 
-void	remove_slash2(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '!')
-		{
-			if (str[i] + 1)
-				ft_memmove(str + i, str + i + 1, ft_strlen(str));
-			else
-				str[i] = 0;
-		}
-		i++;
-	}
-}
-
 void	remove_quotes(t_cmd *head)
 {
 	int		i;
@@ -100,7 +82,6 @@ void	remove_quotes(t_cmd *head)
 		while (node->args[i])
 		{
 			find_quotes(node->args[i], 0);
-			remove_slash2(node->args[i]);
 			i++;
 		}
 		node = node->next;
