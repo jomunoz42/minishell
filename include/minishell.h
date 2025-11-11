@@ -83,7 +83,7 @@ int					remove_redir(t_cmd *head, int i);
 int					change_expansion(t_cmd *head, t_map *env);
 void				remove_quotes(t_cmd *head);
 t_redir				*redir_start(t_cmd *head, int i);
-void				signals(void);
+void				sig_handler(void);
 
 //==========================UTILS=========================
 
@@ -100,6 +100,7 @@ char				*ft_realloc_str(char *str, int len);
 int					arr_count(char **arr);
 char				*get_next_line(int fd);
 char				identify_quote(char c, char flag);
+t_map				*get_map_addr(t_map *env);
 
 //=========================LIBFT==========================
 

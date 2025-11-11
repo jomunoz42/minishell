@@ -2,6 +2,17 @@
 
 void	print_struct(t_cmd *head);
 
+t_map *get_map_addr(t_map *src)
+{
+	static int i;
+	static t_map *env;
+
+	if (i == 0)
+		env = src;
+	i++;
+	return (env);
+}
+
 void	free_list(t_cmd *all)
 {
 	t_cmd	*current;
@@ -37,6 +48,7 @@ int	main(int argc, char **argv, char **environ)
 
 	env = new_map();
 	copy_env(env, environ, &exec);
+	get_map_addr(env);
 	cmd = NULL;
 	sig_handler();
 	while (1)
@@ -47,7 +59,7 @@ int	main(int argc, char **argv, char **environ)
 		cmd = parsing(input, NULL, env);
 		if (cmd)
 		{
-			//print_struct(cmd);
+			print_struct(cmd);
 			if (!ft_strncmp(cmd->args[0], "exit", 4))
 				break ;
 			execute_command(cmd, env, &exec);
