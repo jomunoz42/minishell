@@ -1,135 +1,10 @@
 #include "minishell.h"
 
-int	check_size(char *str)
-{
-	int	i;
+int		split_expansion_helper(t_cmd *node, int i);
+char	*expanded_arg(char *str, t_map *env);
+void	free_list(t_cmd *all);
 
-	i = 0;
-	if (ft_isdigit(str[i]))
-		return (1);
-	if (str[i] == '?' || str[i] == '$')
-		return (1);
-	while (str[i] && ft_isalnum_modified(str[i]))
-		i++;
-	return (i);
-}
-
-int	verify_var_sintax(char *str)
-{
-	int	i;
-	int	j;
-
-	i = 1;
-	j = check_size(str);
-	if (!ft_isalnum_modified(str[i]) && str[i] != '?' && str[i] != '$')
-		return (0);
-	while (i < j && str[i])
-	{
-		if (!ft_isalnum_modified(str[i++]))
-			return (0);
-	}
-	return (1);
-}
-
-char	*get_expansion(char *var, t_map *env)
-{
-	char	*tmp;
-	char	*str;
-	int		len;
-
-	if (var[0] == '0')
-		tmp = ft_strdup("bash");
-	else
-		tmp = ft_strdup(env->get(env, var));
-	if (!tmp)
-		return (NULL);
-	len = ft_strlen(tmp);
-	str = ft_calloc(len + 2, 1);
-	str[0] = '!';
-	ft_memcpy(str + 1, tmp, len);
-	str[len + 1] = '!';
-	free(tmp);
-	return (str);
-}
-
-char	*verify_var(char *str, t_map *env)
-{
-	int		i;
-	int		j;
-	char	*var;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i++] == '$')
-		{
-			j = check_size(str + i);
-			var = ft_substr(str, i, j);
-			if (!var)
-				return (NULL);
-			str = get_expansion(var, env);
-			if (!str)
-				return (NULL);
-			free(var);
-			break ;
-		}
-	}
-	return (str);
-}
-
-char	*expand_str(char *dest, char *src, int index)
-{
-	int		d_len;
-	int		s_len;
-	int		var_size;
-	int		tail_len;
-	char	*tmp;
-
-	d_len = ft_strlen(dest);
-	s_len = ft_strlen(src);
-	var_size = check_size(dest + index + 1) + 1;
-	tail_len = ft_strlen(dest + index + var_size);
-	if (*src)
-	{
-		tmp = ft_realloc_str(dest, s_len + d_len - var_size + 1);
-		if (!tmp)
-			return (NULL);
-		dest = tmp;
-	}
-	ft_memmove(dest + index + s_len, dest + index + var_size, tail_len + 1);
-	ft_memcpy(dest + index, src, s_len);
-	return (dest);
-}
-
-char	*expanded_arg(char *str, t_map *env)
-{
-	int		i;
-	char	*var;
-	char	flag;
-
-	i = -1;
-	flag = 0;
-	while (str[++i])
-	{
-		flag = identify_quote(str[i], flag);
-		if (flag != '\'' && str[i] == '$' && str[i + 1])
-		{
-			if (!verify_var_sintax(str + i))
-				break ;
-			var = verify_var(str, env);
-			if (!var)
-				return (NULL);
-			str = expand_str(str, var, i);
-			if (!str)
-				return (NULL);
-			i = i + ft_strlen(var) - 1;
-			free(var);
-		}
-	}
-	return (str);
-}
-
-int	organize_args(char **args)
+int	organize_args(char **args, t_cmd *node)
 {
 	int	i;
 	int	j;
@@ -137,7 +12,8 @@ int	organize_args(char **args)
 	i = 0;
 	while (args[i])
 	{
-		if (!*args[i] && args[i + 1])
+		if ((!*args[i] || (*args[i] == '\2' && ft_strlen(args[i]) == 1))
+			&& args[i + 1])
 		{
 			j = 0;
 			while (args[i + j + 1])
@@ -149,35 +25,32 @@ int	organize_args(char **args)
 		}
 		i++;
 	}
-	if (!*args[0])
-		return (0);
+	if (node->redir)
+		return (1);
+	if (!*args[0] || (*args[0] == '\2' && ft_strlen(args[0]) == 1))
+		return (free_list(node), 0);
 	return (1);
 }
 
-char	**new_args_expanded(char **splited, t_cmd *node, int start)
+char	*pseudo_quotes(char *splited)
 {
-	int		j;
-	int		i;
-	char	**new_args;
+	int		len;
+	char	*str;
 
-	new_args = ft_calloc(arr_count(node->args) + arr_count(splited),
-			sizeof(char *));
-	if (!new_args)
+	len = ft_strlen(splited);
+	str = ft_calloc(len + 4, 1);
+	if (!str)
 		return (NULL);
-	i = 0;
-	while (node->args[i])
+	if (splited[0] == '\2')
 	{
-		if (i == start)
-		{
-			j = -1;
-			while (++j < arr_count(splited))
-				new_args[i + j] = splited[j];
-		}
-		else
-			new_args[i] = node->args[i];
-		i++;
+		splited++;
+		len--;
 	}
-	return (new_args);
+	str[0] = '\3';
+	ft_memcpy(str + 1, splited, len);
+	str[len + 1] = '\3';
+	str[len + 2] = 0;
+	return (str);
 }
 
 int	split_expansion(t_cmd *head)
@@ -189,20 +62,12 @@ int	split_expansion(t_cmd *head)
 	node = head;
 	while (node)
 	{
-		i = 0;
-		while (node->args[i])
+		i = -1;
+		while (node->args[++i])
 		{
 			quote_handler(node->args[i]);
-			tmp = ft_split(node->args[i], '\3');
-			if (!tmp)
+			if (!split_expansion_helper(node, i))
 				return (0);
-			if (arr_count(tmp) > 1)
-			{
-				node->args = new_args_expanded(tmp, node, i);
-				if (!node->args)
-					return (0);
-			}
-			i++;
 		}
 		node = node->next;
 	}
@@ -216,7 +81,9 @@ int	organize_list(t_cmd *head)
 	node = head;
 	while (node)
 	{
-		if (!organize_args(node->args))
+		if (!node->args)
+			return (0);
+		if (!organize_args(node->args, head))
 			return (0);
 		node = node->next;
 	}
@@ -226,7 +93,6 @@ int	organize_list(t_cmd *head)
 int	change_expansion(t_cmd *head, t_map *env)
 {
 	int		i;
-	char	*str;
 	t_cmd	*node;
 
 	node = head;

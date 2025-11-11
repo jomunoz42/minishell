@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char				*get_absolute_path(t_map *env, char *cmd);
+char	*get_absolute_path(t_map *env, char *cmd);
 
 t_cmd	*new_node(char **args, t_map *env)
 {
