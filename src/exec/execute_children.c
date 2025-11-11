@@ -1,10 +1,10 @@
 
 #include "minishell.h"
 
-int    		is_it_built_in(char *cmd);
+int			is_it_built_in(char *cmd);
 int			exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
-int     	parent_built_ins(t_cmd *cmd, t_map *env, t_exec *exec);
-int 		is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec);
+int			parent_built_ins(t_cmd *cmd, t_map *env, t_exec *exec);
+int			is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec);
 void		handle_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
 
 static void	waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
@@ -14,14 +14,11 @@ static void	waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
 	temp = cmd;
 	while (temp)
 	{
-		if (!temp->next)
-			waitpid(temp->pid, &exec->status, 0);
-		else
-			waitpid(temp->pid, NULL, 0);
+		waitpid(temp->pid, &exec->status, 0);
 		temp = temp->next;
 	}
-	if (WIFEXITED(exec->status))
-		env->put(env, "?", ft_itoa(WEXITSTATUS(exec->status)));
+	exec->status = convert_status(exec->status);
+	env->put(env, "?", ft_itoa(exec->status));
 }
 
 static void	redirections2(t_redir *temp, t_exec *exec)
@@ -72,9 +69,12 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	cmd->pid = fork();
 	if (cmd->pid == -1)
-		handling_errors(exec, NULL, 4);
+		handling_errors(exec, NULL, 4,);
 	if (!cmd->pid)
 	{
+		exec->is_child = true;
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		handle_built_in(cmd, env, exec);
 		dup2(exec->in, 0);
 		close(exec->in);
@@ -100,7 +100,8 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	exec->out = -1;
 	if (is_parent_built_ins(temp, env, exec))
 		return ;
-	execute_heredocs(cmd, exec);
+	if (execute_heredocs(cmd, exec))
+		return ;
 	exec->in = dup(0);
 	while (temp)
 	{

@@ -3,7 +3,7 @@
 
 int   is_there_slash(char *path);
 
-void	handling_errors(t_exec *exec, char *arg, int error_id)
+void	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
 {
 	if (error_id == 1)
 		(write(2, "bash: ", 6), perror(arg));
@@ -17,13 +17,13 @@ void	handling_errors(t_exec *exec, char *arg, int error_id)
 	{
 		perror("pipe");
 		close_everything(exec); // check
-		ft_exit(1);                // free everything
+		ft_exit(1, exec, cmd);                // free everything
 	}
 	if (error_id == 4)
 	{
 		perror("fork");
 		close_everything(exec); // check
-		ft_exit(1);                // free everything
+		ft_exit(1, exec, cmd);                // free everything
 	}
 }
 

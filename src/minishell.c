@@ -4,12 +4,10 @@ void	print_struct(t_cmd *head);
 
 t_map *get_map_addr(t_map *src)
 {
-	static int i;
 	static t_map *env;
 
-	if (i == 0)
+	if (src)
 		env = src;
-	i++;
 	return (env);
 }
 
@@ -50,10 +48,13 @@ int	main(int argc, char **argv, char **environ)
 	copy_env(env, environ, &exec);
 	get_map_addr(env);
 	cmd = NULL;
-	sig_handler();
+
 	while (1)
-	{
+	{	
+		sig_handler();
 		input = readline("minishell$ ");
+		if (!input)
+			ft_exit(0, &exec, cmd);
 		if (*input)
 			add_history(input);
 		cmd = parsing(input, NULL, env);
@@ -62,11 +63,13 @@ int	main(int argc, char **argv, char **environ)
 			// print_struct(cmd);
 			if (!ft_strncmp(cmd->args[0], "exit", 4))
 				break ;
+			signal(SIGQUIT, SIG_IGN);
+			signal(SIGINT, SIG_IGN);
 			execute_command(cmd, env, &exec);
 		}
 		free_list(cmd);
+		free(input);
 	}
-	free(input);
 	free_list(cmd);
 	rl_clear_history();
 	env->destroy(env);
