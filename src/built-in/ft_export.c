@@ -24,7 +24,7 @@ static int	print_export(char **vars, t_map *env, t_exec *exec)
 	return (0);
 }
 
-static int	add_export(char *arg, t_map *env)
+static int	add_export(char *arg, t_map *env, t_exec *exec, t_cmd *cmd)
 {
 	char	**vars;
 	int		j;
@@ -33,7 +33,7 @@ static int	add_export(char *arg, t_map *env)
 		return (1);
 	vars = ft_calloc(sizeof(char *), 3);
 	if (!vars)
-		ft_exit(1);
+		ft_exit(1, exec, cmd);
 	if (is_there_equal(arg))
 	{
 		j = length_of_equal(arg);
@@ -71,14 +71,14 @@ static char	*create_var(t_node *node)
 	return (result);
 }
 
-static int  export_var(t_cmd *cmd, t_map *env, int i)
+static int  export_var(t_cmd *cmd, t_map *env, int i, t_exec *exec)
 {
 	int invalid_export;
 
 	invalid_export = 0;
 	while (cmd->args[i])
 	{
-		if (add_export(cmd->args[i], env))
+		if (add_export(cmd->args[i], env, exec, cmd))
 			invalid_export = 1;
 		i++;
 	}
@@ -93,12 +93,12 @@ int	ft_export(t_cmd *cmd, t_map *env, t_exec *exec)
 
 	i = 1;
 	if (cmd->args[i])
-		return (export_var(cmd, env, i));
+		return (export_var(cmd, env, i, exec));
 	else
 	{
 		copy = ft_calloc(sizeof(char *), env->size + 1);
 		if (!copy)
-			ft_exit(1);
+			ft_exit(1, exec, env);
 		node = env->head;
 		i = 0;
 		while (node)

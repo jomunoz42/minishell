@@ -34,6 +34,7 @@ typedef struct s_exec
 	int				status;
 	bool			no_permission;
 	bool			no_file;
+	bool			is_child;
 }					t_exec;
 
 typedef struct s_redir
@@ -59,17 +60,17 @@ int					ft_pwd(t_map *env, t_exec *exec);
 int					ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
 int					ft_unset(t_cmd *cmd, t_map *env);
 int					ft_env(t_cmd *cmd, t_map *env, t_exec *exec);
-int			ft_exit(int status); //  return
+int					ft_exit(int status, t_exec *exec, t_cmd *cmd);
 
 //=======================EXECUTION========================
 
-void				execute_heredocs(t_cmd *cmd, t_exec *exec);
+int					execute_heredocs(t_cmd *cmd, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
-void				handling_errors(t_exec *exec, char *arg, int error_id);
+void				handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd);
 void				handle_execve_errors(char *path, char **cmd, t_map *env);
 void				close_everything(t_exec *exec);
 void				close_and_reset(t_exec *exec);
-
+int					convert_status(int status);
 void				redirections(t_redir *redir, t_exec *exec);
 
 //========================PARSING=========================
