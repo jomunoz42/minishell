@@ -30,7 +30,7 @@ typedef struct s_exec
 {
 	int				in;
 	int				out;
-	int pipefd[2]; //   verificar se da para tirar sem problema
+	int 			pipefd[2]; //   checkar
 	int				status;
 	bool			no_permission;
 	bool			no_file;
@@ -67,15 +67,15 @@ int					ft_exit(int status, t_exec *exec, t_cmd *cmd);
 int					execute_heredocs(t_cmd *cmd, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 void				handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd);
-void				handle_execve_errors(char *path, char **cmd, t_map *env);
+void				handle_execve_errors(t_cmd *cmd, t_map *env, t_exec *exec);
 void				close_everything(t_exec *exec);
 void				close_and_reset(t_exec *exec);
 int					convert_status(int status);
-void				redirections(t_redir *redir, t_exec *exec);
+void				redirections(t_redir *redir, t_exec *exec, t_cmd *cmd);
 
 //========================PARSING=========================
 
-t_cmd				*new_node(char **args, t_map *env);
+t_cmd				*new_node(char **args, t_map *env, t_exec *exec, t_cmd *cmd);
 t_cmd				*separate_args(t_cmd *head, char *line, t_map *env);
 t_cmd				*parsing(char *input, t_cmd *all, t_map *env);
 int					quote_handler(char *input);

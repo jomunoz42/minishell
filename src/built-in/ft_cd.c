@@ -39,7 +39,7 @@ static int    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
     
     path = env->get(env, "OLDPWD");
     if (!path || path[0] == '\0')
-        return (write(2, "bash: cd: OLDPWD not set\n", 24), 1);
+        return (write(2, "bash: cd: OLDPWD not set\n", 25), 1);
     if (file_or_directory(path, env, cmd) == 0)
     {
         if (chdir(path) != 0)
@@ -58,7 +58,7 @@ static int    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
     else
         return(free(current_pwd), 1);
     return (0);
-}
+}                                    //  CHECK if it is really worth it
 
 static int    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
 {

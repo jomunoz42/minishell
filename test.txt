@@ -188,6 +188,11 @@ bash: nofile: No such file or directory
 echo $?
 $? = 1
 
+unset OLDPWD
+cd -
+bash: cd: OLDPWD not set
+$? = 1                   leaks?
+
 --------------------------------------------------------------------------------------
 
 SHLVL:

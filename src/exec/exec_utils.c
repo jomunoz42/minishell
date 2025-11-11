@@ -70,7 +70,7 @@ int 	is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec)
 	if (!temp->next && is_it_built_in(temp->args[0]))
 	{
 		exec->out = dup(1);
-		redirections(temp->redir, exec);
+		redirections(temp->redir, exec, temp);
 		exec_built_in(temp, env, exec);
 		close(exec->out);
 		return (1);

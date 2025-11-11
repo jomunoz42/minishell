@@ -44,7 +44,7 @@ static int	here_doc_util(t_redir *redir, char *line, int size)
 	return (0);
 }
 
-static void	handling_here_doc(t_redir *redir, t_exec *exec)
+static void	handling_here_doc(t_redir *redir, t_exec *exec, t_cmd *cmd)
 {
 	pid_t   pid;
 	char	*line;
@@ -52,10 +52,10 @@ static void	handling_here_doc(t_redir *redir, t_exec *exec)
 
 	redir->fd = open("/tmp/mini_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (redir->fd == -1)
-		handling_errors(exec, "/tmp/mini_temp", 1);
+		handling_errors(exec, "/tmp/mini_temp", 1, cmd);
 	pid = fork();
 	if (pid == -1)
-		handling_errors(exec, NULL, 4);
+		handling_errors(exec, NULL, 4, cmd);
 	if (!pid)
 	{
 		signal(SIGINT, SIG_DFL);
@@ -87,7 +87,7 @@ int   execute_heredocs(t_cmd *cmd, t_exec *exec)
 		{
 			if (ft_strncmp(redir_temp->args[0], "<<", 3) == 0)
 			{
-				handling_here_doc(redir_temp, exec);
+				handling_here_doc(redir_temp, exec, cmd_temp);
 				wait(&status);
 				status = convert_status(status);
 				if (status)

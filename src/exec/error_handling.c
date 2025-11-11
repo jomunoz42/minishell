@@ -12,7 +12,7 @@ void	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
 	if (errno == ENOENT) 
 		exec->no_file = true;
 	else if (errno == EACCES)
-		exec->no_permission = true;   ///   ver se tem mesmo que ser
+		exec->no_permission = true; ///  chekar  testar -x de um ficheiro
 	if (error_id == 3)
 	{
 		perror("pipe");
@@ -53,31 +53,34 @@ static void	 error_messages(char *path)
 	}
 }
 
-void	handle_execve_errors(char *path, char **cmd, t_map *env)
+void	handle_execve_errors(t_cmd *cmd, t_map *env, t_exec *exec)
 {
-	if (is_there_slash(path))
-		error_messages(path);
+	if (is_there_slash(cmd->args[0]))
+		error_messages(cmd->args[0]);
 	else
 	{
 		if (env->get(env, "PATH") == NULL || env->get(env, "PATH")[0] == '\0')
 		{
 			write(2, "bash: ", 6);
-			perror(cmd[0]);
+			perror(cmd->args[0]);
 		}
 		else
 		{
-			if (path && ft_strncmp(path, "", 1) == 0)
+			if (cmd->args[0] && ft_strncmp(cmd->args[0], "", 1) == 0)
+			{
 				write(2, "Command '' not found\n", 22);
+				ft_exit(127, exec, cmd);                    // check this for leaks
+			}
 			else
 			{
-				write(2, cmd[0], ft_strlen(cmd[0]));
+				write(2, cmd->args[0], ft_strlen(cmd->args[0]));
 				write(2, ": command not found\n", 21);
 			}
 		}
-		if (path && path != cmd[0] && path[0] != '\0')
-			free(path);
-		free_double(cmd);
-		exit(127);
+		if (cmd->args[0] && cmd->args[0][0] != '\0')
+			free(cmd->args[0]);
+		free_double(cmd->args[0]);
+		ft_exit(127, exec, cmd);
 	}
 }
 
