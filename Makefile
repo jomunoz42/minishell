@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+         #
+#    By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
-#    Updated: 2025/10/24 13:49:43 by jomunoz          ###   ########.fr        #
+#    Updated: 2025/11/12 19:30:41 by pbongiov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

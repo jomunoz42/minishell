@@ -1,7 +1,7 @@
 
 #include "minishell.h"
 
-int handle_cd_errors(char *path, int error_id, t_map *env)
+int handle_cd_errors(char *path, int error_id)
 {
     if (error_id == 0)
     {
@@ -25,7 +25,7 @@ int handle_cd_errors(char *path, int error_id, t_map *env)
     return (1);
 }
 
-int file_or_directory(char *path, t_map *env, t_cmd *cmd)
+int file_or_directory(char *path, t_cmd *cmd)
 {
     struct stat buf;
     
@@ -34,17 +34,17 @@ int file_or_directory(char *path, t_map *env, t_cmd *cmd)
         if (errno == ENOENT)
         {
             if (cmd->args[1][0] == '/')
-                return (handle_cd_errors(path, 2, env));
+                return (handle_cd_errors(path, 2));
             else
-                return (handle_cd_errors(cmd->args[1], 2, env));
+                return (handle_cd_errors(cmd->args[1], 2));
         }
     }
     else if (S_ISREG(buf.st_mode))
     {
         if (cmd->args[1][0] == '/')
-            return (handle_cd_errors(path, 3, env));
+            return (handle_cd_errors(path, 3));
         else
-            return (handle_cd_errors(cmd->args[1], 3, env));
+            return (handle_cd_errors(cmd->args[1], 3));
     }
     if (S_ISDIR(buf.st_mode)) 
         return (0);
@@ -56,9 +56,9 @@ void handle_folder_errors(t_cmd *cmd, char *path, t_map *env)
     if (errno == EACCES)
     {
         if (cmd->args[1][0] == '/')
-            handle_cd_errors(path, 4, env);
+            handle_cd_errors(path, 4);
         else
-            handle_cd_errors(cmd->args[1], 4, env);
+            handle_cd_errors(cmd->args[1], 4);
     }
     else
         perror("bash: cd");
@@ -93,9 +93,9 @@ int    goes_nowhere(t_map *env, char *current_pwd)
     if (chdir(current_pwd) != 0)
     {
         if (errno == EACCES)
-            handle_cd_errors(".", 4, env);
+            handle_cd_errors(".", 4);
         else if (errno == ENOENT)
-            handle_cd_errors(".", 2, env);
+            handle_cd_errors(".", 2);
         return (1);
     }
     free(current_pwd);

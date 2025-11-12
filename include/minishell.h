@@ -54,7 +54,7 @@ typedef struct s_cmd
 
 //========================BUILTINS========================
 
-int					ft_echo(t_cmd *cmd, t_map *env, t_exec *exec);
+int					ft_echo(t_cmd *cmd, t_exec *exec);
 int					ft_cd(t_cmd *cmd, t_map *env);
 int					ft_pwd(t_map *env, t_exec *exec);
 int					ft_export(t_cmd *cmd, t_map *env, t_exec *exec);
@@ -76,10 +76,10 @@ void				redirections(t_redir *redir, t_exec *exec, t_cmd *cmd);
 
 //========================PARSING=========================
 
-t_cmd				*new_node(char **args, t_map *env);
-t_cmd				*separate_args(t_cmd *head, char *line, t_map *env);
+t_cmd				*new_node(char **args);
+t_cmd				*separate_args(t_cmd *head, char *line);
 t_cmd				*parsing(char *input, t_cmd *all, t_map *env);
-int					quote_handler(char *input);
+int					quote_handler(char *input, int n);
 char				*unlink_redir(char *str);
 int					count_redir(char *str);
 int					init_redir(t_cmd *head);
@@ -92,15 +92,14 @@ void				sig_handler(void);
 
 //==========================UTILS=========================
 
-void				copy_env(t_map *map, char **env, t_exec *exec);
+void				copy_env(t_map *map, char **env);
 int					length_of_equal(char *vars);
 int					is_there_equal(char *vars);
 int					is_there_value(char *vars);
-int					handle_cd_errors(char *path, int error_id, t_map *env);
-int					file_or_directory(char *path, t_map *env, t_cmd *cmd);
+int					handle_cd_errors(char *path, int error_id);
+int					file_or_directory(char *path, t_cmd *cmd);
 char				*ft_strjoin_free(char *s1, char *s2);
 void				free_double(char **arg);
-void				error_exit(char *s, int code);
 char				*ft_realloc_str(char *str, int len);
 int					arr_count(char **arr);
 char				*get_next_line(int fd);

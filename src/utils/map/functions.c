@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:55:11 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/31 20:05:32 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/12 18:41:43 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	*ft_strdup(const char *s);
 int		ft_strcmp(const char *str1, const char *str2);
-char	**to_str_util(t_map *this, char **str, t_node *node);
-t_node	*create_node(t_map_extra *this, char *key, char *value);
+char	**to_str_util(char **str, t_node *node);
+t_node	*create_node(char *key, char *value);
 void	free_s(char **str);
 
 void	__put(t_map_extra *this, char *key, char *value)
@@ -36,7 +36,7 @@ void	__put(t_map_extra *this, char *key, char *value)
 		}
 		node = node->next;
 	}
-	node = create_node(this, key, value);
+	node = create_node(key, value);
 	if (++this->size && !node)
 		return ;
 	if (!this->head)
@@ -98,7 +98,7 @@ char	**to_str(t_map_extra *this)
 	this->str = malloc(sizeof(char *) * (this->size + 1));
 	if (!this->str)
 		return (NULL);
-	this->str = to_str_util((void *)this, this->str, this->head);
+	this->str = to_str_util(this->str, this->head);
 	return ((char **)this->str);
 }
 

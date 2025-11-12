@@ -2,7 +2,7 @@
 
 char	*get_absolute_path(t_map *env, char *cmd);
 
-t_cmd	*new_node(char **args, t_map *env)
+t_cmd	*new_node(char **args)
 {
 	t_cmd	*node;
 
@@ -15,7 +15,7 @@ t_cmd	*new_node(char **args, t_map *env)
 	return (node);
 }
 
-t_cmd	*separate_args(t_cmd *head, char *line, t_map *env)
+t_cmd	*separate_args(t_cmd *head, char *line)
 {
 	char	**args;
 	t_cmd	*node;
@@ -25,10 +25,10 @@ t_cmd	*separate_args(t_cmd *head, char *line, t_map *env)
 	if (!args)
 		return (perror("Allocation Error"), NULL);
 	if (!head)
-		head = new_node(args, env);
+		head = new_node(args);
 	else
 	{
-		node = new_node(args, env);
+		node = new_node(args);
 		if (!node)
 			return (NULL);
 		current = head;

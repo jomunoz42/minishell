@@ -41,8 +41,6 @@ void	print_struct(t_cmd *head)
 int	remove_redir(t_cmd *head, int i)
 {
 	int		len;
-	char	**tmp;
-	t_cmd	*node;
 
 	len = arr_count(head->args);
 	free(head->args[i]);
@@ -75,7 +73,7 @@ char	*primary_check(char *input, t_map *env)
 	char	*dup;
 
 	if (!input || !is_empty(input) || !check_sintax(input, env)
-		|| !quote_handler(input))
+		|| !quote_handler(input, 1))
 		return (NULL);
 	dup = ft_strdup(input);
 	if (!dup)
@@ -100,7 +98,7 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 	i = 0;
 	while (line[i])
 	{
-		head = separate_args(head, line[i], env);
+		head = separate_args(head, line[i]);
 		if (!head)
 			return (free_double(line), NULL);
 		i++;

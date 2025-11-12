@@ -27,7 +27,7 @@ void	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
 	}
 }
 
-static void	 error_messages(char *path)
+static void	 error_messages(char *path, t_exec *exec)
 {
 	struct stat buf;
     
@@ -38,25 +38,25 @@ static void	 error_messages(char *path)
         if (errno == ENOENT)
         {
 			write(2, ": No such file or directory\n", 29);
-			exit(127);
+			ft_exit(127, exec, NULL); 
 		}
     }
     else if (S_ISREG(buf.st_mode))
     {
 		write(2, ": Permission denied\n", 21);
-		exit(126);
+		ft_exit(126, exec, NULL);
 	}
     else if (S_ISDIR(buf.st_mode))
 	{
 		write(2, ": Is a directory\n", 18);
-		exit(126);
+		ft_exit(126, exec,NULL);
 	}
 }
 
 void	handle_execve_errors(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	if (is_there_slash(cmd->args[0]))
-		error_messages(cmd->args[0]);
+		error_messages(cmd->args[0], exec);
 	else
 	{
 		if (env->get(env, "PATH") == NULL || env->get(env, "PATH")[0] == '\0')
@@ -69,7 +69,7 @@ void	handle_execve_errors(t_cmd *cmd, t_map *env, t_exec *exec)
 			if (cmd->args[0] && ft_strncmp(cmd->args[0], "", 1) == 0)
 			{
 				write(2, "Command '' not found\n", 22);
-				ft_exit(127, exec, cmd);                    // check this for leaks
+				ft_exit(127, exec, cmd); 
 			}
 			else
 			{
@@ -77,10 +77,7 @@ void	handle_execve_errors(t_cmd *cmd, t_map *env, t_exec *exec)
 				write(2, ": command not found\n", 21);
 			}
 		}
-		if (cmd->args[0] && cmd->args[0][0] != '\0')
-			free(cmd->args[0]);
-		free_double(cmd->args);
-		ft_exit(127, exec, cmd);
+		ft_exit(127, exec, cmd); 
 	}
 }
 

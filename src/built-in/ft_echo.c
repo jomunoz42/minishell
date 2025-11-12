@@ -16,7 +16,7 @@ static int	only_ns(char *arg)
 	return (1);
 }
 
-int ft_echo(t_cmd *cmd, t_map *env, t_exec *exec)
+int ft_echo(t_cmd *cmd, t_exec *exec)
 {
     int i;
     bool n_option;

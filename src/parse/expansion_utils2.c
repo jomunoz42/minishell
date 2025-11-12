@@ -46,7 +46,7 @@ int	split_expansion_helper(t_cmd *node, int i)
 		tmp_double = node->args;
 		node->args = new_args_expanded(splited, node, i);
 		if (!node->args)
-			return (0);
+			return (free_double(splited), 0);
 		free_double(tmp_double);
 	}
 	else if (node->args[i][0] == '\2')

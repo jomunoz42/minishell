@@ -22,14 +22,17 @@ char	*get_absolute_path(t_map *env, char *cmd)
 		return (cmd);
 	i = -1;
 	dirs = ft_split(str, ':');
+	if (!dirs)
+		return (NULL);
 	while (dirs[++i])
 	{
-		temp = ft_strjoin_free(dirs[i], "/");
+		temp = ft_strjoin(dirs[i], "/");
 		path = ft_strjoin_free(temp, cmd);
 		if (access(path, X_OK) == 0)
-			return (free(cmd), path);
+			return (free_double(dirs), path);
 		free(path);
 	}
+	free_double(dirs);
 	return (cmd);
 }
 
@@ -68,7 +71,7 @@ static void	handling_here_doc(t_redir *redir, t_exec *exec, t_cmd *cmd)
 				break ;
 			(write(redir->fd, line, ft_strlen(line)), free(line));
 		}
-		(close(redir->fd), exit(0));
+		(close(redir->fd), ft_exit(0, exec, cmd));
 	}
 	close(redir->fd);
 }

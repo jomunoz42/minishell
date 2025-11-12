@@ -4,8 +4,9 @@ void	handler(int sig)
 {
 	t_map	*env;
 
+	(void)sig;
 	env = get_map_addr(NULL);
-	write(1, "\n2\n", 3);
+	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 1);
 	rl_redisplay();

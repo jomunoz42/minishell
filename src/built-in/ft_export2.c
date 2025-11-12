@@ -37,7 +37,7 @@ char	**sort_vars(char **vars)
 	return (vars);
 }
 
-int	handle_invalid_export(char *arg, t_map *env)
+int	handle_invalid_export(char *arg)
 {
 	int	i;
 

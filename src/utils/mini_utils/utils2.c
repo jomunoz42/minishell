@@ -1,15 +1,7 @@
 #include "minishell.h"
 
-void error_exit(char *s, int code)
-{
-    errno = code;
-    perror(s);
-    exit(0);
-}
-
 char *ft_realloc_str(char *str, int len)
 {
-    int i;
     char *new;
 
     new = malloc(len);
@@ -29,7 +21,7 @@ int	arr_count(char **arr)
 
 	i = 0;
     if (!arr)
-        return (0);
+            return (0);
 	while (arr[i])
 		i++;
 	return (i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 22:33:05 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/28 23:09:58 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/12 18:41:58 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
-char	**to_str_util(t_map *this, char **str, t_node *node)
+char	**to_str_util(char **str, t_node *node)
 {
 	int		i;
 	char	*tmp;

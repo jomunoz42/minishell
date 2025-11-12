@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 15:22:03 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/19 18:06:41 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/12 18:40:55 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_map	*new_map(void)
 	return ((t_map *)new);
 }
 
-t_node	*create_node(t_map_extra *this, char *key, char *value)
+t_node	*create_node(char *key, char *value)
 {
 	t_node	*node;
 

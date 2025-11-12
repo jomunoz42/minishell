@@ -56,7 +56,6 @@ char	*pseudo_quotes(char *splited)
 int	split_expansion(t_cmd *head)
 {
 	int		i;
-	char	**tmp;
 	t_cmd	*node;
 
 	node = head;
@@ -65,7 +64,7 @@ int	split_expansion(t_cmd *head)
 		i = -1;
 		while (node->args[++i])
 		{
-			quote_handler(node->args[i]);
+			quote_handler(node->args[i], 0);
 			if (!split_expansion_helper(node, i))
 				return (0);
 		}

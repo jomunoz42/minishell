@@ -13,64 +13,36 @@ static int    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
     
     path = env->get(env, "HOME");
     if (!path || path[0] == '\0')
-        return (write(2, "bash: cd: HOME not set\n", 24), 1);
-    if (file_or_directory(path, env, cmd) == 0)
+        return (free(current_pwd), write(2, "bash: cd: HOME not set\n", 24), 1);
+    if (file_or_directory(path, cmd) == 0)
     {
         if (chdir(path) != 0)
         {
             if (errno == EACCES)
-                handle_cd_errors(path, 4, env);
+                handle_cd_errors(path, 4);
             else
                 perror("bash: cd");
             free(current_pwd);
             return (1);
         }
-        env->put(env, "OLDPWD", current_pwd);
+        env->put(env, "OLDPWD", ft_strdup(current_pwd));
         env->put(env, "PWD", ft_strdup(path));
     }
-    else
-        return (free(current_pwd), 1);
+    free(current_pwd);
     return (0);
 }
-
-static int    goes_last_dir(t_cmd *cmd, t_map *env, char *current_pwd)
-{
-    char *path;
-    
-    path = env->get(env, "OLDPWD");
-    if (!path || path[0] == '\0')
-        return (write(2, "bash: cd: OLDPWD not set\n", 25), 1);
-    if (file_or_directory(path, env, cmd) == 0)
-    {
-        if (chdir(path) != 0)
-        {
-            if (errno == EACCES)
-                handle_cd_errors(path, 4, env);
-            else
-                perror("bash: cd");
-            free(current_pwd);
-            return (1);
-        }
-        printf("%s\n", path);
-        env->put(env, "PWD", ft_strdup(path));
-        env->put(env, "OLDPWD", current_pwd);
-    }
-    else
-        return(free(current_pwd), 1);
-    return (0);
-}                                    //  CHECK if it is really worth it
 
 static int    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
 {
     char *path;
 
     path = find_last_slash(ft_strdup(current_pwd));
-    if (file_or_directory(path, env, cmd) == 0)
+    if (file_or_directory(path, cmd) == 0)
     {
         if (chdir(path) != 0)
         {
             if (errno == EACCES)
-                handle_cd_errors(path, 4, env);
+                handle_cd_errors(path, 4);
             else
                 perror("bash: cd");
             free(path);
@@ -78,10 +50,9 @@ static int    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
             return (1);
         }
         env->put(env, "PWD", ft_strdup(path));
-        env->put(env, "OLDPWD", current_pwd);
+        env->put(env, "OLDPWD", ft_strdup(current_pwd));
     }
-    else
-        return(free(current_pwd), 1);
+    free(current_pwd);
     return (free(path), 0);
 }
 
@@ -96,7 +67,7 @@ static int    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
         path = ft_strjoin(env->get(env, "PWD"), "/");
         path = ft_strjoin_free(path, cmd->args[1]);
     }
-    if (file_or_directory(path, env, cmd) == 0)
+    if (file_or_directory(path, cmd) == 0)
     {
         if (chdir(path) != 0)
         {
@@ -105,11 +76,10 @@ static int    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
             free(current_pwd);
             return (1);
         }
-        env->put(env, "OLDPWD", current_pwd);
+        env->put(env, "OLDPWD", ft_strdup(current_pwd));
         env->put(env, "PWD", ft_strdup(path));
     }
-    else
-        return(free(current_pwd), 1);
+    free(current_pwd);
     return (free(path), 0);
 }
 
@@ -122,14 +92,14 @@ int	ft_cd(t_cmd *cmd, t_map *env)
     {
         current_pwd = env->get(env, "PWD");
         if (!current_pwd || current_pwd[0] == '\0')
-        return (handle_cd_errors(NULL, 0, env));
+            return (handle_cd_errors(NULL, 0));
     }
     if (cmd->args[1] && cmd->args[2])
-        return (handle_cd_errors(NULL, 1, env));
+        return (free(current_pwd), handle_cd_errors(NULL, 1));
     else if (!cmd->args[1] || !ft_strncmp(cmd->args[1], "~", 2))
         return (goes_home(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], "-", 2))
-        return (goes_last_dir(cmd, env, current_pwd));
+        return (absolute_and_relative(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], "-", 1))
         return (handle_cd_options(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], "..", 3))

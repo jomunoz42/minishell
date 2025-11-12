@@ -22,7 +22,7 @@ int	quote_count(char *str)
 	return (1);
 }
 
-int	quote_handler(char *input)
+int	quote_handler(char *input, int n)
 {
 	int		i;
 	char	flag;
@@ -36,7 +36,7 @@ int	quote_handler(char *input)
 		flag = identify_quote(input[i], flag);
 		if (!flag)
 		{
-			if (input[i] == '|')
+			if (input[i] == '|' && n)
 				input[i] = '\2';
 			else if (input[i] == ' ')
 				input[i] = '\3';

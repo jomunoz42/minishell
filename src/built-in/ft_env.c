@@ -25,7 +25,7 @@ static void	handle_no_env(t_map *map)
 		ft_strdup("/home/jomunoz/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"));
 }
 
-void	copy_env(t_map *map, char **env, t_exec *exec)
+void	copy_env(t_map *map, char **env)
 {
     static char	*args[2];
 	int			j;

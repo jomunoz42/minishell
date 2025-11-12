@@ -20,7 +20,8 @@ int    is_it_built_in(char *cmd)
         return (1);
     if (!ft_strncmp(cmd, "unset", 6))
         return (1);
-	return (0);
+    else
+	    return (0);
 }
 
 int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
@@ -33,7 +34,7 @@ int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
     else if (!ft_strncmp(cmd->args[0], "cd", 3))
         status = ft_cd(cmd, env);
     else if (!ft_strncmp(cmd->args[0], "echo", 5))
-        status = ft_echo(cmd, env, exec);
+        status = ft_echo(cmd, exec);
     else if (!ft_strncmp(cmd->args[0], "pwd", 4))
         status = ft_pwd(env, exec);
     else if (!ft_strncmp(cmd->args[0], "env", 4))
@@ -53,13 +54,13 @@ void	handle_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
 	if (is_it_built_in(cmd->args[0]))
 	{
 		if (exec->no_file == true || exec->no_permission == true)
-			exit(1);                          
+			ft_exit(1, exec, cmd);                          
 		status = exec_built_in(cmd, env, exec);
 		close(exec->in);
 		close(exec->out);
 		if (exec->pipefd[0])
 			close(exec->pipefd[0]);
-		exit(status);                //  use my exit for LEAKS
+		ft_exit(status, exec, cmd);
 	}
 	else
 		cmd->args[0] = get_absolute_path(env, cmd->args[0]);
