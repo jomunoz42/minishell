@@ -47,19 +47,19 @@ int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
 	return (status);
 }
 
-void	handle_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
+void	handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 {
 	int	status;
 
 	if (is_it_built_in(cmd->args[0]))
 	{
-		if (exec->no_file == true || exec->no_permission == true)
-			ft_exit(1, exec, cmd);                          
-		status = exec_built_in(cmd, env, exec);
+        if (exec->no_file == true || exec->no_permission == true)
+            ft_exit(1, exec, cmd);                          
+		status = exec_built_in(temp, env, exec);
 		close(exec->in);
 		close(exec->out);
 		if (exec->pipefd[0])
-			close(exec->pipefd[0]);
+            close(exec->pipefd[0]);
 		ft_exit(status, exec, cmd);
 	}
 	else

@@ -4,7 +4,7 @@
 int			is_it_built_in(char *cmd);
 int			exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
 int			is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec);
-void		handle_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
+void		handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec);
 
 static void	waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
 {
@@ -64,17 +64,17 @@ void	redirections(t_redir *redir, t_exec *exec, t_cmd *cmd)
 	}
 }
 
-void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
+static void	create_children(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 {
-	cmd->pid = fork();
-	if (cmd->pid == -1)
+	temp->pid = fork();
+	if (temp->pid == -1)
 		handling_errors(exec, NULL, 4, cmd);
-	if (!cmd->pid)
+	if (!temp->pid)
 	{
 		exec->is_child = true;
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		handle_built_in(cmd, env, exec);
+		handle_built_in(cmd, temp, env, exec);
 		dup2(exec->in, 0);
 		close(exec->in);
 		dup2(exec->out, 1);
@@ -83,8 +83,8 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 			close(exec->pipefd[0]);
 		if (exec->no_file || exec->no_permission)
 			ft_exit(1, exec, cmd);
-		execve(cmd->args[0], cmd->args, env->to_str(env));
-		handle_execve_errors(cmd, env, exec);
+		execve(temp->args[0], temp->args, env->to_str(env));
+		handle_execve_errors(cmd, temp, env, exec);
 	}
 	close_and_reset(exec);
 }
@@ -92,6 +92,7 @@ void	create_children(t_cmd *cmd, t_map *env, t_exec *exec)
 void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	t_cmd	*temp;
+
 
 	temp = cmd;
 	exec->in = -1;
@@ -112,7 +113,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 			exec->out = exec->pipefd[1];
 		}
 		redirections(temp->redir, exec, temp);
-		create_children(temp, env, exec);
+		create_children(cmd, temp, env, exec);
 		exec->in = exec->pipefd[0];
 		temp = temp->next;
 	}

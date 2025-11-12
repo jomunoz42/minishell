@@ -38,7 +38,7 @@ static void	 error_messages(char *path, t_exec *exec)
         if (errno == ENOENT)
         {
 			write(2, ": No such file or directory\n", 29);
-			ft_exit(127, exec, NULL); 
+			ft_exit(127, exec, NULL);                        // checkar leaks aqui
 		}
     }
     else if (S_ISREG(buf.st_mode))
@@ -53,31 +53,31 @@ static void	 error_messages(char *path, t_exec *exec)
 	}
 }
 
-void	handle_execve_errors(t_cmd *cmd, t_map *env, t_exec *exec)
+void	handle_execve_errors(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 {
-	if (is_there_slash(cmd->args[0]))
-		error_messages(cmd->args[0], exec);
+	if (is_there_slash(temp->args[0]))
+		error_messages(temp->args[0], exec);
 	else
 	{
 		if (env->get(env, "PATH") == NULL || env->get(env, "PATH")[0] == '\0')
 		{
 			write(2, "bash: ", 6);
-			perror(cmd->args[0]);
+			perror(temp->args[0]);
 		}
 		else
 		{
-			if (cmd->args[0] && ft_strncmp(cmd->args[0], "", 1) == 0)
+			if (temp->args[0] && ft_strncmp(temp->args[0], "", 1) == 0)
 			{
 				write(2, "Command '' not found\n", 22);
-				ft_exit(127, exec, cmd); 
+				ft_exit(127, exec, cmd);
 			}
 			else
 			{
-				write(2, cmd->args[0], ft_strlen(cmd->args[0]));
+				write(2, temp->args[0], ft_strlen(temp->args[0]));
 				write(2, ": command not found\n", 21);
 			}
 		}
-		ft_exit(127, exec, cmd); 
+		ft_exit(127, exec, cmd);
 	}
 }
 

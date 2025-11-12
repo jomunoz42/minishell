@@ -50,8 +50,7 @@ static int	add_export(char *arg, t_map *env, t_exec *exec, t_cmd *cmd)
 			return (free_double(vars), 1);
 		env->put(env, ft_strdup(arg), NULL);
 	}
-	free_double(vars);
-	return (0);
+	return (free_double(vars), 0);
 }
 
 static char	*create_var(t_node *node)
