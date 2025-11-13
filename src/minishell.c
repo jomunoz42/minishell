@@ -48,8 +48,7 @@ int	main(int argc, char **argv, char **environ)
 	copy_env(env, environ);
 	get_map_addr(env);
 	cmd = NULL;
-	(void)argc;
-	(void)argv;
+	((void)argc, (void)argv);
 	while (1)
 	{	
 		sig_handler();
@@ -62,20 +61,13 @@ int	main(int argc, char **argv, char **environ)
 		if (cmd)
 		{
 			//print_struct(cmd);
-			if (!ft_strncmp(cmd->args[0], "exit", 4))
-				break ;
-			signal(SIGQUIT, SIG_IGN);
-			signal(SIGINT, SIG_IGN);
+			(signal(SIGQUIT, SIG_IGN), signal(SIGINT, SIG_IGN));
 			execute_command(cmd, env, &exec);
 		}
 		free_list(cmd);
 		cmd = NULL;
 		free(input);
 	}
-	free_list(cmd);
-	rl_clear_history();
-	env->destroy(env);
-	unlink("/tmp/mini_temp");
 }
 
 // jomunoz@c2r3s6:~/Common_Core_42/Milestone3/minishell$ export var="cat Makefile | cat | cat | cat | cat"

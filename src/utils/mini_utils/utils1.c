@@ -64,3 +64,17 @@ int   is_there_slash(char *path)
 	}
 	return (0);
 }
+
+int  is_only_number(char *arg)
+{
+	int i;
+
+	i = 0;
+	while (arg[i])
+	{
+		if (!ft_isdigit(arg[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}

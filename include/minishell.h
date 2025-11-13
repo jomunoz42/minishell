@@ -73,6 +73,7 @@ void				close_everything(t_exec *exec);
 void				close_and_reset(t_exec *exec);
 int					convert_status(int status);
 void				redirections(t_redir *redir, t_exec *exec, t_cmd *cmd);
+int 				exit_parsing(t_cmd *cmd, t_exec *exec, int status);
 
 //========================PARSING=========================
 
@@ -96,6 +97,7 @@ void				copy_env(t_map *map, char **env);
 int					length_of_equal(char *vars);
 int					is_there_equal(char *vars);
 int					is_there_value(char *vars);
+int				    is_only_number(char *arg);
 int					handle_cd_errors(char *path, int error_id);
 int					file_or_directory(char *path, t_cmd *cmd);
 char				*ft_strjoin_free(char *s1, char *s2);

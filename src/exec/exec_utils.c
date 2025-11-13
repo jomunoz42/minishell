@@ -20,6 +20,8 @@ int    is_it_built_in(char *cmd)
         return (1);
     if (!ft_strncmp(cmd, "unset", 6))
         return (1);
+    if (!ft_strncmp(cmd, "exit", 5))
+        return (1);
     else
 	    return (0);
 }
@@ -43,6 +45,8 @@ int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
         status = ft_export(cmd, env, exec);
     else if (!ft_strncmp(cmd->args[0], "unset", 6))
         status = ft_unset(cmd, env);
+    else if (!ft_strncmp(cmd->args[0], "exit", 5))
+		status = exit_parsing(cmd, exec, status);
     env->put(env, "?", ft_itoa(status));
 	return (status);
 }
