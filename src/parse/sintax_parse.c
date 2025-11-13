@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-int only_redir(char *str)
+int	only_redir(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -14,22 +14,50 @@ int only_redir(char *str)
 	return (0);
 }
 
+int	double_redir(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '<' && str[i + 1] == ' ')
+		{
+			i++;
+			while (str[i + 1] && str[i] == ' ')
+				i++;
+			if (str[i] == '>' || str[i] == '|' || !str[i + 1])
+				return (0);
+		}
+		else if (str[i] == '>' && str[i + 1] == ' ')
+		{
+			i++;
+			while (str[i] == ' ')
+				i++;
+			if (str[i] == '<' || str[i] == '|' || !str[i + 1])
+				return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
 int	is_valid_redir(char *str, int end)
 {
-	int i;
-	char c;
-	int count;
+	int		i;
+	char	c;
+	int		count;
 
 	i = 0;
 	count = 0;
-	if (!only_redir(str))
+	if (!only_redir(str) || !double_redir(str))
 		return (0);
 	while (i <= end)
 	{
 		if (str[i] == '>' || str[i] == '<')
 		{
 			if (count == 0)
-				c = str[i]; 
+				c = str[i];
 			if (c != str[i])
 				return (0);
 			count++;
@@ -45,8 +73,9 @@ int	is_valid_redir(char *str, int end)
 
 int	is_valid_pipe(char *str, int end)
 {
-	int	i;
-	int	count;
+	int		i;
+	int		count;
+	char	last_char;
 
 	i = 0;
 	count = 0;
@@ -58,8 +87,12 @@ int	is_valid_pipe(char *str, int end)
 			count++;
 		if (str[i] == '|' && count == 0)
 			return (0);
+		if (str[i] != ' ')
+			last_char = str[i];
 		i++;
 	}
+	if (last_char == '|')
+		return (0);
 	return (1);
 }
 
