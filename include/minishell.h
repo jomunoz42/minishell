@@ -64,7 +64,7 @@ int					ft_exit(int status, t_exec *exec, t_cmd *cmd);
 
 //=======================EXECUTION========================
 
-int					execute_heredocs(t_cmd *cmd, t_exec *exec);
+int					execute_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 void				handling_errors(t_exec *exec, char *arg, int error_id,
 						t_cmd *cmd);

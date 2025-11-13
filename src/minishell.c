@@ -61,6 +61,7 @@ int	main(int argc, char **argv, char **environ)
 		cmd = parsing(input, cmd, env);
 		if (cmd)
 		{
+			//print_struct(cmd);
 			if (!ft_strncmp(cmd->args[0], "exit", 4))
 				break ;
 			signal(SIGQUIT, SIG_IGN);

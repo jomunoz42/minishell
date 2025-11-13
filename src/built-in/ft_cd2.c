@@ -51,7 +51,7 @@ int file_or_directory(char *path, t_cmd *cmd)
     return (1);
 }
 
-void handle_folder_errors(t_cmd *cmd, char *path, t_map *env)
+void handle_folder_errors(t_cmd *cmd, char *path)
 {
     if (errno == EACCES)
     {
@@ -64,7 +64,7 @@ void handle_folder_errors(t_cmd *cmd, char *path, t_map *env)
         perror("bash: cd");
 }
 
-int handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
+int handle_cd_options(t_cmd *cmd, char *current_pwd)
 {
     int i;
 
@@ -88,7 +88,7 @@ int handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd)
     }
 }
 
-int    goes_nowhere(t_map *env, char *current_pwd)
+int    goes_nowhere(char *current_pwd)
 {
     if (chdir(current_pwd) != 0)
     {

@@ -57,8 +57,8 @@ int	ft_env(t_cmd *cmd, t_map *env, t_exec *exec)
 	i = -1;
 	if (cmd->args[1])
 	{
-		write(1, "Minishell subject: env with no options or arguments.\n", 54);
-		return (0);
+		write(2, "Minishell subject: env with no options or arguments.\n", 53);
+		return (1);
 	}
 	vars = env->to_str(env);
 	while (vars && vars[++i] && is_there_value(vars[i]))

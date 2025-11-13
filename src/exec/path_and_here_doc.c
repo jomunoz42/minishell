@@ -61,8 +61,8 @@ static void	handling_here_doc(t_redir *redir, t_exec *exec, t_cmd *cmd)
 		handling_errors(exec, NULL, 4, cmd);
 	if (!pid)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		exec->is_child = true;
+		(signal(SIGINT, SIG_DFL), signal(SIGQUIT, SIG_DFL));
 		size = ft_strlen(redir->args[1]);
 		while (1)
 		{
@@ -76,13 +76,13 @@ static void	handling_here_doc(t_redir *redir, t_exec *exec, t_cmd *cmd)
 	close(redir->fd);
 }
 
-int   execute_heredocs(t_cmd *cmd, t_exec *exec)
+int   execute_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec)
 {
 	t_cmd 	*cmd_temp;
 	t_redir *redir_temp;
 	int		status;
 
-	cmd_temp = cmd;
+	cmd_temp = temp;
 	while(cmd_temp)
 	{
 		redir_temp = cmd_temp->redir;
@@ -90,7 +90,7 @@ int   execute_heredocs(t_cmd *cmd, t_exec *exec)
 		{
 			if (ft_strncmp(redir_temp->args[0], "<<", 3) == 0)
 			{
-				handling_here_doc(redir_temp, exec, cmd_temp);
+				handling_here_doc(redir_temp, exec, cmd);
 				wait(&status);
 				status = convert_status(status);
 				if (status)

@@ -6,14 +6,14 @@
 #    By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
-#    Updated: 2025/11/12 19:30:41 by pbongiov         ###   ########.fr        #
+#    Updated: 2025/11/13 21:16:18 by pbongiov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
 
-CFLAGS = -g -Iinclude #-Wall -Wextra -Werror
+CFLAGS = -g -Iinclude -Wall -Wextra -Werror
 
 LDFLAGS = -lreadline
 

@@ -324,6 +324,32 @@ Segmentation fault (core dumped)
 minishell$ export a="echo $HOME $OLDPWD"
 Segmentation fault (core dumped)
 
-
 minishell$ ./minishell
 bash: ./minishell: Is a directory
+
+
+
+
+
+
+
+/bin/noexist
+ls | wc -l
+
+
+NAO FUNCIONA
+echo hello | cat
+echo hello | grep h
+echo hello world | grep o | wc -c
+ls | wc -l
+export TEST=42
+env | grep TEST
+unset TEST
+env | grep TEST
+
+double free;
+export VAR="hello world"
+echo $VAR
+
+ls |
+cat < > file

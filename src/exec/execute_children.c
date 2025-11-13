@@ -99,7 +99,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	exec->out = -1;
 	if (is_parent_built_ins(temp, env, exec))
 		return ;
-	if (execute_heredocs(cmd, exec))
+	if (execute_heredocs(cmd, temp, exec))
 		return ;
 	exec->in = dup(0);
 	while (temp)
@@ -112,7 +112,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 			close(exec->out);
 			exec->out = exec->pipefd[1];
 		}
-		redirections(temp->redir, exec, temp);
+		redirections(temp->redir, exec, cmd);
 		create_children(cmd, temp, env, exec);
 		exec->in = exec->pipefd[0];
 		temp = temp->next;

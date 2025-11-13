@@ -2,10 +2,10 @@
 
 #include "minishell.h"
 
-int					handle_folder_errors(t_cmd *cmd, char *path, t_map *env);
+int					handle_folder_errors(t_cmd *cmd, char *path);
 char				*find_last_slash(char *current_pwd);
-int                handle_cd_options(t_cmd *cmd, t_map *env, char *current_pwd);
-int                goes_nowhere(t_map *env, char *current_pwd);
+int                handle_cd_options(t_cmd *cmd, char *current_pwd);
+int                goes_nowhere(char *current_pwd);
 
 static int    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
 {
@@ -71,7 +71,7 @@ static int    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
     {
         if (chdir(path) != 0)
         {
-            handle_folder_errors(cmd, path, env);
+            handle_folder_errors(cmd, path);
             free(path);
             free(current_pwd);
             return (1);
@@ -101,11 +101,11 @@ int	ft_cd(t_cmd *cmd, t_map *env)
     else if (!ft_strncmp(cmd->args[1], "-", 2))
         return (absolute_and_relative(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], "-", 1))
-        return (handle_cd_options(cmd, env, current_pwd));
+        return (handle_cd_options(cmd, current_pwd));
     else if (!ft_strncmp(cmd->args[1], "..", 3))
         return (goes_up(cmd, env, current_pwd));
     else if (!ft_strncmp(cmd->args[1], ".", 2))
-        return (goes_nowhere(env, current_pwd));
+        return (goes_nowhere(current_pwd));
     else
         return (absolute_and_relative(cmd, env, current_pwd));
     return (0);

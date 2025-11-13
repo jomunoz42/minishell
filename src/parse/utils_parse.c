@@ -5,10 +5,12 @@ int	quote_count(char *str)
 	bool	single_flag;
 	bool	double_flag;
 	int		i;
+	t_map 	*env;
 
 	i = 0;
 	single_flag = false;
 	double_flag = false;
+	env = get_map_addr(NULL);
 	while (str[i])
 	{
 		if (str[i] == '"' && !single_flag)
@@ -18,7 +20,11 @@ int	quote_count(char *str)
 		i++;
 	}
 	if (single_flag || double_flag)
-		return (perror("Open Quotes"), 0);
+	{
+		write(2, "bash: syntax error near unexpected token\n", 42);
+		env->put(env, "?", ft_strdup("2"));
+		return (0);
+	}
 	return (1);
 }
 

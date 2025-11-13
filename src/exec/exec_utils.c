@@ -51,7 +51,7 @@ void	handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 {
 	int	status;
 
-	if (is_it_built_in(cmd->args[0]))
+	if (is_it_built_in(temp->args[0]))
 	{
         if (exec->no_file == true || exec->no_permission == true)
             ft_exit(1, exec, cmd);                          
@@ -63,7 +63,7 @@ void	handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 		ft_exit(status, exec, cmd);
 	}
 	else
-		cmd->args[0] = get_absolute_path(env, cmd->args[0]);
+		temp->args[0] = get_absolute_path(env, temp->args[0]);
 }
 
 int 	is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec)
