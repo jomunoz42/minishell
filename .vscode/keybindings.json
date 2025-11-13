@@ -1,8 +1,0 @@
-[
-  {
-    "key": "ctrl+shift+i",
-    "command": "workbench.action.tasks.runTask",
-    "args": "Format C file (42)",
-    "when": "editorTextFocus && editorLangId == c"
-  }
-]
