@@ -46,9 +46,13 @@ int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
     else if (!ft_strncmp(cmd->args[0], "unset", 6))
         status = ft_unset(cmd, env);
     else if (!ft_strncmp(cmd->args[0], "exit", 5))
-		status = exit_parsing(cmd, exec, status);
-    env->put(env, "?", ft_itoa(status));
-	return (status);
+    {
+        if (cmd->args[1])
+		    status = exit_parsing(cmd, exec);
+        else
+            ft_exit(ft_atoi(env->get(env, "?")), exec, cmd);
+    }
+	return (env->put(env, "?", ft_itoa(status)), status);
 }
 
 void	handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)

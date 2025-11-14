@@ -30,11 +30,12 @@ typedef struct s_exec
 {
 	int				in;
 	int				out;
-	int pipefd[2]; //   checkar
+	int 			pipefd[2];
 	int				status;
 	bool			no_permission;
 	bool			no_file;
 	bool			is_child;
+	bool			msg_printed;
 }					t_exec;
 
 typedef struct s_redir
@@ -73,7 +74,7 @@ void				close_everything(t_exec *exec);
 void				close_and_reset(t_exec *exec);
 int					convert_status(int status);
 void				redirections(t_redir *redir, t_exec *exec, t_cmd *cmd);
-int 				exit_parsing(t_cmd *cmd, t_exec *exec, int status);
+int 				exit_parsing(t_cmd *cmd, t_exec *exec);
 
 //========================PARSING=========================
 

@@ -28,8 +28,9 @@ static int    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
         env->put(env, "OLDPWD", ft_strdup(current_pwd));
         env->put(env, "PWD", ft_strdup(path));
     }
-    free(current_pwd);
-    return (0);
+    else
+        return (free(current_pwd), 1);
+    return (free(current_pwd), 0);
 }
 
 static int    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
@@ -52,8 +53,9 @@ static int    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
         env->put(env, "PWD", ft_strdup(path));
         env->put(env, "OLDPWD", ft_strdup(current_pwd));
     }
-    free(current_pwd);
-    return (free(path), 0);
+    else
+        return (free(current_pwd), free(path), 1);
+    return (free(current_pwd), free(path), 0);
 }
 
 static int    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
@@ -79,8 +81,9 @@ static int    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
         env->put(env, "OLDPWD", ft_strdup(current_pwd));
         env->put(env, "PWD", ft_strdup(path));
     }
-    free(current_pwd);
-    return (free(path), 0);
+    else
+        return (free(current_pwd), free(path), 1);
+    return (free(current_pwd), free(path), 0);
 }
 
 int	ft_cd(t_cmd *cmd, t_map *env)
@@ -111,14 +114,4 @@ int	ft_cd(t_cmd *cmd, t_map *env)
     return (0);
 }
 
-
-// bash: cd: No such file or directory
-// minishell$ echo $?
-// 1
-// minishell$ cd -
-// bash: cd: -: No such file or directory
-// free(): invalid pointer
-// Aborted (core dumped)
-
-
-// SOLVED, TESTAR COM BUEDA FORCA
+// testar leaks cd outra vez
