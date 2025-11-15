@@ -119,6 +119,10 @@ export a=c b=a c=t
 $a$b$c
 cat must happen
 
+export =
+bash: export: `=': not a valid identifier
+$? = 1
+
 ---------->   CD 
 
 -> cd aaa aaa

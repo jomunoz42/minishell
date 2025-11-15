@@ -40,7 +40,7 @@ char	*verify_var(char *str, t_map *env)
 	{
 		if (str[i++] == '$')
 		{
-			if (!ft_isalnum_modified(str[i]))
+			if (!ft_isalnum_modified(str[i]) && str[i] != '?' && str[i] != '$')
 				continue ;
 			j = check_size(str + i);
 			var = ft_substr(str, i, j);

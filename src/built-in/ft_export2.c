@@ -42,6 +42,13 @@ int	handle_invalid_export(char *arg)
 	int	i;
 
 	i = -1;
+	if (arg[0] == '=')
+	{
+		write(2, "bash: export: `", 15);
+		write(2, arg, ft_strlen(arg));
+		write(2, "': not a valid identifier\n", 27);
+		return (1);
+	}
 	while (arg[++i] && arg[i] != '=')
 	{
 		if (ft_isdigit(arg[0]) || !ft_isalnum_modified(arg[i]))

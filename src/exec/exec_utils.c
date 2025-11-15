@@ -50,7 +50,7 @@ int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
         if (cmd->args[1])
 		    status = exit_parsing(cmd, exec);
         else
-            ft_exit(ft_atol(env->get(env, "?")), exec, cmd);
+            ft_exit(ft_atoi(env->get(env, "?")), exec, cmd);
     }
 	return (env->put(env, "?", ft_itoa(status)), status);
 }

@@ -58,11 +58,7 @@ int	exit_parsing(t_cmd *cmd, t_exec *exec)
 		exec->msg_printed = true;
 		return (1);
 	}
-<<<<<<< Updated upstream
-	else if (!is_valid_exit_arg(cmd->args[1]))
-=======
 	else if (!is_valid_exit_arg(cmd->args[1]) || check_overflow(cmd))
->>>>>>> Stashed changes
 	{
 		if (!exec->is_child)
 			write(1, "exit\n", 6);
@@ -72,7 +68,7 @@ int	exit_parsing(t_cmd *cmd, t_exec *exec)
 		exec->msg_printed = true;
 		ft_exit(2, exec, cmd);
 	}
-	status = ft_atol(cmd->args[1]);
+	status = ft_atoi(cmd->args[1]);
 	ft_exit(status, exec, cmd);
 	return (0);
 }
@@ -95,5 +91,3 @@ int	ft_exit(int status, t_exec *exec, t_cmd *cmd)
 		unlink("/tmp/mini_temp");
 	exit(status);
 }
-
-// exit ta foda, mas testa-lo

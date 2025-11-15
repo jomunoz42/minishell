@@ -7,19 +7,21 @@ static void handle_shell_lvl(t_map *map)
 	char		*lvl;
 
 	lvl = map->get(map, "SHLVL");
+	if (!lvl)
+		return ;
 	if (!ft_strncmp(lvl, "999", 4))
 	{
 		write(2, "bash: warning: shell level (1000) too high, resetting to 1\n", 60);
 		lvl = ft_itoa(1);
 	}
 	else
-		lvl = ft_itoa(ft_atol(lvl) + 1);
+		lvl = ft_itoa(ft_atoi(lvl) + 1);
 	map->put(map, "SHLVL", lvl);
 }
 
 static void	handle_no_env(t_map *map)
 {
-	map->put(map, ft_strdup("SHLVL"), ft_strdup("3"));
+	map->put(map, ft_strdup("SHLVL"), ft_strdup("2"));
 	map->put(map, ft_strdup("PWD"), ft_strdup(getcwd(NULL, 0)));
 	map->put(map, ft_strdup("PATH"),
 		ft_strdup("/home/jomunoz/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"));
@@ -32,7 +34,7 @@ void	copy_env(t_map *map, char **env)
 	int			i;
 
 	i = -1;
-	if (env && env[0])
+	if (env && *env)
 	{
 		while (env[++i])
 		{
