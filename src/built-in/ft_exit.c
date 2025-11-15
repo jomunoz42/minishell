@@ -36,7 +36,7 @@ int	exit_parsing(t_cmd *cmd, t_exec *exec)
 		exec->msg_printed = true;
 		return (1);
 	}
-	if (!is_valid_exit_arg(cmd->args[1]))
+	else if (!is_valid_exit_arg(cmd->args[1]))
 	{
 		if (!exec->is_child)
 			write(1, "exit\n", 6);

@@ -13,9 +13,9 @@ char	*get_absolute_path(t_map *env, char *cmd)
 	char	*str;
 	int		i;
 
-	if (!*cmd)
-		return ("");
-	if (is_it_built_in(cmd) || access(cmd, X_OK) == 0)
+	if (!cmd)
+		return (NULL);
+	if (!*cmd || is_it_built_in(cmd) || access(cmd, X_OK) == 0)
 		return (cmd);
 	str = env->get(env, "PATH");
 	if (!str || str[0] == '\0')
@@ -32,8 +32,7 @@ char	*get_absolute_path(t_map *env, char *cmd)
 			return (free_double(dirs), path);
 		free(path);
 	}
-	free_double(dirs);
-	return (cmd);
+	return (free_double(dirs), cmd);
 }
 
 static int	here_doc_util(t_redir *redir, char *line, int size)

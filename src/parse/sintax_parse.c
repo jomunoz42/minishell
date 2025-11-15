@@ -3,7 +3,16 @@
 int	only_redir(char *str)
 {
 	int	i;
+	char last_char;
 
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] != ' ')
+			last_char = str[i];
+	}
+	if (last_char == '>' || last_char == '<')
+		return (0);
 	i = 0;
 	while (str[i])
 	{
@@ -26,7 +35,7 @@ int	double_redir(char *str)
 			i++;
 			while (str[i + 1] && str[i] == ' ')
 				i++;
-			if (str[i] == '>' || str[i] == '|' || !str[i + 1])
+			if (str[i] == '>' || str[i] == '|')
 				return (0);
 		}
 		else if (str[i] == '>' && str[i + 1] == ' ')
@@ -87,9 +96,13 @@ int	is_valid_pipe(char *str, int end)
 			count++;
 		if (str[i] == '|' && count == 0)
 			return (0);
+		i++;
+	}
+	i = -1;
+	while (str[++i])
+	{
 		if (str[i] != ' ')
 			last_char = str[i];
-		i++;
 	}
 	if (last_char == '|')
 		return (0);

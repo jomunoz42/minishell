@@ -56,6 +56,7 @@ static void	 error_messages(char *path, t_exec *exec, t_cmd *cmd)
 
 void	handle_execve_errors(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 {
+	(!cmd->args[0] && cmd->redir) && (ft_exit(0, exec, cmd));
 	if (is_there_slash(temp->args[0]))
 		error_messages(temp->args[0], exec, cmd);
 	else

@@ -5,6 +5,12 @@
     fun:readline
 }
 {
+    leak readline
+    Memcheck:Leak
+    ...
+    fun:/usr/bin/ls
+}
+{
     leak add_history
     Memcheck:Leak
     ...

@@ -40,6 +40,8 @@ char	*verify_var(char *str, t_map *env)
 	{
 		if (str[i++] == '$')
 		{
+			if (!ft_isalnum_modified(str[i]))
+				continue ;
 			j = check_size(str + i);
 			var = ft_substr(str, i, j);
 			if (!var)
@@ -48,7 +50,6 @@ char	*verify_var(char *str, t_map *env)
 			if (!str)
 				return (NULL);
 			free(var);
-			break ;
 		}
 	}
 	return (str);
@@ -91,7 +92,7 @@ char	*expanded_arg(char *str, t_map *env)
 		if (flag != '\'' && str[i] == '$' && str[i + 1])
 		{
 			if (!verify_var_sintax(str + i))
-				break ;
+				continue ;
 			var = verify_var(str, env);
 			if (!var)
 				return (NULL);

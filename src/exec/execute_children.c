@@ -83,7 +83,8 @@ static void	create_children(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 			close(exec->pipefd[0]);
 		if (exec->no_file || exec->no_permission)
 			ft_exit(1, exec, cmd);
-		execve(temp->args[0], temp->args, env->to_str(env));
+		if (temp->args[0])
+			execve(temp->args[0], temp->args, env->to_str(env));
 		handle_execve_errors(cmd, temp, env, exec);
 	}
 	close_and_reset(exec);

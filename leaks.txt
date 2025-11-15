@@ -1,0 +1,10 @@
+char	*get_absolute_path(t_map *env, char *cmd)
+{
+	char	**dirs;
+	char	*path;
+	char	*temp;
+	char	*str;
+	int		i;
+
+	if (!cmd || !*cmd)
+		return (cmd);
