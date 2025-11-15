@@ -193,6 +193,83 @@ cd -
 bash: cd: OLDPWD not set
 $? = 1                   leaks?
 
+---------->   EXIT
+
+exit
+$? = "last status"      do 2/3 tests
+
+exit 0
+$? = 0
+
+exit +42
+$? = 42
+
+exit 256
+$? = 0
+
+exit -1
+$? = 255
+
+exit -256
+$? = 0 
+
+exit 1 2
+exit
+bash: exit: too many arguments
+$? = 1
+
+exit 1 ff
+exit
+bash: exit: too many arguments
+$? = 1
+
+exit exit
+exit
+bash: exit: exit: numeric argument required
+$? = 2
+
+exit 1ff
+exit
+bash: exit: 1ff: numeric argument required
+$? = 2
+
+exit ff ff
+exit
+bash: exit: ff: numeric argument required
+$? = 2
+
+exit -
+exit
+bash: exit: -: numeric argument required
+$? = 2
+
+exit +
+exit
+bash: exit: +: numeric argument required
+$? = 2
+
+exit -+
+exit
+bash: exit: -+: numeric argument required
+$? = 2
+
+exit 9223372036854775807
+$? = 255
+
+exit 9223372036854775808
+exit
+bash: exit: 9223372036854775808: numeric argument required
+$? = 2
+
+exit -9223372036854775808
+exit
+$? = 0
+
+exit -9223372036854775809
+exit
+bash: exit: -9223372036854775809: numeric argument required
+$? = 2
+
 --------------------------------------------------------------------------------------
 
 SHLVL:

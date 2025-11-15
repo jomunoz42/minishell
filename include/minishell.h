@@ -124,7 +124,7 @@ int					ft_lstsize(t_cmd *lst);
 void				*ft_memmove(void *dest, const void *src, size_t n);
 void				*ft_memcpy(void *dest, const void *src, size_t n);
 int					ft_isalnum_modified(int c);
-int					ft_atoi(const char *nptr);
+long				ft_atol(const char *nptr);
 char				*ft_itoa(int nbr);
 int					ft_isdigit(int c);
 

@@ -13,7 +13,7 @@ static void handle_shell_lvl(t_map *map)
 		lvl = ft_itoa(1);
 	}
 	else
-		lvl = ft_itoa(ft_atoi(lvl) + 1);
+		lvl = ft_itoa(ft_atol(lvl) + 1);
 	map->put(map, "SHLVL", lvl);
 }
 

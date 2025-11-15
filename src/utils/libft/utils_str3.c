@@ -2,10 +2,10 @@
 
 #include "minishell.h"
 
-int	ft_atoi(const char *nptr)
+long	ft_atol(const char *nptr)
 {
 	int	a;
-	int	num;
+	long long num;
 	int	sign;
 
 	a = 0;

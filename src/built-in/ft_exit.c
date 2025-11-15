@@ -4,7 +4,7 @@
 
 void	free_list(t_cmd *all);
 
-int	is_valid_exit_arg(char *arg)
+static int	is_valid_exit_arg(char *arg)
 {
 	int	i;
 
@@ -24,9 +24,31 @@ int	is_valid_exit_arg(char *arg)
 	return (1);
 }
 
+static int check_overflow(t_cmd *cmd)
+{
+	size_t size;
+
+	size = ft_strlen(cmd->args[1]);
+	if (ft_isdigit(cmd->args[1][0]))
+	{
+		if (size > 19)
+			return (1);
+		if (size == 19 && (cmd->args[1][18] == '8' || cmd->args[1][18] == '9'))
+			return (1);
+	}
+	if (cmd->args[1][0] == '+' || cmd->args[1][0] == '-')
+	{
+		if (size > 20)
+			return (1);
+		if (size == 20 && cmd->args[1][19] == '9')
+			return (1);
+	}
+	return (0);
+}
+
 int	exit_parsing(t_cmd *cmd, t_exec *exec)
 {
-	int	status;
+	int		status;
 
 	if (cmd->args[2] && is_valid_exit_arg(cmd->args[1]))
 	{
@@ -36,7 +58,11 @@ int	exit_parsing(t_cmd *cmd, t_exec *exec)
 		exec->msg_printed = true;
 		return (1);
 	}
+<<<<<<< Updated upstream
 	else if (!is_valid_exit_arg(cmd->args[1]))
+=======
+	else if (!is_valid_exit_arg(cmd->args[1]) || check_overflow(cmd))
+>>>>>>> Stashed changes
 	{
 		if (!exec->is_child)
 			write(1, "exit\n", 6);
@@ -46,7 +72,7 @@ int	exit_parsing(t_cmd *cmd, t_exec *exec)
 		exec->msg_printed = true;
 		ft_exit(2, exec, cmd);
 	}
-	status = ft_atoi(cmd->args[1]);
+	status = ft_atol(cmd->args[1]);
 	ft_exit(status, exec, cmd);
 	return (0);
 }
