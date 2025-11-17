@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:55:11 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/12 18:41:43 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/17 19:19:58 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	__put(t_map_extra *this, char *key, char *value)
 		if (ft_strcmp(node->key, key) == 0)
 		{
 			free(node->value);
+			free(key);
 			node->value = value; 
 			return ;
 		}

@@ -25,8 +25,8 @@ static int    goes_home(t_cmd *cmd, t_map *env, char *current_pwd)
             free(current_pwd);
             return (1);
         }
-        env->put(env, "OLDPWD", ft_strdup(current_pwd));
-        env->put(env, "PWD", ft_strdup(path));
+        env->put(env, ft_strdup("OLDPWD"), ft_strdup(current_pwd));
+        env->put(env, ft_strdup("PWD"), ft_strdup(path));
     }
     else
         return (free(current_pwd), 1);
@@ -50,8 +50,8 @@ static int    goes_up(t_cmd *cmd, t_map *env, char *current_pwd)
             free(current_pwd);
             return (1);
         }
-        env->put(env, "PWD", ft_strdup(path));
-        env->put(env, "OLDPWD", ft_strdup(current_pwd));
+        env->put(env, ft_strdup("PWD"), ft_strdup(path));
+        env->put(env, ft_strdup("OLDPWD"), ft_strdup(current_pwd));
     }
     else
         return (free(current_pwd), free(path), 1);
@@ -78,8 +78,8 @@ static int    absolute_and_relative(t_cmd *cmd, t_map *env, char *current_pwd)
             free(current_pwd);
             return (1);
         }
-        env->put(env, "OLDPWD", ft_strdup(current_pwd));
-        env->put(env, "PWD", ft_strdup(path));
+        env->put(env, ft_strdup("OLDPWD"), ft_strdup(current_pwd));
+        env->put(env, ft_strdup("PWD"), ft_strdup(path));
     }
     else
         return (free(current_pwd), free(path), 1);

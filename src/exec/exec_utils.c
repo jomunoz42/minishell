@@ -52,7 +52,7 @@ int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
         else
             ft_exit(ft_atoi(env->get(env, "?")), exec, cmd);
     }
-	return (env->put(env, "?", ft_itoa(status)), status);
+	return (env->put(env, ft_strdup("?"), ft_itoa(status)), status);
 }
 
 void	handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)

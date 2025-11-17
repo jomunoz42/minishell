@@ -10,7 +10,7 @@ void	handler(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 1);
 	rl_redisplay();
-	env->put(env, "?", ft_strdup("130"));
+	env->put(env, ft_strdup("?"), ft_strdup("130"));
 }
 
 void	sig_handler(void)

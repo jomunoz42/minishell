@@ -108,6 +108,7 @@ int					arr_count(char **arr);
 char				*get_next_line(int fd);
 char				identify_quote(char c, char flag);
 t_map				*get_map_addr(t_map *env);
+int 				get_pid(void);
 
 //=========================LIBFT==========================
 

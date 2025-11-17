@@ -64,6 +64,8 @@ int	main(int argc, char **argv, char **environ)
 			(signal(SIGQUIT, SIG_IGN), signal(SIGINT, SIG_IGN));
 			execute_command(cmd, env, &exec);
 		}
+		else
+			env->put(env, ft_strdup("?"), ft_strdup("0"));
 		free_list(cmd);
 		cmd = NULL;
 		free(input);
