@@ -9,7 +9,7 @@ void	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
 
 	env = get_map_addr(NULL);
 	if (error_id == 1 || error_id == 2)
-		((write(2, "bash: ", 6), perror(arg)), env->put(env, "?", ft_strdup("1")));
+		((write(2, "bash: ", 6), perror(arg)), env->put(env, ft_strdup("?"), ft_strdup("1")));
 	if (errno == ENOENT) 
 		exec->no_file = true;
 	else if (errno == EACCES)

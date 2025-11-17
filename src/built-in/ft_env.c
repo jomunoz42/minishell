@@ -16,7 +16,7 @@ static void handle_shell_lvl(t_map *map)
 	}
 	else
 		lvl = ft_itoa(ft_atoi(lvl) + 1);
-	map->put(map, "SHLVL", lvl);
+	map->put(map, ft_strdup("SHLVL"), lvl);
 }
 
 static void	handle_no_env(t_map *map)
@@ -32,6 +32,7 @@ void	copy_env(t_map *map, char **env)
     static char	*args[2];
 	int			j;
 	int			i;
+	int 		pid;
 
 	i = -1;
 	if (env && *env)
@@ -48,7 +49,8 @@ void	copy_env(t_map *map, char **env)
 		handle_no_env(map);
 	handle_shell_lvl(map);
 	map->put(map, ft_strdup("?"), ft_strdup("0"));
-	map->put(map, ft_strdup("$"), ft_strdup("substituir")); ////////
+	pid = get_pid();
+	map->put(map, ft_strdup("$"), ft_itoa(pid));
 }
 
 int	ft_env(t_cmd *cmd, t_map *env, t_exec *exec)

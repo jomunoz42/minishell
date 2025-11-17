@@ -39,3 +39,13 @@ char  *find_last_slash(char *current_pwd)
     }
     return (current_pwd);
 }
+
+int get_pid()
+{
+    int pid;
+
+    pid = fork();
+    if (pid == 0)
+        exit(0);
+    return (pid - 1);
+}

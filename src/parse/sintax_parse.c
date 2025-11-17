@@ -124,13 +124,13 @@ int	check_sintax(char *str, t_map *env)
 		if (str[i] == '|' && !is_valid_pipe(str, i))
 		{
 			write(2, "bash: syntax error near unexpected token\n", 42);
-			env->put(env, "?", ft_strdup("2"));
+			env->put(env, ft_strdup("?"), ft_strdup("2"));
 			return (0);
 		}
 		else if ((str[i] == '<' || str[i] == '>') && !is_valid_redir(str, i))
 		{
 			write(2, "bash: syntax error near unexpected token\n", 42);
-			env->put(env, "?", ft_strdup("2"));
+			env->put(env, ("?"), ft_strdup("2"));
 			return (0);
 		}
 	}

@@ -17,7 +17,7 @@ static void	waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
 		temp = temp->next;
 	}
 	exec->status = convert_status(exec->status);
-	env->put(env, "?", ft_itoa(exec->status));
+	env->put(env, ft_strdup("?"), ft_itoa(exec->status));
 }
 
 static void	redirections2(t_redir *temp, t_exec *exec, t_cmd *cmd)

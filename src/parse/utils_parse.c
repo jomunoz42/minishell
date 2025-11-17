@@ -22,7 +22,7 @@ int	quote_count(char *str)
 	if (single_flag || double_flag)
 	{
 		write(2, "bash: syntax error near unexpected token\n", 42);
-		env->put(env, "?", ft_strdup("2"));
+		env->put(env, ft_strdup("?"), ft_strdup("2"));
 		return (0);
 	}
 	return (1);
