@@ -35,11 +35,12 @@ char	*verify_var(char *str, t_map *env)
 	int		j;
 	char	*var;
 
-	i = 0;
-	while (str[i])
+	i = -1;
+	while (str[++i])
 	{
-		if (str[i++] == '$')
+		if (str[i] == '$')
 		{
+			i++;
 			if (!ft_isalnum_modified(str[i]) && str[i] != '?' && str[i] != '$')
 				continue ;
 			j = check_size(str + i);
@@ -50,6 +51,7 @@ char	*verify_var(char *str, t_map *env)
 			if (!str)
 				return (NULL);
 			free(var);
+			break;
 		}
 	}
 	return (str);
