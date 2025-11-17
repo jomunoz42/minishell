@@ -89,15 +89,20 @@ void	close_everything(t_exec *exec)
 		close(exec->in);
 	if (exec->out != -1)
 		close(exec->out);
-	// falta aqui if (pipefd[0] > 0) e (pipefd[1] > 0)
+	if (exec->pipefd[0] > 0)
+		close(exec->pipefd[0]);
+	if (exec->pipefd[1] > 0)
+		close(exec->pipefd[1]);
 } 
 
 void close_and_reset(t_exec *exec)
 {
-	if (exec->in)
+	if (exec->in != -1)
 		close(exec->in);
-	if (exec->out)
+	if (exec->out != -1)
 		close(exec->out);
+	if (exec->pipefd[0] > 0)
+		close(exec->pipefd[0]);
 	exec->no_file = false;
 	exec->no_permission = false;
 }
