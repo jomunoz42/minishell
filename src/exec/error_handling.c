@@ -3,29 +3,34 @@
 
 int   is_there_slash(char *path);
 
-void	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
+int	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
 {
 	t_map *env;
 
 	env = get_map_addr(NULL);
-	if (error_id == 1 || error_id == 2)
-		((write(2, "bash: ", 6), perror(arg)), env->put(env, ft_strdup("?"), ft_strdup("1")));
+	if (error_id == 1)
+	{
+		(write(2, "bash: ", 6), perror(arg));
+		env->put(env, ft_strdup("?"), ft_strdup("1"));
+		if (!ft_strncmp(cmd->args[0], "echo", 5))
+			exec->echo_flag = 1;
+		return (1);
+	}
+	if (error_id == 2)
+	{
+		(write(2, "bash: ", 6), perror(arg));
+		env->put(env, ft_strdup("?"), ft_strdup("1"));
+		return (0);
+	}
 	if (errno == ENOENT) 
 		exec->no_file = true;
 	else if (errno == EACCES)
-		exec->no_permission = true; ///  chekar  testar -x de um ficheiro
+		exec->no_permission = true;
 	if (error_id == 3)
-	{
-		perror("pipe");
-		close_everything(exec); // check
-		ft_exit(1, exec, cmd);
-	}
+		(perror("pipe"), (close_everything(exec), ft_exit(1, exec, cmd)));
 	if (error_id == 4)
-	{
-		perror("fork");
-		close_everything(exec); // check
-		ft_exit(1, exec, cmd);
-	}
+		(perror("fork"), (close_everything(exec), ft_exit(1, exec, cmd)));
+	return (0);
 }
 
 static void	 error_messages(char *path, t_exec *exec, t_cmd *cmd)
@@ -97,12 +102,10 @@ void	close_everything(t_exec *exec)
 
 void close_and_reset(t_exec *exec)
 {
-	if (exec->in != -1)
+	if (exec->in > 2)
 		close(exec->in);
-	if (exec->out != -1)
+	if (exec->out > 2)
 		close(exec->out);
-	if (exec->pipefd[0] > 0)
-		close(exec->pipefd[0]);
 	exec->no_file = false;
 	exec->no_permission = false;
 }

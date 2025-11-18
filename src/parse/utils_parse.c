@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:39 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/18 17:08:17 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/18 20:38:34 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,15 +92,22 @@ void	remove_quotes(t_cmd *head)
 {
 	int		i;
 	t_cmd	*node;
+	t_redir	*redir;
 
 	node = head;
 	while (node)
 	{
+		redir = node->redir;
 		i = 0;
 		while (node->args[i])
 		{
 			find_quotes(node->args[i], 0);
 			i++;
+		}
+		while (redir)
+		{
+			find_quotes(redir->args[1], 0);
+			redir = redir->next;
 		}
 		node = node->next;
 	}

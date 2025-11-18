@@ -64,8 +64,10 @@ void	handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
         if (exec->no_file == true || exec->no_permission == true)
             ft_exit(1, exec, cmd);                          
 		status = exec_built_in(temp, env, exec);
-		close(exec->in);
-		close(exec->out);
+        if (exec->in > 2)
+		    close(exec->in);
+        if (exec->out > 2)
+		    close(exec->out);
 		if (exec->pipefd[0])
             close(exec->pipefd[0]);
 		ft_exit(status, exec, cmd);
@@ -76,21 +78,28 @@ void	handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 
 int 	is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec)
 {
+    exec->in = -1;
+	exec->out = -1;
 	if (!temp->next && is_it_built_in(temp->args[0]))
 	{
 		exec->out = dup(1);
 		redirections(temp->redir, exec, temp);
 		exec_built_in(temp, env, exec);
-		close(exec->out);
+		if (exec->in > 2)
+		    close(exec->in);
+	    if (exec->out > 2)
+		    close(exec->out);
 		return (1);
 	}
 	return (0);
 }
+
 void	no_file_no_perm(t_cmd *cmd, t_exec *exec)
 {
 	if (exec->in == -1 && (exec->no_file || exec->no_permission))
 	{
-		close(exec->out);
+        if (exec->out > 2)
+		    close(exec->out);
 		if (exec->pipefd[0])
 			close(exec->pipefd[0]);
 		ft_exit(1, exec, cmd);

@@ -23,6 +23,11 @@ int ft_echo(t_cmd *cmd, t_exec *exec)
 
 	i = 1;
 	n_option = false;
+    if (exec->echo_flag)
+    {
+        exec->echo_flag = 0;
+        return (1);
+    }
     while (cmd->args[i] && cmd->args[i][0] == '-' && only_ns(cmd->args[i]))
     {
         n_option = true;

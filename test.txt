@@ -66,6 +66,10 @@ out.txt: hello -n
 ls | echo -nnnnnn -n hello -n < 2.txt | cat
 hello -nminishell$
 
+echo <"./test_files/infile" <missing <"./test_files/infile"
+bash: missing: No such file or directory
+$? = 1
+
 ---------->   PWD
 
 unset PWD
@@ -333,6 +337,12 @@ $? = 0
 cat < nofile | cat > out.txt
 bash: nofile: No such file or directory         
 $? = 0
+
+
+cat < 123 cat < 234
+bash: 123: No such file or directory
+$? = 1
+
 
 cat < nofile | ls > nofile2            creates nofile2?
 $? = 0

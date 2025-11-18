@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+         #
+#    By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
-#    Updated: 2025/11/18 19:20:34 by pbongiov         ###   ########.fr        #
+#    Updated: 2025/11/18 19:26:27 by jomunoz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,12 +45,6 @@ v:
 	make re && clear &&  valgrind --suppressions=readline.supp ./$(NAME)
 
 vl:
-	make re && clear && valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=readline.supp ./$(NAME)
-
-vc:
-	make re && clear && valgrind --track-origins=yes --suppressions=readline.supp ./$(NAME)
-
-vall:
 	make re && clear && valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=readline.supp ./$(NAME)
 
 .PHONY: all clean fclean re r

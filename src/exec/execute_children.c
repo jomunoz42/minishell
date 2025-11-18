@@ -25,14 +25,16 @@ static void	redirections2(t_redir *temp, t_exec *exec, t_cmd *cmd)
 {
 	if (ft_strncmp(temp->args[0], ">>", 3) == 0)
 	{
-		close(exec->out);
+		if (exec->out > 2)
+			close(exec->out);
 		exec->out = open(temp->args[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
 		if (exec->out == -1)
 			handling_errors(exec, temp->args[1], 2, cmd);
 	}
 	if (ft_strncmp(temp->args[0], ">", 2) == 0)
 	{
-		close(exec->out);
+		if (exec->out > 2)
+			close(exec->out);
 		exec->out = open(temp->args[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (exec->out == -1)
 			handling_errors(exec, temp->args[1], 2, cmd);
@@ -48,17 +50,22 @@ void	redirections(t_redir *redir, t_exec *exec, t_cmd *cmd)
 	{
 		if (ft_strncmp(temp->args[0], "<<", 3) == 0)
 		{
-			close(exec->in);
+			if (exec->in > 2)
+				close(exec->in);
 			exec->in = open("/tmp/mini_temp", O_RDONLY);
 			if (exec->in == -1)
 				handling_errors(exec, "/tmp/mini_temp", 1, cmd);
 		}
 		if (ft_strncmp(temp->args[0], "<", 2) == 0)
 		{
-			close(exec->in);
+			if (exec->in > 2)
+				close(exec->in);
 			exec->in = open(temp->args[1], O_RDONLY);
 			if (exec->in == -1)
-				handling_errors(exec, temp->args[1], 1, cmd);
+			{
+				if (handling_errors(exec, temp->args[1], 1, cmd))
+					return ;
+			}
 		}
 		redirections2(temp, exec, cmd);
 		temp = temp->next;
@@ -78,9 +85,11 @@ static void	create_children(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 		no_file_no_perm(cmd, exec);
 		handle_built_in(cmd, temp, env, exec);
 		dup2(exec->in, 0);
-		close(exec->in);
+		if (exec->in > 2)
+			close(exec->in);
 		dup2(exec->out, 1);
-		close(exec->out);
+		if (exec->out > 2)
+			close(exec->out);
 		if (exec->pipefd[0])
 			close(exec->pipefd[0]);
 		if (temp->args[0])
@@ -95,8 +104,6 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	t_cmd	*temp;
 
 	temp = cmd;
-	exec->in = -1;
-	exec->out = -1;
 	if (is_parent_built_ins(temp, env, exec))
 		return ;
 	if (execute_heredocs(cmd, temp, exec))
@@ -119,3 +126,14 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	}
 	waiting_proccesses(cmd, exec, env);
 }
+
+
+// cat < 123 < 456
+// bash: 123: No such file or directory
+// echo $? = 1
+
+
+// cagada here doc
+
+
+//   echo << a    env << a      pwd << a

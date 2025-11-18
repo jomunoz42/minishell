@@ -36,6 +36,7 @@ typedef struct s_exec
 	bool			no_file;
 	bool			is_child;
 	bool			msg_printed;
+	bool			echo_flag;
 }					t_exec;
 
 typedef struct s_redir
@@ -67,7 +68,7 @@ int					ft_exit(int status, t_exec *exec, t_cmd *cmd);
 
 int					execute_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
-void				handling_errors(t_exec *exec, char *arg, int error_id,
+int					handling_errors(t_exec *exec, char *arg, int error_id,
 						t_cmd *cmd);
 void				handle_execve_errors(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec);
 void				close_everything(t_exec *exec);
