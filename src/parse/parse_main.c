@@ -1,46 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_main.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/18 17:05:21 by pbongiov          #+#    #+#             */
+/*   Updated: 2025/11/18 17:07:49 by pbongiov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int		check_sintax(char *str, t_map *env);
 
-void	print_struct(t_cmd *head)
-{
-	t_cmd	*node;
-	int		i;
-	t_redir	*redir_node;
-
-	node = head;
-	while (node)
-	{
-		printf("======== COMANDO =========\n");
-		i = 0;
-		if (node->args)
-		{
-			while (node->args[i])
-				printf("ARGS: %s\n", node->args[i++]);
-		}
-		if (node->redir)
-		{
-			redir_node = node->redir;
-			while (redir_node)
-			{
-				printf("----- REDIRECIONAMENTO ----\n");
-				i = 0;
-				if (*redir_node->args)
-				{
-					while (i < 2)
-						printf("REDIR: %s\n", redir_node->args[i++]);
-				}
-				redir_node = redir_node->next;
-			}
-		}
-		printf("==========================\n\n");
-		node = node->next;
-	}
-}
-
 int	remove_redir(t_cmd *head, int i)
 {
-	int		len;
+	int	len;
 
 	len = arr_count(head->args);
 	free(head->args[i]);
@@ -103,7 +79,7 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 			return (free_double(line), NULL);
 		i++;
 	}
-	free(input), 
+	free(input);
 	free_double(line);
 	if (!init_redir(head))
 		return (NULL);

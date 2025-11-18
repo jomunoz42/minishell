@@ -86,3 +86,13 @@ int 	is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec)
 	}
 	return (0);
 }
+void	no_file_no_perm(t_cmd *cmd, t_exec *exec)
+{
+	if (exec->in == -1 && (exec->no_file || exec->no_permission))
+	{
+		close(exec->out);
+		if (exec->pipefd[0])
+			close(exec->pipefd[0]);
+		ft_exit(1, exec, cmd);
+	}
+}

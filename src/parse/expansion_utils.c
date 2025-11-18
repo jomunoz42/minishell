@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansion_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/18 17:05:08 by pbongiov          #+#    #+#             */
+/*   Updated: 2025/11/18 17:09:06 by pbongiov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int		verify_var_sintax(char *str);
@@ -35,12 +47,11 @@ char	*verify_var(char *str, t_map *env)
 	int		j;
 	char	*var;
 
-	i = -1;
-	while (str[++i])
+	i = 0;
+	while (str[i])
 	{
-		if (str[i] == '$')
+		if (str[i++] == '$')
 		{
-			i++;
 			if (!ft_isalnum_modified(str[i]) && str[i] != '?' && str[i] != '$')
 				continue ;
 			j = check_size(str + i);
@@ -51,7 +62,7 @@ char	*verify_var(char *str, t_map *env)
 			if (!str)
 				return (NULL);
 			free(var);
-			break;
+			break ;
 		}
 	}
 	return (str);

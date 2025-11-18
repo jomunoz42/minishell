@@ -6,14 +6,14 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 22:33:05 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/12 18:41:58 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/18 17:11:07 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map.h"
 
-void	free_s(char **str);
-char	*ft_strdup(const char *s);
+void			free_s(char **str);
+char			*ft_strdup(const char *s);
 
 static size_t	ft_strlen(const char *str)
 {

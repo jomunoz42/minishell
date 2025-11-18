@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_parse.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/18 17:05:39 by pbongiov          #+#    #+#             */
+/*   Updated: 2025/11/18 17:08:17 by pbongiov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	quote_count(char *str)
@@ -5,7 +17,7 @@ int	quote_count(char *str)
 	bool	single_flag;
 	bool	double_flag;
 	int		i;
-	t_map 	*env;
+	t_map	*env;
 
 	i = 0;
 	single_flag = false;

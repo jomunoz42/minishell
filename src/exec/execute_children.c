@@ -5,6 +5,7 @@ int			is_it_built_in(char *cmd);
 int			exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
 int			is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec);
 void		handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec);
+void		no_file_no_perm(t_cmd *cmd, t_exec *exec);
 
 static void	waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
 {
@@ -64,27 +65,6 @@ void	redirections(t_redir *redir, t_exec *exec, t_cmd *cmd)
 	}
 }
 
-static void no_file_no_perm(t_cmd *cmd, t_exec *exec)
-{
-	// printf("%d\n", exec->in);
-	// printf("%d\n", exec->out);
-	// printf("%d\n", exec->pipefd[0]);
-	// printf("%d\n", exec->pipefd[1]);
-	if (exec->in == -1 && (exec->no_file || exec->no_permission))
-	{
-		close(exec->out);
-		if (exec->pipefd[0])
-			close(exec->pipefd[0]);
-	}
-	if (exec->out == -1 && exec->no_permission)
-	{
-		close(exec->in);
-		if (exec->pipefd[0])
-			close(exec->pipefd[0]);
-	}
-	ft_exit(1, exec, cmd);
-}
-
 static void	create_children(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 {
 	temp->pid = fork();
@@ -95,9 +75,7 @@ static void	create_children(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 		exec->is_child = true;
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-
 		no_file_no_perm(cmd, exec);
-
 		handle_built_in(cmd, temp, env, exec);
 		dup2(exec->in, 0);
 		close(exec->in);
@@ -105,8 +83,6 @@ static void	create_children(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 		close(exec->out);
 		if (exec->pipefd[0])
 			close(exec->pipefd[0]);
-		if (exec->no_file || exec->no_permission)
-			ft_exit(1, exec, cmd);
 		if (temp->args[0])
 			execve(temp->args[0], temp->args, env->to_str(env));
 		handle_execve_errors(cmd, temp, env, exec);
@@ -117,7 +93,6 @@ static void	create_children(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 {
 	t_cmd	*temp;
-
 
 	temp = cmd;
 	exec->in = -1;

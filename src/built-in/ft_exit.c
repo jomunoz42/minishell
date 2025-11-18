@@ -78,16 +78,18 @@ int	ft_exit(int status, t_exec *exec, t_cmd *cmd)
 	t_map	*env;
 
 	env = get_map_addr(NULL);
-	while (status > 256)
-		status -= 256;
-	while (status < 0)
-		status += 256;
+	// while (status > 256)
+	// 	status -= 256;
+	// while (status < 0)
+	// 	status += 256;
 	if (!exec->is_child && !exec->msg_printed)
 		write(1, "exit\n", 6);
-	free_list(cmd);
+	if (cmd)
+		free_list(cmd);
 	rl_clear_history();
-	env->destroy(env);
-	if (!exec->is_child)
-		unlink("/tmp/mini_temp");
+	if (env)
+		env->destroy(env);
+	// if (!exec->is_child)
+	// 	unlink("/tmp/mini_temp");
 	exit(status);
 }

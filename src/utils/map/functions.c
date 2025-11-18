@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:55:11 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/17 19:19:58 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/18 17:11:04 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	__put(t_map_extra *this, char *key, char *value)
 		{
 			free(node->value);
 			free(key);
-			node->value = value; 
+			node->value = value;
 			return ;
 		}
 		node = node->next;
@@ -78,11 +78,11 @@ void	__remove(t_map_extra *this, char *key)
 			else
 				this->head = node->next;
 			if (node == this->tail)
-                this->tail = prev;
+				this->tail = prev;
 			(free(node->key), free(node->value), free(node));
 			this->size--;
 			if (this->size == 0)
-                this->tail = NULL;
+				this->tail = NULL;
 			return ;
 		}
 		prev = node;
