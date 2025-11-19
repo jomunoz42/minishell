@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:50:25 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 19:50:28 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/19 23:09:00 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void				sig_handler(void);
 
 //==========================UTILS=========================
 
-void				copy_env(t_map *map, char **env);
+void				copy_env(t_map *map, char **env, t_exec *exec, t_cmd *cmd);
 int					length_of_equal(char *vars);
 int					is_there_equal(char *vars);
 int					is_there_value(char *vars);
@@ -121,7 +121,7 @@ int					arr_count(char **arr);
 char				*get_next_line(int fd);
 char				identify_quote(char c, char flag);
 t_map				*get_map_addr(t_map *env);
-int					get_pid(void);
+int					get_pid(t_exec *exec, t_cmd *cmd);
 
 //=========================LIBFT==========================
 

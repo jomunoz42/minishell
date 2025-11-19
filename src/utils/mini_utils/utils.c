@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:09:45 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/19 19:34:53 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/19 23:12:00 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ char	*find_last_slash(char *current_pwd)
 	return (current_pwd);
 }
 
-int	get_pid(void)
+int	get_pid(t_exec *exec, t_cmd *cmd)
 {
 	int	pid;
 
 	pid = fork();
 	if (pid == 0)
-		exit(0);
+		ft_exit(0, exec, cmd);
 	wait(NULL);
 	return (pid - 1);
 }

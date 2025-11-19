@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:25:42 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 19:49:55 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/19 23:19:59 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_struct(t_cmd *head);
 
 t_map	*get_map_addr(t_map *src)
 {
@@ -57,7 +55,7 @@ int	main(int argc, char **argv, char **environ)
 	char			*input;
 
 	env = new_map();
-	copy_env(env, environ);
+	copy_env(env, environ, &exec, NULL);
 	((void)argc, (void)argv);
 	while (1)
 	{

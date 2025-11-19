@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:18 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 19:57:05 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/19 23:22:34 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-#define MSG1
 
 static void	handle_shell_lvl(t_map *map)
 {
@@ -38,7 +36,7 @@ static void	handle_no_env(t_map *map)
 	map->put(map, ft_strdup("PWD"), ft_strdup(getcwd(NULL, 0)));
 }
 
-void	copy_env(t_map *map, char **env)
+void	copy_env(t_map *map, char **env, t_exec *exec, t_cmd *cmd)
 {
 	static char	*args[2];
 	int			j;
@@ -61,7 +59,7 @@ void	copy_env(t_map *map, char **env)
 		handle_no_env(map);
 	handle_shell_lvl(map);
 	map->put(map, ft_strdup("?"), ft_strdup("0"));
-	pid = get_pid();
+	pid = get_pid(exec, cmd);
 	map->put(map, ft_strdup("$"), ft_itoa(pid));
 }
 

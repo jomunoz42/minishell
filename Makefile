@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+         #
+#    By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
-#    Updated: 2025/11/19 19:56:41 by jomunoz          ###   ########.fr        #
+#    Updated: 2025/11/19 23:12:38 by pbongiov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,5 +73,8 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+v:
+	make re && clear && valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=readline.supp ./minishell
 
 .PHONY: all clean fclean re r
