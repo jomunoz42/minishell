@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 19:24:46 by jomunoz           #+#    #+#             */
+/*   Updated: 2025/11/19 19:29:19 by jomunoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -71,9 +81,9 @@ static char	*create_var(t_node *node)
 	return (result);
 }
 
-static int  export_var(t_cmd *cmd, t_map *env, int i, t_exec *exec)
+static int	export_var(t_cmd *cmd, t_map *env, int i, t_exec *exec)
 {
-	int invalid_export;
+	int	invalid_export;
 
 	invalid_export = 0;
 	while (cmd->args[i])
@@ -98,7 +108,7 @@ int	ft_export(t_cmd *cmd, t_map *env, t_exec *exec)
 	{
 		copy = ft_calloc(sizeof(char *), env->size + 1);
 		if (!copy)
-			ft_exit(1, exec,cmd);
+			ft_exit(1, exec, cmd);
 		node = env->head;
 		i = 0;
 		while (node)
@@ -110,4 +120,3 @@ int	ft_export(t_cmd *cmd, t_map *env, t_exec *exec)
 		return (print_export(sort_vars(copy), exec));
 	}
 }
-

@@ -6,18 +6,54 @@
 #    By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
-#    Updated: 2025/11/18 19:26:27 by jomunoz          ###   ########.fr        #
+#    Updated: 2025/11/19 19:56:41 by jomunoz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
 
-CFLAGS = -g -Iinclude -Wall -Wextra -Werror
+CFLAGS = -Iinclude -Wall -Wextra -Werror
 
 LDFLAGS = -lreadline
 
-SRC := $(shell find src/ -name '*.c')
+SRC := 	src/built-in/ft_cd2.c \
+		src/built-in/ft_cd.c \
+		src/built-in/ft_echo.c \
+		src/built-in/ft_env.c \
+		src/built-in/ft_exit.c \
+		src/built-in/ft_export2.c \
+		src/built-in/ft_export.c \
+		src/built-in/ft_pwd.c \
+		src/built-in/ft_unset.c \
+		src/exec/error_handling.c \
+		src/exec/execute_children.c \
+		src/exec/exec_utils.c \
+		src/exec/path_and_here_doc.c \
+		src/parse/expansion_parse.c \
+		src/parse/expansion_utils2.c \
+		src/parse/expansion_utils.c \
+		src/parse/list_manage.c \
+		src/parse/parse_main.c \
+		src/parse/redir_parse.c \
+		src/parse/signals.c \
+		src/parse/sintax_parse.c \
+		src/parse/utils_parse.c \
+		src/utils/libft/ft_itoa.c \
+		src/utils/libft/ft_split.c \
+		src/utils/libft/list_utils.c \
+		src/utils/libft/utils_str2.c \
+		src/utils/libft/utils_str3.c \
+		src/utils/libft/utils_str.c \
+		src/utils/map/functions.c \
+		src/utils/map/utils2.c \
+		src/utils/map/utils.c \
+		src/utils/mini_utils/get_next_line.c \
+		src/utils/mini_utils/many_lines.c \
+		src/utils/mini_utils/utils1.c \
+		src/utils/mini_utils/utils2.c \
+		src/utils/mini_utils/utils.c \
+		src/minishell.c
 
 OBJ := $(patsubst src/%.c,obj/%.o,$(SRC))
 
@@ -37,14 +73,5 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
-
-r:
-	make re && clear && ./$(NAME)
-
-v:
-	make re && clear &&  valgrind --suppressions=readline.supp ./$(NAME)
-
-vl:
-	make re && clear && valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=readline.supp ./$(NAME)
 
 .PHONY: all clean fclean re r

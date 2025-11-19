@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 19:50:25 by jomunoz           #+#    #+#             */
+/*   Updated: 2025/11/19 19:50:28 by jomunoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -30,7 +40,7 @@ typedef struct s_exec
 {
 	int				in;
 	int				out;
-	int 			pipefd[2];
+	int				pipefd[2];
 	int				status;
 	bool			no_permission;
 	bool			no_file;
@@ -70,12 +80,13 @@ int					execute_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 int					handling_errors(t_exec *exec, char *arg, int error_id,
 						t_cmd *cmd);
-void				handle_execve_errors(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec);
+void				handle_execve_errors(t_cmd *cmd, t_cmd *temp, t_map *env,
+						t_exec *exec);
 void				close_everything(t_exec *exec);
 void				close_and_reset(t_exec *exec);
 int					convert_status(int status);
 void				redirections(t_redir *redir, t_exec *exec, t_cmd *cmd);
-int 				exit_parsing(t_cmd *cmd, t_exec *exec);
+int					exit_parsing(t_cmd *cmd, t_exec *exec);
 int					no_file_no_perm(t_cmd *cmd, t_exec *exec);
 
 //========================PARSING=========================
@@ -100,7 +111,7 @@ void				copy_env(t_map *map, char **env);
 int					length_of_equal(char *vars);
 int					is_there_equal(char *vars);
 int					is_there_value(char *vars);
-int				    is_only_number(char *arg);
+int					is_only_number(char *arg);
 int					handle_cd_errors(char *path, int error_id);
 int					file_or_directory(char *path, t_cmd *cmd);
 char				*ft_strjoin_free(char *s1, char *s2);
@@ -110,7 +121,7 @@ int					arr_count(char **arr);
 char				*get_next_line(int fd);
 char				identify_quote(char c, char flag);
 t_map				*get_map_addr(t_map *env);
-int 				get_pid(void);
+int					get_pid(void);
 
 //=========================LIBFT==========================
 
@@ -130,7 +141,5 @@ int					ft_isalnum_modified(int c);
 int					ft_atoi(const char *nptr);
 char				*ft_itoa(int nbr);
 int					ft_isdigit(int c);
-
-# define COPY ft_strdup
 
 #endif

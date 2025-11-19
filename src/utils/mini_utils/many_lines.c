@@ -1,40 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   many_lines.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 19:24:58 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 19:29:23 by jomunoz          ###   ########.fr       */
+/*   Created: 2025/11/19 19:45:07 by jomunoz           #+#    #+#             */
+/*   Updated: 2025/11/19 19:45:18 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(t_map *env, t_exec *exec)
+char	*get_path_dir(char *str, char *cmd)
 {
+	int		i;
+	char	*temp;
 	char	*path;
+	char	**dirs;
 
-	path = getcwd(NULL, 0);
-	if (path == NULL)
+	i = -1;
+	dirs = ft_split(str, ':');
+	if (!dirs)
+		return (NULL);
+	while (dirs[++i])
 	{
-		path = env->get(env, "PWD");
-		if (!path || path[0] == '\0')
-		{
-			fprintf(stderr,
-				"bash: pwd: error retrieving current directory: getcwd: %s\n",
-				strerror(errno));
-			return (1);
-		}
-		write(exec->out, path, ft_strlen(path));
-		write(exec->out, "\n", 1);
-	}
-	else
-	{
-		write(exec->out, path, ft_strlen(path));
-		write(exec->out, "\n", 1);
+		temp = ft_strjoin(dirs[i], "/");
+		path = ft_strjoin_free(temp, cmd);
+		if (access(path, X_OK) == 0)
+			return (free_double(dirs), path);
 		free(path);
 	}
-	return (0);
+	return (free_double(dirs), cmd);
 }

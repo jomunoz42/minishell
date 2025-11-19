@@ -1,48 +1,58 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 19:25:16 by jomunoz           #+#    #+#             */
+/*   Updated: 2025/11/19 19:29:41 by jomunoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-static void reverse(char *str, int len)
+static void	reverse(char *str, int len)
 {
-	int 	start;
-    int 	end;
-	char 	tmp;
+	int		start;
+	int		end;
+	char	tmp;
 
 	start = 0;
 	end = len - 1;
-    while (start < end)
-    {
-        tmp = str[start];
-        str[start] = str[end];
-        str[end] = tmp;
-        start++;
-        end--;
-    }
+	while (start < end)
+	{
+		tmp = str[start];
+		str[start] = str[end];
+		str[end] = tmp;
+		start++;
+		end--;
+	}
 }
 
-char *ft_itoa(int n)
+char	*ft_itoa(int n)
 {
-    char *str;
-    int i;
-    long num;
-	
+	char	*str;
+	int		i;
+	long	num;
+
 	i = 0;
 	num = n;
 	str = malloc(12);
-    if (!str)
-        return NULL;
-    if (num == 0)
-    {
-        str[i++] = '0';
-        str[i] = '\0';
-        return (str);
-    }
-    while (num != 0)
-    {
-        str[i++] = (num % 10) + '0';
-        num /= 10;
-    }
-    str[i] = '\0';
-    reverse(str, i);
-    return (str);
+	if (!str)
+		return (NULL);
+	if (num == 0)
+	{
+		str[i++] = '0';
+		str[i] = '\0';
+		return (str);
+	}
+	while (num != 0)
+	{
+		str[i++] = (num % 10) + '0';
+		num /= 10;
+	}
+	str[i] = '\0';
+	reverse(str, i);
+	return (str);
 }

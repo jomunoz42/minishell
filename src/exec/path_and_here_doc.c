@@ -1,17 +1,25 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path_and_here_doc.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 19:21:01 by jomunoz           #+#    #+#             */
+/*   Updated: 2025/11/19 19:45:26 by jomunoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-void				print_env(t_map *env);
-int				    is_it_built_in(char *cmd);
+void		print_env(t_map *env);
+int			is_it_built_in(char *cmd);
+char		*get_path_dir(char *str, char *cmd);
 
 char	*get_absolute_path(t_map *env, char *cmd)
 {
-	char	**dirs;
-	char	*path;
 	char	*temp;
 	char	*str;
-	int		i;
 
 	if (!cmd)
 		return (NULL);
@@ -20,19 +28,8 @@ char	*get_absolute_path(t_map *env, char *cmd)
 	str = env->get(env, "PATH");
 	if (!str || str[0] == '\0')
 		return (cmd);
-	i = -1;
-	dirs = ft_split(str, ':');
-	if (!dirs)
-		return (NULL);
-	while (dirs[++i])
-	{
-		temp = ft_strjoin(dirs[i], "/");
-		path = ft_strjoin_free(temp, cmd);
-		if (access(path, X_OK) == 0)
-			return (free_double(dirs), path);
-		free(path);
-	}
-	return (free_double(dirs), cmd);
+	temp = get_path_dir(str, cmd);
+	return (temp);
 }
 
 static int	here_doc_util(t_redir *redir, char *line, int size)
@@ -48,9 +45,9 @@ static int	here_doc_util(t_redir *redir, char *line, int size)
 
 static void	handling_here_doc(t_redir *redir, t_exec *exec, t_cmd *cmd)
 {
-	pid_t   pid;
+	pid_t	pid;
 	char	*line;
-	int 	size;
+	int		size;
 
 	redir->fd = open("/tmp/mini_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (redir->fd == -1)
@@ -75,17 +72,17 @@ static void	handling_here_doc(t_redir *redir, t_exec *exec, t_cmd *cmd)
 	close(redir->fd);
 }
 
-int   execute_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec)
+int	execute_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec)
 {
-	t_cmd 	*cmd_temp;
-	t_redir *redir_temp;
+	t_cmd	*cmd_temp;
+	t_redir	*redir_temp;
 	int		status;
 
 	cmd_temp = temp;
-	while(cmd_temp)
+	while (cmd_temp)
 	{
 		redir_temp = cmd_temp->redir;
-		while(redir_temp)
+		while (redir_temp)
 		{
 			if (ft_strncmp(redir_temp->args[0], "<<", 3) == 0)
 			{
@@ -102,7 +99,7 @@ int   execute_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec)
 	return (0);
 }
 
-int convert_status(int status)
+int	convert_status(int status)
 {
 	if (WIFEXITED(status))
 	{

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_children.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 19:20:57 by jomunoz           #+#    #+#             */
+/*   Updated: 2025/11/19 19:49:43 by jomunoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -49,16 +60,14 @@ void	redirections(t_redir *redir, t_exec *exec, t_cmd *cmd)
 	{
 		if (ft_strncmp(temp->args[0], "<<", 3) == 0)
 		{
-			if (exec->in > 2)
-				close(exec->in);
+			((exec->in > 2) && close(exec->in));
 			exec->in = open("/tmp/mini_temp", O_RDONLY);
 			if (exec->in == -1)
 				handling_errors(exec, "/tmp/mini_temp", 1, cmd);
 		}
 		if (ft_strncmp(temp->args[0], "<", 2) == 0)
 		{
-			if (exec->in > 2)
-				close(exec->in);
+			((exec->in > 2) && close(exec->in));
 			exec->in = open(temp->args[1], O_RDONLY);
 			if (exec->in == -1)
 			{
@@ -103,6 +112,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	t_cmd	*temp;
 
 	temp = cmd;
+	(signal(SIGQUIT, SIG_IGN), signal(SIGINT, SIG_IGN));
 	if (execute_heredocs(cmd, temp, exec))
 		return ;
 	if (is_parent_built_ins(temp, env, exec))

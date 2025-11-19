@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sintax_parse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:35 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/19 18:39:42 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/19 19:36:51 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	is_valid_redir(char *str, int end)
 	i = 0;
 	count = 0;
 	if (!only_redir(str) || !double_redir(str))
-			return (0);
+		return (0);
 	while (i <= end)
 	{
 		if (str[i] == '>' || str[i] == '<')

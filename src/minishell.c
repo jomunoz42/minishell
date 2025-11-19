@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 19:25:42 by jomunoz           #+#    #+#             */
+/*   Updated: 2025/11/19 19:49:55 by jomunoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	print_struct(t_cmd *head);
 
-t_map *get_map_addr(t_map *src)
+t_map	*get_map_addr(t_map *src)
 {
-	static t_map *env;
+	static t_map	*env;
 
 	if (src)
 		env = src;
@@ -46,23 +58,18 @@ int	main(int argc, char **argv, char **environ)
 
 	env = new_map();
 	copy_env(env, environ);
-	get_map_addr(env);
-	cmd = NULL;
 	((void)argc, (void)argv);
 	while (1)
-	{	
+	{
 		sig_handler();
 		input = readline("minishell$ ");
 		if (!input)
 			ft_exit(0, &exec, cmd);
 		if (*input)
 			add_history(input);
-		cmd = parsing(input, cmd, env);
+		cmd = parsing(input, NULL, env);
 		if (cmd)
-		{
-			(signal(SIGQUIT, SIG_IGN), signal(SIGINT, SIG_IGN));
 			execute_command(cmd, env, &exec);
-		}
 		else
 			env->put(env, ft_strdup("?"), ft_strdup("0"));
 		free_list(cmd);

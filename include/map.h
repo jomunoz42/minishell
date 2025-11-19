@@ -6,18 +6,18 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/04 19:32:49 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/10/12 17:28:26 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/19 19:50:37 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_H
 # define MAP_H
 
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# include <stdbool.h>
 
 typedef struct s_map		t_map;
 typedef struct s_node		t_node;
@@ -52,7 +52,7 @@ struct						s_map_extra
 	t_node					*head;
 	t_node					*tail;
 	char					**str;
-	int						is_change; // ver uso disto
+	int						is_change;
 };
 
 t_map						*new_map(void);

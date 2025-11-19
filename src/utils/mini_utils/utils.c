@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:09:45 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/18 19:18:35 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/19 19:34:53 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,6 @@ int	get_pid(void)
 	pid = fork();
 	if (pid == 0)
 		exit(0);
-    wait(NULL);
+	wait(NULL);
 	return (pid - 1);
 }

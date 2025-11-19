@@ -1,17 +1,30 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 19:21:18 by jomunoz           #+#    #+#             */
+/*   Updated: 2025/11/19 19:57:05 by jomunoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-static void handle_shell_lvl(t_map *map)
+#define MSG1
+
+static void	handle_shell_lvl(t_map *map)
 {
-	char		*lvl;
+	char	*lvl;
 
 	lvl = map->get(map, "SHLVL");
 	if (!lvl)
 		return ;
 	if (!ft_strncmp(lvl, "999", 4))
 	{
-		write(2, "bash: warning: shell level (1000) too high, resetting to 1\n", 60);
+		write(2, "bash: warning: shell level (1000) too high, resetting to 1\n",
+			60);
 		lvl = ft_itoa(1);
 	}
 	else
@@ -23,18 +36,17 @@ static void	handle_no_env(t_map *map)
 {
 	map->put(map, ft_strdup("SHLVL"), ft_strdup("2"));
 	map->put(map, ft_strdup("PWD"), ft_strdup(getcwd(NULL, 0)));
-	map->put(map, ft_strdup("PATH"),
-		ft_strdup("/home/jomunoz/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"));
 }
 
 void	copy_env(t_map *map, char **env)
 {
-    static char	*args[2];
+	static char	*args[2];
 	int			j;
 	int			i;
-	int 		pid;
+	int			pid;
 
 	i = -1;
+	get_map_addr(map);
 	if (env && *env)
 	{
 		while (env[++i])

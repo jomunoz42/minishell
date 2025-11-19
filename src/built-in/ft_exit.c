@@ -1,19 +1,29 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/19 19:21:20 by jomunoz           #+#    #+#             */
+/*   Updated: 2025/11/19 19:29:16 by jomunoz          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_list(t_cmd *all);
+void		free_list(t_cmd *all);
 
 static int	is_valid_exit_arg(char *arg)
 {
 	int	i;
 
 	i = 0;
-	if (arg[0] == '+' || arg[0] == '-') 
+	if (arg[0] == '+' || arg[0] == '-')
 	{
-        i++;
-        if (!arg[1] || !ft_isdigit(arg[1]))
-            return (0);
+		i++;
+		if (!arg[1] || !ft_isdigit(arg[1]))
+			return (0);
 	}
 	while (arg[i])
 	{
@@ -24,9 +34,9 @@ static int	is_valid_exit_arg(char *arg)
 	return (1);
 }
 
-static int check_overflow(t_cmd *cmd)
+static int	check_overflow(t_cmd *cmd)
 {
-	size_t size;
+	size_t	size;
 
 	size = ft_strlen(cmd->args[1]);
 	if (ft_isdigit(cmd->args[1][0]))
@@ -48,7 +58,7 @@ static int check_overflow(t_cmd *cmd)
 
 int	exit_parsing(t_cmd *cmd, t_exec *exec)
 {
-	int		status;
+	int	status;
 
 	if (cmd->args[2] && is_valid_exit_arg(cmd->args[1]))
 	{
@@ -78,10 +88,10 @@ int	ft_exit(int status, t_exec *exec, t_cmd *cmd)
 	t_map	*env;
 
 	env = get_map_addr(NULL);
-	// while (status > 256)
-	// 	status -= 256;
-	// while (status < 0)
-	// 	status += 256;
+	while (status > 256)
+		status -= 256;
+	while (status < 0)
+		status += 256;
 	if (!exec->is_child && !exec->msg_printed)
 		write(1, "exit\n", 6);
 	if (cmd)
@@ -89,7 +99,7 @@ int	ft_exit(int status, t_exec *exec, t_cmd *cmd)
 	rl_clear_history();
 	if (env)
 		env->destroy(env);
-	// if (!exec->is_child)
-	// 	unlink("/tmp/mini_temp");
+	if (!exec->is_child)
+		unlink("/tmp/mini_temp");
 	exit(status);
 }
