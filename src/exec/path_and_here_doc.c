@@ -89,7 +89,6 @@ int   execute_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec)
 		{
 			if (ft_strncmp(redir_temp->args[0], "<<", 3) == 0)
 			{
-				printf("hereewfewfwefweff\n");
 				handling_here_doc(redir_temp, exec, cmd);
 				wait(&status);
 				status = convert_status(status);

@@ -93,7 +93,7 @@ int	ft_cd(t_cmd *cmd, t_map *env)
     current_pwd = getcwd(NULL, 0);
     if (!current_pwd)
     {
-        current_pwd = env->get(env, "PWD");
+        current_pwd = ft_strdup(env->get(env, "PWD"));
         if (!current_pwd || current_pwd[0] == '\0')
             return (handle_cd_errors(NULL, 0));
     }
@@ -113,5 +113,3 @@ int	ft_cd(t_cmd *cmd, t_map *env)
         return (absolute_and_relative(cmd, env, current_pwd));
     return (0);
 }
-
-// testar leaks cd outra vez

@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:35 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/18 17:05:37 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/19 18:39:42 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	double_redir(char *str)
 			i++;
 			while (str[i] == ' ')
 				i++;
-			if (str[i] == '<' || str[i] == '|' || !str[i + 1])
+			if (str[i] == '<' || str[i] == '|')
 				return (0);
 		}
 		i++;
@@ -72,7 +72,7 @@ int	is_valid_redir(char *str, int end)
 	i = 0;
 	count = 0;
 	if (!only_redir(str) || !double_redir(str))
-		return (0);
+			return (0);
 	while (i <= end)
 	{
 		if (str[i] == '>' || str[i] == '<')
@@ -142,7 +142,7 @@ int	check_sintax(char *str, t_map *env)
 		else if ((str[i] == '<' || str[i] == '>') && !is_valid_redir(str, i))
 		{
 			write(2, "bash: syntax error near unexpected token\n", 42);
-			env->put(env, ("?"), ft_strdup("2"));
+			env->put(env, ft_strdup("?"), ft_strdup("2"));
 			return (0);
 		}
 	}

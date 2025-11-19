@@ -55,14 +55,14 @@ int    exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
 	return (env->put(env, ft_strdup("?"), ft_itoa(status)), status);
 }
 
-void	handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
+void	handle_built_in(t_cmd *head, t_cmd *temp, t_map *env, t_exec *exec)
 {
 	int	status;
 
 	if (is_it_built_in(temp->args[0]))
-	{
-        if (exec->no_file == true || exec->no_permission == true)
-            ft_exit(1, exec, cmd);                          
+	{      
+        if (!temp->args[1])
+            return ;           
 		status = exec_built_in(temp, env, exec);
         if (exec->in > 2)
 		    close(exec->in);
@@ -70,7 +70,7 @@ void	handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 		    close(exec->out);
 		if (exec->pipefd[0])
             close(exec->pipefd[0]);
-		ft_exit(status, exec, cmd);
+		ft_exit(status, exec, head);
 	}
 	else
 		temp->args[0] = get_absolute_path(env, temp->args[0]);
@@ -78,12 +78,17 @@ void	handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 
 int 	is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec)
 {
+    int invalid;
+
     exec->in = -1;
 	exec->out = -1;
 	if (!temp->next && is_it_built_in(temp->args[0]))
 	{
 		exec->out = dup(1);
 		redirections(temp->redir, exec, temp);
+        invalid = no_file_no_perm(temp, exec);
+        if (invalid)
+            return (1);
 		exec_built_in(temp, env, exec);
 		if (exec->in > 2)
 		    close(exec->in);
@@ -94,14 +99,26 @@ int 	is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec)
 	return (0);
 }
 
-void	no_file_no_perm(t_cmd *cmd, t_exec *exec)
+int	no_file_no_perm(t_cmd *cmd, t_exec *exec)
 {
-	if (exec->in == -1 && (exec->no_file || exec->no_permission))
+    t_map *env;
+
+    env = get_map_addr(NULL);
+    if (!exec->is_child && (exec->no_file || exec->no_permission))
+    {
+        close_and_reset(exec);
+        env->put(env, ft_strdup("?"), ft_strdup("1"));
+		return (1);
+    }
+	if (exec->no_file || exec->no_permission)
 	{
         if (exec->out > 2)
 		    close(exec->out);
+        if (exec->in > 2)
+		    close(exec->in);
 		if (exec->pipefd[0])
 			close(exec->pipefd[0]);
 		ft_exit(1, exec, cmd);
-	}
+    }
+    return (0);
 }

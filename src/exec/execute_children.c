@@ -5,7 +5,6 @@ int			is_it_built_in(char *cmd);
 int			exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
 int			is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec);
 void		handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec);
-void		no_file_no_perm(t_cmd *cmd, t_exec *exec);
 
 static void	waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
 {
@@ -104,9 +103,9 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	t_cmd	*temp;
 
 	temp = cmd;
-	if (is_parent_built_ins(temp, env, exec))
-		return ;
 	if (execute_heredocs(cmd, temp, exec))
+		return ;
+	if (is_parent_built_ins(temp, env, exec))
 		return ;
 	exec->in = dup(0);
 	while (temp)
@@ -126,14 +125,3 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	}
 	waiting_proccesses(cmd, exec, env);
 }
-
-
-// cat < 123 < 456
-// bash: 123: No such file or directory
-// echo $? = 1
-
-
-// cagada here doc
-
-
-//   echo << a    env << a      pwd << a

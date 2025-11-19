@@ -8,6 +8,10 @@ int	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
 	t_map *env;
 
 	env = get_map_addr(NULL);
+	if (errno == ENOENT) 
+		exec->no_file = true;
+	else if (errno == EACCES)
+		exec->no_permission = true;
 	if (error_id == 1)
 	{
 		(write(2, "bash: ", 6), perror(arg));
@@ -22,10 +26,6 @@ int	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
 		env->put(env, ft_strdup("?"), ft_strdup("1"));
 		return (0);
 	}
-	if (errno == ENOENT) 
-		exec->no_file = true;
-	else if (errno == EACCES)
-		exec->no_permission = true;
 	if (error_id == 3)
 		(perror("pipe"), (close_everything(exec), ft_exit(1, exec, cmd)));
 	if (error_id == 4)
