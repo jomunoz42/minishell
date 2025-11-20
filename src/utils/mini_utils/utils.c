@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:09:45 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/19 23:12:00 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/20 22:43:43 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,10 @@ int	get_pid(t_exec *exec, t_cmd *cmd)
 
 	pid = fork();
 	if (pid == 0)
+	{
+		exec->is_child = true;
 		ft_exit(0, exec, cmd);
+	}
 	wait(NULL);
 	return (pid - 1);
 }

@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:04 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 19:29:30 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/20 22:59:08 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,10 @@ int	no_file_no_perm(t_cmd *cmd, t_exec *exec)
 	{
 		close_and_reset(exec);
 		env->put(env, ft_strdup("?"), ft_strdup("1"));
+		if (exec->out > 2)
+			close(exec->out);
+		if (exec->in > 2)
+			close(exec->in);
 		return (1);
 	}
 	if (exec->no_file || exec->no_permission)

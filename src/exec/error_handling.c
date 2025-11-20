@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:07 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 19:48:33 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/20 22:58:26 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ int	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
 	{
 		(write(2, "bash: ", 6), perror(arg));
 		env->put(env, ft_strdup("?"), ft_strdup("1"));
-		if (!ft_strncmp(cmd->args[0], "echo", 5))
-			exec->echo_flag = 1;
 		return (1);
 	}
 	if (error_id == 2)
@@ -100,13 +98,13 @@ void	handle_execve_errors(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 
 void	close_everything(t_exec *exec)
 {
-	if (exec->in != -1)
+	if (exec->in > 2)
 		close(exec->in);
-	if (exec->out != -1)
+	if (exec->out > 2)
 		close(exec->out);
-	if (exec->pipefd[0] > 0)
+	if (exec->pipefd[0] > 2)
 		close(exec->pipefd[0]);
-	if (exec->pipefd[1] > 0)
+	if (exec->pipefd[1] > 2)
 		close(exec->pipefd[1]);
 }
 

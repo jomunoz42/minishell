@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:20 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 19:29:16 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/20 22:53:47 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,6 @@ int	ft_exit(int status, t_exec *exec, t_cmd *cmd)
 		env->destroy(env);
 	if (!exec->is_child)
 		unlink("/tmp/mini_temp");
+	close_everything(exec);
 	exit(status);
 }

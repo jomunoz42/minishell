@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:50:25 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 23:09:00 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/20 22:08:06 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ typedef struct s_exec
 	bool			no_file;
 	bool			is_child;
 	bool			msg_printed;
-	bool			echo_flag;
 }					t_exec;
 
 typedef struct s_redir
