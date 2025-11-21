@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:18 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 23:22:34 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/21 18:36:54 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	copy_env(t_map *map, char **env, t_exec *exec, t_cmd *cmd)
 
 	i = -1;
 	get_map_addr(map);
+	get_exec_addr(exec);
 	if (env && *env)
 	{
 		while (env[++i])

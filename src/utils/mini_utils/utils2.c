@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:10:15 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/18 17:11:42 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/21 18:38:12 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,22 @@ int	arr_count(char **arr)
 	while (arr[i])
 		i++;
 	return (i);
+}
+
+t_cmd	*get_cmd_addr(t_cmd *src)
+{
+	static t_cmd	*cmd;
+
+	if (src)
+		cmd = src;
+	return (cmd);
+}
+
+t_exec	*get_exec_addr(t_exec *src)
+{
+	static t_exec	*exec;
+
+	if (src)
+		exec = src;
+	return (exec);
 }

@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   path_and_here_doc.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:01 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 19:45:26 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/21 18:41:49 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void sig_heredoc_handler(int sig);
 
 void		print_env(t_map *env);
 int			is_it_built_in(char *cmd);
@@ -58,7 +60,7 @@ static void	handling_here_doc(t_redir *redir, t_exec *exec, t_cmd *cmd)
 	if (!pid)
 	{
 		exec->is_child = true;
-		(signal(SIGINT, SIG_DFL), signal(SIGQUIT, SIG_DFL));
+		(signal(SIGINT, sig_heredoc_handler), signal(SIGQUIT, SIG_IGN));
 		size = ft_strlen(redir->args[1]);
 		while (1)
 		{
@@ -79,6 +81,7 @@ int	execute_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec)
 	int		status;
 
 	cmd_temp = temp;
+	get_cmd_addr(cmd);
 	while (cmd_temp)
 	{
 		redir_temp = cmd_temp->redir;

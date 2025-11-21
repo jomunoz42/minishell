@@ -3,14 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:29 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/20 22:08:33 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/21 19:10:45 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void close_fds_exit(t_cmd *cmd)
+{
+	t_redir *redir;
+
+	while (cmd)
+	{
+		redir = cmd->redir;
+		while (redir)
+		{
+			if (redir && redir->fd > 2)
+				close(redir->fd);
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+}
+
+void sig_heredoc_handler(int sig)
+{
+	t_cmd *cmd;
+	t_cmd *temp;
+	t_exec *exec;
+	
+	(void)sig;
+	cmd = get_cmd_addr(NULL);
+	exec = get_exec_addr(NULL);
+	temp = cmd;
+	close_everything(exec);
+	close_fds_exit(temp);
+	ft_exit(130, exec, cmd);
+}
 
 void	handler(int sig)
 {

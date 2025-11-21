@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:04 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/20 22:59:08 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/21 19:05:49 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ void	handle_built_in(t_cmd *head, t_cmd *temp, t_map *env, t_exec *exec)
 
 	if (is_it_built_in(temp->args[0]))
 	{
-		if (!temp->args[1])
-			return ;
 		status = exec_built_in(temp, env, exec);
 		if (exec->in > 2)
 			close(exec->in);

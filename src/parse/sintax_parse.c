@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sintax_parse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:35 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/19 19:36:51 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/21 17:03:51 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,24 +38,23 @@ int	only_redir(char *str)
 int	double_redir(char *str)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '<' && str[i + 1] == ' ')
 		{
-			i++;
-			while (str[i + 1] && str[i] == ' ')
-				i++;
-			if (str[i] == '>' || str[i] == '|')
+			j = i + 1;
+			while (str[++i] == ' ');
+			if (str[i] == '>' || str[i] == '|' || (str[i] == '<' && i != j))
 				return (0);
 		}
 		else if (str[i] == '>' && str[i + 1] == ' ')
 		{
-			i++;
-			while (str[i] == ' ')
-				i++;
-			if (str[i] == '<' || str[i] == '|')
+			j = i + 1;
+			while (str[++i] == ' ');
+			if (str[i] == '<' || str[i] == '|' || (str[i] == '>' && i != j))
 				return (0);
 		}
 		i++;

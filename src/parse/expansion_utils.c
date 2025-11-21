@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:08 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/18 17:09:06 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/21 16:48:18 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,21 +74,21 @@ char	*expand_str(char *dest, char *src, int index)
 	int		s_len;
 	int		var_size;
 	int		tail_len;
+	char	*new_str;
 
 	d_len = ft_strlen(dest);
 	s_len = ft_strlen(src);
 	var_size = check_size(dest + index + 1) + 1;
 	tail_len = ft_strlen(dest + index + var_size);
-	if (*src)
-	{
-		dest = ft_realloc_str(dest, s_len + d_len - var_size + 2);
-		if (!dest)
-			return (NULL);
-	}
-	ft_memmove(dest + index + s_len + 1, dest + index + var_size, tail_len + 1);
-	ft_memcpy(dest + index + 1, src, s_len);
-	dest[index] = '\2';
-	return (dest);
+	new_str = ft_calloc(s_len + d_len - var_size + 2, 1);
+	if (!new_str)
+		return (NULL);
+	ft_memcpy(new_str, dest, index);
+	ft_memcpy(new_str + index + 1, src, s_len);
+	ft_memcpy(new_str + index + s_len + 1, dest + index + var_size, tail_len);
+	new_str[index] = '\2';
+	free(dest);
+	return (new_str);
 }
 
 char	*expanded_arg(char *str, t_map *env)

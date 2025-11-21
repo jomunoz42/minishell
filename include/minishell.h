@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:50:25 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/20 22:08:06 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/21 18:38:39 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ int					arr_count(char **arr);
 char				*get_next_line(int fd);
 char				identify_quote(char c, char flag);
 t_map				*get_map_addr(t_map *env);
+t_cmd				*get_cmd_addr(t_cmd *src);
+t_exec				*get_exec_addr(t_exec *src);
 int					get_pid(t_exec *exec, t_cmd *cmd);
 
 //=========================LIBFT==========================
