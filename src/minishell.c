@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:25:42 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/21 19:24:39 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/21 19:49:43 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,10 @@ int	main(int argc, char **argv, char **environ)
 			ft_exit(0, &exec, NULL);
 		if (*input)
 			add_history(input);
-		cmd = parsing(input, NULL, env);
+		cmd = parsing(input, NULL, &exec);
 		if (cmd)
 			execute_command(cmd, env, &exec);
-		else
+		else if (!exec.no_file)
 			env->put(env, ft_strdup("?"), ft_strdup("0"));
 		free_list(cmd);
 		cmd = NULL;

@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:29 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/21 19:10:45 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/21 19:47:28 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,13 @@ void	sig_handler(void)
 {
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handler);
+}
+
+void	put_error_msg(void)
+{
+	t_map *env;
+
+	env = get_map_addr(NULL);
+	write(2, "bash: syntax error near unexpected token\n", 42);
+	env->put(env, ft_strdup("?"), ft_strdup("2"));
 }

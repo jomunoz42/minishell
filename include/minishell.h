@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:50:25 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/21 18:38:39 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/21 19:38:08 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,14 +92,14 @@ int					no_file_no_perm(t_cmd *cmd, t_exec *exec);
 
 t_cmd				*new_node(char **args);
 t_cmd				*separate_args(t_cmd *head, char *line);
-t_cmd				*parsing(char *input, t_cmd *all, t_map *env);
+t_cmd				*parsing(char *input, t_cmd *all, t_exec *exec);
 int					quote_handler(char *input, int n);
 char				*unlink_redir(char *str);
 int					count_redir(char *str);
 int					init_redir(t_cmd *head);
 t_redir				*new_redir(t_cmd *head, int i);
 int					remove_redir(t_cmd *head, int i);
-int					change_expansion(t_cmd *head, t_map *env);
+int					change_expansion(t_cmd *head);
 void				remove_quotes(t_cmd *head);
 t_redir				*redir_start(t_cmd *head, int i);
 void				sig_handler(void);

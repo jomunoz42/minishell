@@ -6,13 +6,13 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:21 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/18 17:07:49 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/21 19:49:25 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		check_sintax(char *str, t_map *env);
+int		check_sintax(char *str);
 
 int	remove_redir(t_cmd *head, int i)
 {
@@ -44,12 +44,19 @@ int	is_empty(char *input)
 	return (flag == true);
 }
 
-char	*primary_check(char *input, t_map *env)
+char	*primary_check(char *input, t_exec *exec)
 {
 	char	*dup;
 
-	if (!input || !is_empty(input) || !check_sintax(input, env)
-		|| !quote_handler(input, 1))
+	exec->no_file = false;
+	if (!input || !is_empty(input))
+		return (NULL);
+	if (!check_sintax(input))
+	{
+		exec->no_file = true;
+		return (NULL);
+	}
+	if (!quote_handler(input, 1))
 		return (NULL);
 	dup = ft_strdup(input);
 	if (!dup)
@@ -60,12 +67,12 @@ char	*primary_check(char *input, t_map *env)
 	return (dup);
 }
 
-t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
+t_cmd	*parsing(char *input, t_cmd *head, t_exec *exec)
 {
 	int		i;
 	char	**line;
 
-	input = primary_check(input, env);
+	input = primary_check(input, exec);
 	if (!input)
 		return (NULL);
 	line = ft_split(input, '\2');
@@ -83,7 +90,7 @@ t_cmd	*parsing(char *input, t_cmd *head, t_map *env)
 	free_double(line);
 	if (!init_redir(head))
 		return (NULL);
-	if (!change_expansion(head, env))
+	if (!change_expansion(head))
 		return (NULL);
 	remove_quotes(head);
 	return (head);

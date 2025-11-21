@@ -6,11 +6,13 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:35 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/21 17:03:51 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/21 19:36:37 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	put_error_msg(void);
 
 int	only_redir(char *str)
 {
@@ -46,14 +48,16 @@ int	double_redir(char *str)
 		if (str[i] == '<' && str[i + 1] == ' ')
 		{
 			j = i + 1;
-			while (str[++i] == ' ');
+			while (str[++i] == ' ')
+				;
 			if (str[i] == '>' || str[i] == '|' || (str[i] == '<' && i != j))
 				return (0);
 		}
 		else if (str[i] == '>' && str[i + 1] == ' ')
 		{
 			j = i + 1;
-			while (str[++i] == ' ');
+			while (str[++i] == ' ')
+				;
 			if (str[i] == '<' || str[i] == '|' || (str[i] == '>' && i != j))
 				return (0);
 		}
@@ -120,7 +124,9 @@ int	is_valid_pipe(char *str, int end)
 	return (1);
 }
 
-int	check_sintax(char *str, t_map *env)
+
+
+int	check_sintax(char *str)
 {
 	int		i;
 	char	flag;
@@ -133,17 +139,9 @@ int	check_sintax(char *str, t_map *env)
 		if (flag)
 			continue ;
 		if (str[i] == '|' && !is_valid_pipe(str, i))
-		{
-			write(2, "bash: syntax error near unexpected token\n", 42);
-			env->put(env, ft_strdup("?"), ft_strdup("2"));
-			return (0);
-		}
+			return (put_error_msg(), 0);
 		else if ((str[i] == '<' || str[i] == '>') && !is_valid_redir(str, i))
-		{
-			write(2, "bash: syntax error near unexpected token\n", 42);
-			env->put(env, ft_strdup("?"), ft_strdup("2"));
-			return (0);
-		}
+			return (put_error_msg(), 0);
 	}
 	return (1);
 }

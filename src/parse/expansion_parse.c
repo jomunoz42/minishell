@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:04 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/18 17:05:05 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/21 19:37:32 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,14 @@ int	organize_list(t_cmd *head)
 	return (1);
 }
 
-int	change_expansion(t_cmd *head, t_map *env)
+int	change_expansion(t_cmd *head)
 {
 	int		i;
 	t_cmd	*node;
+	t_map	*env;
 
 	node = head;
+	env = get_map_addr(NULL);
 	while (node)
 	{
 		i = 0;
