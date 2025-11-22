@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:20 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/21 18:34:47 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/22 19:23:12 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,18 +56,33 @@ static int	check_overflow(t_cmd *cmd)
 	return (0);
 }
 
-int	exit_parsing(t_cmd *cmd, t_exec *exec)
+static int	to_many_args(t_cmd *cmd, t_exec *exec, t_map *env)
 {
 	int	status;
 
+	status = 0;
 	if (cmd->args[2] && is_valid_exit_arg(cmd->args[1]))
 	{
 		if (!exec->is_child)
 			write(1, "exit\n", 6);
 		write(2, "bash: exit: too many arguments\n", 31);
 		exec->msg_printed = true;
-		return (1);
+		status = ft_atoi(env->get(env, "?"));
+		if (status == 0)
+			return (1);
+		else
+			return (status);
 	}
+	return (0);
+}
+
+int	exit_parsing(t_cmd *cmd, t_exec *exec, t_map *env)
+{
+	int	status;
+
+	status = to_many_args(cmd, exec, env);
+	if (status)
+		return (status);
 	else if (!is_valid_exit_arg(cmd->args[1]) || check_overflow(cmd))
 	{
 		if (!exec->is_child)

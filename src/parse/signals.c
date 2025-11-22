@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:29 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/21 19:47:28 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/22 19:24:02 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void close_fds_exit(t_cmd *cmd)
+static void	close_fds_exit(t_cmd *cmd)
 {
-	t_redir *redir;
+	t_redir	*redir;
 
 	while (cmd)
 	{
@@ -29,12 +29,12 @@ static void close_fds_exit(t_cmd *cmd)
 	}
 }
 
-void sig_heredoc_handler(int sig)
+void	sig_heredoc_handler(int sig)
 {
-	t_cmd *cmd;
-	t_cmd *temp;
-	t_exec *exec;
-	
+	t_cmd	*cmd;
+	t_cmd	*temp;
+	t_exec	*exec;
+
 	(void)sig;
 	cmd = get_cmd_addr(NULL);
 	exec = get_exec_addr(NULL);
@@ -65,7 +65,7 @@ void	sig_handler(void)
 
 void	put_error_msg(void)
 {
-	t_map *env;
+	t_map	*env;
 
 	env = get_map_addr(NULL);
 	write(2, "bash: syntax error near unexpected token\n", 42);

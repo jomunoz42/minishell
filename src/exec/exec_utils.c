@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:04 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/21 19:05:49 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/21 21:42:49 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
 	else if (!ft_strncmp(cmd->args[0], "exit", 5))
 	{
 		if (cmd->args[1])
-			status = exit_parsing(cmd, exec);
+			status = exit_parsing(cmd, exec, env);
 		else
 			ft_exit(ft_atoi(env->get(env, "?")), exec, cmd);
 	}

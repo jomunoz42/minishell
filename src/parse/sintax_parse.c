@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sintax_parse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:35 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/21 19:36:37 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/22 19:24:15 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,6 @@ int	is_valid_pipe(char *str, int end)
 		return (0);
 	return (1);
 }
-
-
 
 int	check_sintax(char *str)
 {

@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:24:46 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 19:29:19 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/21 21:09:42 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	print_export(char **vars, t_exec *exec)
 	i = -1;
 	while (vars && vars[++i])
 	{
-		if (!ft_strncmp(vars[i], "_=\"./minishell\"", 16)
+		if (!ft_strncmp(vars[i], "_=", 2)
 			|| !ft_strncmp(vars[i], "?", 1) || !ft_strncmp(vars[i], "$", 1))
 			continue ;
 		write(exec->out, "declare -x ", 11);
