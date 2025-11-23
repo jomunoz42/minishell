@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+         #
+#    By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
-#    Updated: 2025/11/21 15:59:55 by pbongiov         ###   ########.fr        #
+#    Updated: 2025/11/23 19:02:49 by jomunoz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRC := 	src/built-in/ft_cd2.c \
 		src/exec/execute_children.c \
 		src/exec/exec_utils.c \
 		src/exec/path_and_here_doc.c \
+		src/exec/redirections.c \
 		src/parse/expansion_parse.c \
 		src/parse/expansion_utils2.c \
 		src/parse/expansion_utils.c \

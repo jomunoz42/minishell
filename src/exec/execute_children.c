@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:20:57 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/22 18:01:26 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/23 19:03:30 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int			is_it_built_in(char *cmd);
 int			exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
-int			is_parent_built_ins(t_cmd *temp, t_map *env, t_exec *exec);
+int			parent_built_in(t_cmd *temp, t_map *env, t_exec *exec);
 void		handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec);
 
 static void	waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
@@ -29,55 +29,6 @@ static void	waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
 	}
 	exec->status = convert_status(exec->status);
 	env->put(env, ft_strdup("?"), ft_itoa(exec->status));
-}
-
-static void	redirections2(t_redir *temp, t_exec *exec, t_cmd *cmd)
-{
-	if (ft_strncmp(temp->args[0], ">>", 3) == 0)
-	{
-		if (exec->out > 2)
-			close(exec->out);
-		exec->out = open(temp->args[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
-		if (exec->out == -1)
-			handling_errors(exec, temp->args[1], 2, cmd);
-	}
-	if (ft_strncmp(temp->args[0], ">", 2) == 0)
-	{
-		if (exec->out > 2)
-			close(exec->out);
-		exec->out = open(temp->args[1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (exec->out == -1)
-			handling_errors(exec, temp->args[1], 2, cmd);
-	}
-}
-
-void	redirections(t_redir *redir, t_exec *exec, t_cmd *cmd)
-{
-	t_redir	*temp;
-
-	temp = redir;
-	while (temp)
-	{
-		if (ft_strncmp(temp->args[0], "<<", 3) == 0)
-		{
-			((exec->in > 2) && close(exec->in));
-			exec->in = open("/tmp/mini_temp", O_RDONLY);
-			if (exec->in == -1)
-				handling_errors(exec, "/tmp/mini_temp", 1, cmd);
-		}
-		if (ft_strncmp(temp->args[0], "<", 2) == 0)
-		{
-			((exec->in > 2) && close(exec->in));
-			exec->in = open(temp->args[1], O_RDONLY);
-			if (exec->in == -1)
-			{
-				if (handling_errors(exec, temp->args[1], 1, cmd))
-					return ;
-			}
-		}
-		redirections2(temp, exec, cmd);
-		temp = temp->next;
-	}
 }
 
 static void	create_children(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
@@ -114,9 +65,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	temp = cmd;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-	if (execute_heredocs(cmd, temp, exec, env))
-		return ;
-	if (is_parent_built_ins(temp, env, exec))
+	if (exec_heredocs(cmd, temp, exec, env) || parent_built_in(temp, env, exec))
 		return ;
 	exec->in = dup(0);
 	while (temp)
