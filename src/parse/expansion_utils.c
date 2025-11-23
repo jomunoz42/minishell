@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:08 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/21 16:48:18 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/23 16:15:03 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*verify_var(char *str, t_map *env)
 	return (str);
 }
 
-char	*expand_str(char *dest, char *src, int index)
+char	*expand_str(char *dest, char *src, int index, int n)
 {
 	int		d_len;
 	int		s_len;
@@ -84,14 +84,15 @@ char	*expand_str(char *dest, char *src, int index)
 	if (!new_str)
 		return (NULL);
 	ft_memcpy(new_str, dest, index);
-	ft_memcpy(new_str + index + 1, src, s_len);
-	ft_memcpy(new_str + index + s_len + 1, dest + index + var_size, tail_len);
-	new_str[index] = '\2';
+	ft_memcpy(new_str + index + n, src, s_len);
+	ft_memcpy(new_str + index + s_len + n, dest + index + var_size, tail_len);
+	if (n)
+		new_str[index] = '\2';
 	free(dest);
 	return (new_str);
 }
 
-char	*expanded_arg(char *str, t_map *env)
+char	*expanded_arg(char *str, t_map *env, int n)
 {
 	int		i;
 	char	*var;
@@ -109,7 +110,7 @@ char	*expanded_arg(char *str, t_map *env)
 			var = verify_var(str, env);
 			if (!var)
 				return (NULL);
-			str = expand_str(str, var, i);
+			str = expand_str(str, var, i, n);
 			if (!str)
 				return (free(var), NULL);
 			i = i + ft_strlen(var) - 1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:29 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/22 19:24:02 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/23 16:41:34 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	sig_heredoc_handler(int sig)
 	temp = cmd;
 	close_everything(exec);
 	close_fds_exit(temp);
+	write(1, "\n", 1);
 	ft_exit(130, exec, cmd);
 }
 

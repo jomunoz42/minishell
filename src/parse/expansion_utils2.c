@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:12 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/18 17:05:13 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/23 17:28:54 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 char	*pseudo_quotes(char *splited);
 int		check_size(char *str);
+char	*expanded_arg(char *str, t_map *env, int n);
+void	free_list(t_cmd *all);
 
 char	**new_args_expanded(char **splited, t_cmd *node, int start)
 {
@@ -84,6 +86,52 @@ int	verify_var_sintax(char *str)
 	{
 		if (!ft_isalnum_modified(str[i++]))
 			return (0);
+	}
+	return (1);
+}
+
+int	expand_redir_helper(t_redir *redir, t_map *env, t_cmd *head)
+{
+	char	*temp;
+
+	while (redir)
+	{
+		if (!strncmp(redir->args[1], "<<", 3))
+			;
+		else
+		{
+			temp = expanded_arg(redir->args[1], env, 0);
+			if (!temp)
+			{
+				write(2, "Allocation error\n", 17);
+				return (free_list(head), 0);
+			}
+			redir->args[1] = temp;
+			if (!*redir->args[1])
+			{
+				write(2, "bash: ambiguous redirect\n", 25);
+				return (free_list(head), 0);
+			}
+		}
+		redir = redir->next;
+	}
+	return (1);
+}
+
+int	expand_redir(t_cmd *head)
+{
+	t_cmd	*node;
+	t_map	*env;
+	t_redir	*redir;
+
+	node = head;
+	env = get_map_addr(NULL);
+	while (node)
+	{
+		redir = node->redir;
+		if (!expand_redir_helper(redir, env, head))
+			return (0);
+		node = node->next;
 	}
 	return (1);
 }

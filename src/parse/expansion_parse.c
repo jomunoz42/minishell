@@ -6,17 +6,18 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:04 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/21 19:37:32 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/23 20:17:51 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		split_expansion_helper(t_cmd *node, int i);
-char	*expanded_arg(char *str, t_map *env);
+char	*expanded_arg(char *str, t_map *env, int n);
 void	free_list(t_cmd *all);
+int		expand_redir(t_cmd *head);
 
-int	organize_args(char **args, t_cmd *node)
+int	organize_args(char **args, t_cmd *node, t_cmd *head)
 {
 	int	i;
 	int	j;
@@ -40,7 +41,7 @@ int	organize_args(char **args, t_cmd *node)
 	if (node->redir)
 		return (1);
 	if (!*args[0] || (*args[0] == '\2' && ft_strlen(args[0]) == 1))
-		return (free_list(node), 0);
+		return (free_list(head), 0);
 	return (1);
 }
 
@@ -94,7 +95,7 @@ int	organize_list(t_cmd *head)
 	{
 		if (!node->args)
 			return (0);
-		if (!organize_args(node->args, head))
+		if (!organize_args(node->args, node, head))
 			return (0);
 		node = node->next;
 	}
@@ -114,14 +115,14 @@ int	change_expansion(t_cmd *head)
 		i = 0;
 		while (node->args[i])
 		{
-			node->args[i] = expanded_arg(node->args[i], env);
+			node->args[i] = expanded_arg(node->args[i], env, 1);
 			if (!node->args[i])
 				return (0);
 			i++;
 		}
 		node = node->next;
 	}
-	if (!organize_list(head) || !split_expansion(head))
+	if (!organize_list(head) || !split_expansion(head) || !expand_redir(head))
 		return (0);
 	return (1);
 }
