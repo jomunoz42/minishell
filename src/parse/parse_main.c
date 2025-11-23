@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:21 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/21 19:49:25 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/23 15:41:45 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,13 @@ int	is_empty(char *input)
 	return (flag == true);
 }
 
-char	*primary_check(char *input, t_exec *exec)
+char	*primary_check(char *input)
 {
 	char	*dup;
 
-	exec->no_file = false;
 	if (!input || !is_empty(input))
 		return (NULL);
-	if (!check_sintax(input))
-	{
-		exec->no_file = true;
-		return (NULL);
-	}
-	if (!quote_handler(input, 1))
+	if (!check_sintax(input) || !quote_handler(input, 1))
 		return (NULL);
 	dup = ft_strdup(input);
 	if (!dup)
@@ -67,12 +61,12 @@ char	*primary_check(char *input, t_exec *exec)
 	return (dup);
 }
 
-t_cmd	*parsing(char *input, t_cmd *head, t_exec *exec)
+t_cmd	*parsing(char *input, t_cmd *head)
 {
 	int		i;
 	char	**line;
 
-	input = primary_check(input, exec);
+	input = primary_check(input);
 	if (!input)
 		return (NULL);
 	line = ft_split(input, '\2');

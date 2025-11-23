@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:50:25 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/23 19:05:00 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/23 19:32:30 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int					no_file_no_perm(t_cmd *cmd, t_exec *exec);
 
 t_cmd				*new_node(char **args);
 t_cmd				*separate_args(t_cmd *head, char *line);
-t_cmd				*parsing(char *input, t_cmd *all, t_exec *exec);
+t_cmd				*parsing(char *input, t_cmd *all);
 int					quote_handler(char *input, int n);
 char				*unlink_redir(char *str);
 int					count_redir(char *str);
