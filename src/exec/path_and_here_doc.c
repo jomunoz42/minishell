@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:01 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/22 18:12:43 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/23 19:01:08 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static void	handling_here_doc(t_redir *redir, t_exec *exec, t_cmd *cmd)
 	close(redir->fd);
 }
 
-int	execute_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec, t_map *env)
+int	exec_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec, t_map *env)
 {
 	t_cmd	*cmd_temp;
 	t_redir	*redir_temp;

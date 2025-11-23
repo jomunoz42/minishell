@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:25:42 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/22 19:24:25 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/23 17:05:50 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,31 +76,4 @@ int	main(int argc, char **argv, char **environ)
 	}
 }
 
-// 1-
-// << $'USER' cat
-// << $""''USER"" cat
-
-// 2-
-// CONTROL \ enquanto valgrind esta activo da core dumped e normal?
-// fica tudo breakado
-
-// 3-
-// sleep 5000 ctrl c         should print the promt in a new line
-
-// normal_bash$ sleep 5000
-// ^C
-// normal_bash$
-
-// minishell$ sleep 5000
-// ^Cminishell$ sleep 5000
-
-// 4- enter sem nada nao muda para 0, matem o que ja estava
-// normal_bash$ ^C           (status 130)
-// normal_bash$
-// normal_bash$ echo $?
-// 130
-
-// minishell$ ^C
-// minishell$
-// minishell$ echo $?
-// 0
+// Teste 74

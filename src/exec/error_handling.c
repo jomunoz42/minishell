@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:07 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/20 22:58:26 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/23 17:37:20 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
 	t_map	*env;
 
 	env = get_map_addr(NULL);
-	if (errno == ENOENT)
+	if (errno == ENOENT || errno == EISDIR)
 		exec->no_file = true;
 	else if (errno == EACCES)
 		exec->no_permission = true;
@@ -32,7 +32,7 @@ int	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
 	if (error_id == 2)
 	{
 		(write(2, "bash: ", 6), perror(arg));
-		return (env->put(env, ft_strdup("?"), ft_strdup("1")), 0);
+		return (env->put(env, ft_strdup("?"), ft_strdup("1")), 1);
 	}
 	if (error_id == 3)
 		(perror("pipe"), (close_everything(exec), ft_exit(1, exec, cmd)));
