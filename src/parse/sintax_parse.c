@@ -6,13 +6,14 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:35 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/24 22:22:05 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/24 22:53:03 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	is_valid_pipe_util(char *str);
+int	is_valid_char(char *str);
 
 int	only_redir(char *str)
 {
@@ -138,6 +139,8 @@ int	check_sintax(char *str)
 			return (put_error_msg(), 0);
 		else if ((str[i] == '<' || str[i] == '>') && !is_valid_redir(str, i))
 			return (put_error_msg(), 0);
+		else if (!is_valid_char(str))
+			return (0);
 		if (is_valid_redir(str, i) == 2)
 			return (0);
 	}
