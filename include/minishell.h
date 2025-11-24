@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:50:25 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/23 19:05:00 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/24 18:05:44 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_exec
 	bool			no_file;
 	bool			is_child;
 	bool			msg_printed;
+	bool			expand;
 }					t_exec;
 
 typedef struct s_redir
@@ -75,7 +76,8 @@ int					ft_exit(int status, t_exec *exec, t_cmd *cmd);
 
 //=======================EXECUTION========================
 
-int					exec_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec, t_map *env);
+int					exec_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec,
+						t_map *env);
 void				execute_command(t_cmd *cmd, t_map *env, t_exec *exec);
 int					handling_errors(t_exec *exec, char *arg, int error_id,
 						t_cmd *cmd);
@@ -103,6 +105,7 @@ int					change_expansion(t_cmd *head);
 void				remove_quotes(t_cmd *head);
 t_redir				*redir_start(t_cmd *head, int i);
 void				sig_handler(void);
+void				put_error_msg(void);
 
 //==========================UTILS=========================
 

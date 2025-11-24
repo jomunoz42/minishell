@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/23 19:02:58 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/23 19:10:33 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/24 18:54:40 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	redirections_util2(t_redir *temp, t_exec *exec, t_cmd *cmd)
 
 static int	redirections_util1(t_redir *temp, t_exec *exec, t_cmd *cmd)
 {
-    if (ft_strncmp(temp->args[0], "<", 2) == 0)
+	if (ft_strncmp(temp->args[0], "<", 2) == 0)
 	{
 		((exec->in > 2) && close(exec->in));
 		exec->in = open(temp->args[1], O_RDONLY);
@@ -51,7 +51,7 @@ static int	redirections_util1(t_redir *temp, t_exec *exec, t_cmd *cmd)
 				return (1);
 		}
 	}
-    return (0);
+	return (0);
 }
 
 void	redirections(t_redir *redir, t_exec *exec, t_cmd *cmd)
@@ -64,12 +64,10 @@ void	redirections(t_redir *redir, t_exec *exec, t_cmd *cmd)
 		if (ft_strncmp(temp->args[0], "<<", 3) == 0)
 		{
 			((exec->in > 2) && close(exec->in));
-			exec->in = open("/tmp/mini_temp", O_RDONLY);
-			if (exec->in == -1)
-				handling_errors(exec, "/tmp/mini_temp", 1, cmd);
+			exec->in = temp->fd;
 		}
-        if (redirections_util1(temp, exec, cmd))
-            return ;
+		if (redirections_util1(temp, exec, cmd))
+			return ;
 		if (redirections_util2(temp, exec, cmd))
 			return ;
 		temp = temp->next;

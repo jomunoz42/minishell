@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:25:42 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/23 21:28:16 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/24 19:06:50 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,44 +73,3 @@ int	main(int argc, char **argv, char **environ)
 		free(input);
 	}
 }
-
-
-// 1- Da seg com 1 ou mais espacos
-
-// jomunoz@c2r5s6:~/Common_Core_42/Milestone3/minishell$ ./minishell
-// minishell$ aaaa | | bbbb
-// Segmentation fault (core dumped)
-
-
-
-// 2-
-//  minishell$ a <> b
-//  a: command not found
-//  (criab b)
-
-
-
-// 3-  Em vez de dar sintax error da so para dar return??? se der trabalho caga.
-
-// minishell$ aaaa || bbbb
-// bash: syntax error near unexpected token
-
-
-
-// 4-  O Gustavo descobriu mais este
-
-// normal_bash$ <<< a
-// normal_bash$ 
-
-// minishell$ <<< a
-// bash: syntax error near unexpected token
-
-// ------->  Mas a partir de 4 da sintax error
-
-// normal_bash$ <<<< a
-// // bash: syntax error near unexpected token
-
-// minishell$ <<<< a
-// bash: syntax error near unexpected token
-
-// ------->  Ja agora, se for assim >>> o bash da sintax error, para nao corrigir.

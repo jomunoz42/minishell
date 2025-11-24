@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:12 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/23 17:28:54 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/24 17:20:58 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	*pseudo_quotes(char *splited);
 int		check_size(char *str);
 char	*expanded_arg(char *str, t_map *env, int n);
 void	free_list(t_cmd *all);
+void	expand_heredoc(char *str);
 
 char	**new_args_expanded(char **splited, t_cmd *node, int start)
 {
@@ -96,8 +97,8 @@ int	expand_redir_helper(t_redir *redir, t_map *env, t_cmd *head)
 
 	while (redir)
 	{
-		if (!strncmp(redir->args[1], "<<", 3))
-			;
+		if (!strncmp(redir->args[0], "<<", 3))
+			expand_heredoc(redir->args[1]);
 		else
 		{
 			temp = expanded_arg(redir->args[1], env, 0);

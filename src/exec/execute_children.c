@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_children.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:20:57 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/23 21:17:12 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/24 18:55:27 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	temp = cmd;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
+	get_cmd_addr(cmd);
 	if (exec_heredocs(cmd, temp, exec, env) || parent_built_in(temp, env, exec))
 		return ;
 	exec->in = dup(0);

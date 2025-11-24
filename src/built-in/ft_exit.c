@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:20 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/22 19:23:12 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/24 18:49:08 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,6 @@ int	ft_exit(int status, t_exec *exec, t_cmd *cmd)
 	rl_clear_history();
 	if (env)
 		env->destroy(env);
-	if (!exec->is_child)
-		unlink("/tmp/mini_temp");
 	close_everything(exec);
 	exit(status);
 }

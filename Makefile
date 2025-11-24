@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+         #
+#    By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
-#    Updated: 2025/11/23 19:02:49 by jomunoz          ###   ########.fr        #
+#    Updated: 2025/11/24 17:09:04 by pbongiov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ SRC := 	src/built-in/ft_cd2.c \
 		src/parse/expansion_parse.c \
 		src/parse/expansion_utils2.c \
 		src/parse/expansion_utils.c \
+		src/parse/expand_heredoc.c \
 		src/parse/list_manage.c \
 		src/parse/parse_main.c \
 		src/parse/redir_parse.c \

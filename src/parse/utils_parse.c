@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils_parse.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:39 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/18 20:38:34 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/24 17:06:36 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	put_error_msg(void);
 
 int	quote_count(char *str)
 {
@@ -32,11 +34,7 @@ int	quote_count(char *str)
 		i++;
 	}
 	if (single_flag || double_flag)
-	{
-		write(2, "bash: syntax error near unexpected token\n", 42);
-		env->put(env, ft_strdup("?"), ft_strdup("2"));
-		return (0);
-	}
+		return (put_error_msg(), 0);
 	return (1);
 }
 

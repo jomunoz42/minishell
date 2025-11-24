@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sintax_parse.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:35 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/22 19:24:15 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/24 19:06:08 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	put_error_msg(void);
+int	is_valid_pipe_util(char *str);
 
 int	only_redir(char *str)
 {
@@ -88,7 +88,7 @@ int	is_valid_redir(char *str, int end)
 		}
 		else
 			count = 0;
-		if (count > 2)
+		if ((count > 2 && c == '>') || count > 3)
 			return (0);
 		i++;
 	}
@@ -97,29 +97,28 @@ int	is_valid_redir(char *str, int end)
 
 int	is_valid_pipe(char *str, int end)
 {
-	int		i;
-	int		count;
-	char	last_char;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
 	while (i <= end)
 	{
-		if (str[i] == '|' && str[i + 1] == '|')
-			return (0);
+		if (str[i] == '|')
+		{
+			i++;
+			while (str[i] == ' ')
+				i++;
+			if (str[i] == '|')
+				return (0);
+		}
 		if (str[i] != '>' && str[i] != '<' && str[i] != ' ' && str[i] != '|')
 			count++;
 		if (str[i] == '|' && count == 0)
 			return (0);
 		i++;
 	}
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] != ' ')
-			last_char = str[i];
-	}
-	if (last_char == '|')
+	if (!is_valid_pipe_util(str))
 		return (0);
 	return (1);
 }
@@ -140,6 +139,8 @@ int	check_sintax(char *str)
 			return (put_error_msg(), 0);
 		else if ((str[i] == '<' || str[i] == '>') && !is_valid_redir(str, i))
 			return (put_error_msg(), 0);
+		if (is_valid_redir(str, i) == 2)
+			return (0);
 	}
 	return (1);
 }
