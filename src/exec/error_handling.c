@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:07 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/23 17:37:20 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/24 20:55:46 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,24 @@ void	close_everything(t_exec *exec)
 		close(exec->pipefd[1]);
 }
 
-void	close_and_reset(t_exec *exec)
+void	close_and_reset(t_exec *exec, t_cmd *temp)
 {
+	t_redir *r;
+	
 	if (exec->in > 2)
 		close(exec->in);
 	if (exec->out > 2)
 		close(exec->out);
 	exec->no_file = false;
 	exec->no_permission = false;
+	if (temp)
+	{
+		r = temp->redir;
+		while (r)
+		{
+			if (r->fd > 2)
+				close(r->fd);
+			r = r->next;
+		}
+	}
 }

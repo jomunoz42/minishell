@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:29 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/23 16:41:34 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:41:55 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	close_fds_exit(t_cmd *cmd)
+void	close_fds_exit(t_cmd *cmd)
 {
 	t_redir	*redir;
 

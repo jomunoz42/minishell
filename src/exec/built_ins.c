@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:04 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/23 21:15:28 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/24 20:36:34 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	no_file_no_perm(t_cmd *cmd, t_exec *exec)
 	env = get_map_addr(NULL);
 	if (!exec->is_child && (exec->no_file || exec->no_permission))
 	{
-		close_and_reset(exec);
+		close_and_reset(exec, NULL);
 		env->put(env, ft_strdup("?"), ft_strdup("1"));
 		if (exec->out > 2)
 			close(exec->out);

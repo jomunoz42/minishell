@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_children.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:20:57 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/24 18:55:27 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/24 21:51:39 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	create_children(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec)
 		execve(temp->args[0], temp->args, env->to_str(env));
 		handle_execve_errors(cmd, temp, env, exec);
 	}
-	close_and_reset(exec);
+	close_and_reset(exec, temp);
 }
 
 void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
@@ -69,10 +69,10 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	get_cmd_addr(cmd);
 	if (exec_heredocs(cmd, temp, exec, env) || parent_built_in(temp, env, exec))
 		return ;
-	exec->in = dup(0);
+	exec->in = dup(STDIN_FILENO);
 	while (temp)
 	{
-		exec->out = dup(1);
+		exec->out = dup(STDOUT_FILENO);
 		if (temp->next)
 		{
 			if (pipe(exec->pipefd) == -1)

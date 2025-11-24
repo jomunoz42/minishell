@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_and_here_doc.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:01 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/24 19:11:49 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:50:22 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	here_doc_util(t_redir *redir, char *line, int size, t_exec *exec)
 	t_map	*env;
 	char	*temp;
 
-	if (!line || !*line || ft_strncmp(redir->args[1], line, size + 1) == 0)
+	if (ft_strncmp(redir->args[1], line, size + 1) == 0)
 		return (free(line), 1);
 	env = get_map_addr(NULL);
 	if (exec->expand)
@@ -65,17 +65,17 @@ static void	handling_here_doc(t_redir *redir, t_exec *exec, t_cmd *cmd)
 		handling_errors(exec, NULL, 4, cmd);
 	if (!pid)
 	{
+		exec->is_child = true;
 		redir->fd = open("/tmp/mini_temp", O_WRONLY | O_CREAT | O_TRUNC, 0600);
 		if (redir->fd == -1)
 			(handling_errors(exec, "/tmp/mini_temp", 1, cmd), ft_exit(1, exec,
 					cmd));
-		exec->is_child = true;
 		(signal(SIGINT, sig_heredoc_handler), signal(SIGQUIT, SIG_IGN));
 		size = ft_strlen(redir->args[1]);
 		while (1)
 		{
 			line = readline("> ");
-			if (here_doc_util(redir, line, size, exec))
+			if (!line || here_doc_util(redir, line, size, exec))
 				break ;
 		}
 		close(redir->fd);
@@ -103,7 +103,7 @@ int	exec_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec, t_map *env)
 				unlink("/tmp/mini_temp");
 				s = convert_status(s);
 				if (s)
-					return (env->put(env, ft_strdup("?"), ft_itoa(s)), s);
+					return (close_fds_exit(cmd_temp), env->put(env, ft_strdup("?"), ft_itoa(s)), s);
 			}
 			redir_temp = redir_temp->next;
 		}

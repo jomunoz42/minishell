@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:50:25 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/24 18:05:44 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/24 21:55:58 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int					handling_errors(t_exec *exec, char *arg, int error_id,
 void				handle_execve_errors(t_cmd *cmd, t_cmd *temp, t_map *env,
 						t_exec *exec);
 void				close_everything(t_exec *exec);
-void				close_and_reset(t_exec *exec);
+void				close_and_reset(t_exec *exec, t_cmd *cmd);
 int					convert_status(int status);
 void				redirections(t_redir *redir, t_exec *exec, t_cmd *cmd);
 int					exit_parsing(t_cmd *cmd, t_exec *exec, t_map *env);
@@ -106,6 +106,7 @@ void				remove_quotes(t_cmd *head);
 t_redir				*redir_start(t_cmd *head, int i);
 void				sig_handler(void);
 void				put_error_msg(void);
+void				close_fds_exit(t_cmd *cmd);
 
 //==========================UTILS=========================
 
@@ -120,7 +121,6 @@ char				*ft_strjoin_free(char *s1, char *s2);
 void				free_double(char **arg);
 char				*ft_realloc_str(char *str, int len);
 int					arr_count(char **arr);
-char				*get_next_line(int fd);
 char				identify_quote(char c, char flag);
 t_map				*get_map_addr(t_map *env);
 t_cmd				*get_cmd_addr(t_cmd *src);

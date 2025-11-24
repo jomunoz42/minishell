@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:20 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/24 18:49:08 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:47:36 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void		free_list(t_cmd *all);
+
 
 static int	is_valid_exit_arg(char *arg)
 {
@@ -102,6 +103,7 @@ int	ft_exit(int status, t_exec *exec, t_cmd *cmd)
 {
 	t_map	*env;
 
+	close_fds_exit(cmd);
 	env = get_map_addr(NULL);
 	while (status > 256)
 		status -= 256;

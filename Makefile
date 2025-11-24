@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+         #
+#    By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/04 15:08:31 by pbongiov          #+#    #+#              #
-#    Updated: 2025/11/24 17:09:04 by pbongiov         ###   ########.fr        #
+#    Updated: 2025/11/24 21:58:30 by jomunoz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-CC = cc
+CC = cc -g
 
 CFLAGS = -Iinclude -Wall -Wextra -Werror
 
@@ -28,8 +28,8 @@ SRC := 	src/built-in/ft_cd2.c \
 		src/built-in/ft_unset.c \
 		src/exec/error_handling.c \
 		src/exec/execute_children.c \
-		src/exec/exec_utils.c \
-		src/exec/path_and_here_doc.c \
+		src/exec/built_ins.c \
+		src/exec/here_doc.c \
 		src/exec/redirections.c \
 		src/parse/expansion_parse.c \
 		src/parse/expansion_utils2.c \
@@ -50,7 +50,6 @@ SRC := 	src/built-in/ft_cd2.c \
 		src/utils/map/functions.c \
 		src/utils/map/utils2.c \
 		src/utils/map/utils.c \
-		src/utils/mini_utils/get_next_line.c \
 		src/utils/mini_utils/many_lines.c \
 		src/utils/mini_utils/utils1.c \
 		src/utils/mini_utils/utils2.c \
