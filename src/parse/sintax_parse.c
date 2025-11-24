@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:35 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/24 19:06:08 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/24 22:22:05 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,18 +104,17 @@ int	is_valid_pipe(char *str, int end)
 	count = 0;
 	while (i <= end)
 	{
-		if (str[i] == '|')
-		{
-			i++;
-			while (str[i] == ' ')
-				i++;
-			if (str[i] == '|')
-				return (0);
-		}
 		if (str[i] != '>' && str[i] != '<' && str[i] != ' ' && str[i] != '|')
 			count++;
 		if (str[i] == '|' && count == 0)
 			return (0);
+		if (str[i] == '|')
+		{
+			while (str[++i] == ' ')
+				;
+			if (str[i] == '|')
+				return (0);
+		}
 		i++;
 	}
 	if (!is_valid_pipe_util(str))

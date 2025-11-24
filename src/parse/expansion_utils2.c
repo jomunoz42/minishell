@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:12 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/24 17:20:58 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/24 22:17:08 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ char	**new_args_expanded(char **splited, t_cmd *node, int start)
 
 int	split_expansion_helper(t_cmd *node, int i)
 {
-	char	*tmp_str;
 	char	**splited;
 	char	**tmp_double;
 
@@ -63,12 +62,6 @@ int	split_expansion_helper(t_cmd *node, int i)
 		free_double(tmp_double);
 		if (!node->args)
 			return (free_double(splited), 0);
-	}
-	else if (node->args[i][0] == '\2')
-	{
-		tmp_str = node->args[i];
-		node->args[i] = pseudo_quotes(node->args[i]);
-		free(tmp_str);
 	}
 	free_double(splited);
 	return (1);
