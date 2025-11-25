@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:08 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/23 16:15:03 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/25 18:07:55 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*expand_str(char *dest, char *src, int index, int n)
 	tail_len = ft_strlen(dest + index + var_size);
 	new_str = ft_calloc(s_len + d_len - var_size + 2, 1);
 	if (!new_str)
-		return (NULL);
+		return (free(dest), NULL);
 	ft_memcpy(new_str, dest, index);
 	ft_memcpy(new_str + index + n, src, s_len);
 	ft_memcpy(new_str + index + s_len + n, dest + index + var_size, tail_len);

@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:04 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/23 20:17:51 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/25 18:09:16 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int		split_expansion_helper(t_cmd *node, int i);
 char	*expanded_arg(char *str, t_map *env, int n);
-void	free_list(t_cmd *all);
 int		expand_redir(t_cmd *head);
 
 int	organize_args(char **args, t_cmd *node, t_cmd *head)
@@ -29,6 +28,7 @@ int	organize_args(char **args, t_cmd *node, t_cmd *head)
 			&& args[i + 1])
 		{
 			j = 0;
+			free(args[i]);
 			while (args[i + j + 1])
 			{
 				args[i + j] = args[i + j + 1];

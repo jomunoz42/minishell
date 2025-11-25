@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 17:03:31 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/24 18:04:24 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/24 22:52:43 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,27 @@ int	is_valid_pipe_util(char *str)
 	if (last_char == '|')
 		return (0);
 	return (1);
+}
+
+int is_valid_char(char *str)
+{
+    int i;
+    char flag;
+
+    i = 0;
+    flag = 0;
+    while (str[i])
+    {
+        flag = identify_quote(str[i], flag);
+        if (!flag)
+        {
+            if (str[i] == ';' || str[i] == '&')
+            {
+                write(2, "No, we didn't do the bonus\n", 27);
+                return (0);
+            }
+        }
+        i++;
+    }
+    return (1);
 }
