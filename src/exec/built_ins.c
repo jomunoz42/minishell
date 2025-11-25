@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:04 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/25 18:34:38 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/25 18:47:30 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	handle_built_in(t_cmd *head, t_cmd *temp, t_map *env, t_exec *exec)
 		temp->args[0] = get_absolute_path(env, temp->args[0]);
 }
 
-int	parent_built_in(t_cmd *temp, t_map *env, t_exec *exec, t_cmd *head)
+int	p_built_in(t_cmd *temp, t_map *env, t_exec *exec, t_cmd *head)
 {
 	int	invalid;
 

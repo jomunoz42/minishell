@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:50:25 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/25 18:01:04 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/25 18:45:41 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ void				close_everything(t_exec *exec);
 void				close_and_reset(t_exec *exec, t_cmd *cmd);
 int					convert_status(int status);
 void				redirections(t_redir *redir, t_exec *exec, t_cmd *cmd);
-int					exit_parsing(t_cmd *cmd, t_exec *exec, t_map *env, t_cmd *head);
+int					exit_parsing(t_cmd *cmd, t_exec *exec, t_map *env,
+						t_cmd *head);
 int					no_file_no_perm(t_cmd *cmd, t_exec *exec);
 
 //========================PARSING=========================

@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:45:07 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/19 19:45:18 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/25 18:52:44 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,14 @@ char	*get_path_dir(char *str, char *cmd)
 		free(path);
 	}
 	return (free_double(dirs), cmd);
+}
+
+int	wait_and_open(t_redir *redir_temp)
+{
+	int	s;
+
+	wait(&s);
+	redir_temp->fd = open("/tmp/mini_temp", O_RDONLY);
+	unlink("/tmp/mini_temp");
+	return (convert_status(s));
 }

@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path_and_here_doc.c                                :+:      :+:    :+:   */
+/*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:01 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/24 20:50:22 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/25 18:52:37 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int			wait_and_open(t_redir *redir_temp);
 void		sig_heredoc_handler(int sig);
 void		print_env(t_map *env);
 int			is_it_built_in(char *cmd);
@@ -98,12 +99,10 @@ int	exec_heredocs(t_cmd *cmd, t_cmd *temp, t_exec *exec, t_map *env)
 			if (ft_strncmp(redir_temp->args[0], "<<", 3) == 0)
 			{
 				handling_here_doc(redir_temp, exec, cmd);
-				wait(&s);
-				redir_temp->fd = open("/tmp/mini_temp", O_RDONLY);
-				unlink("/tmp/mini_temp");
-				s = convert_status(s);
+				s = wait_and_open(redir_temp);
 				if (s)
-					return (close_fds_exit(cmd_temp), env->put(env, ft_strdup("?"), ft_itoa(s)), s);
+					return (close_fds_exit(cmd_temp), env->put(env,
+							ft_strdup("?"), ft_itoa(s)), s);
 			}
 			redir_temp = redir_temp->next;
 		}

@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:20:57 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/25 18:35:11 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/25 18:47:30 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int			is_it_built_in(char *cmd);
 int			exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec);
-int			parent_built_in(t_cmd *temp, t_map *env, t_exec *exec, t_cmd *head);
+int			p_built_in(t_cmd *temp, t_map *env, t_exec *exec, t_cmd *head);
 void		handle_built_in(t_cmd *cmd, t_cmd *temp, t_map *env, t_exec *exec);
 
 static void	waiting_proccesses(t_cmd *cmd, t_exec *exec, t_map *env)
@@ -67,7 +67,7 @@ void	execute_command(t_cmd *cmd, t_map *env, t_exec *exec)
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	get_cmd_addr(cmd);
-	if (exec_heredocs(cmd, temp, exec, env) || parent_built_in(temp, env, exec, cmd))
+	if (exec_heredocs(cmd, temp, exec, env) || p_built_in(temp, env, exec, cmd))
 		return ;
 	exec->in = dup(STDIN_FILENO);
 	while (temp)
