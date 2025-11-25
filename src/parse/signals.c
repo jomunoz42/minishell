@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:29 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/24 20:41:55 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/25 18:22:48 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,19 @@
 void	close_fds_exit(t_cmd *cmd)
 {
 	t_redir	*redir;
+	t_cmd	*temp;
 
-	while (cmd)
+	temp = cmd;
+	while (temp)
 	{
-		redir = cmd->redir;
+		redir = temp->redir;
 		while (redir)
 		{
 			if (redir && redir->fd > 2)
 				close(redir->fd);
 			redir = redir->next;
 		}
-		cmd = cmd->next;
+		temp = temp->next;
 	}
 }
 

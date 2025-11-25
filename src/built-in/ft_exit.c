@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:20 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/24 20:47:36 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/25 18:32:38 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	to_many_args(t_cmd *cmd, t_exec *exec, t_map *env)
 	return (0);
 }
 
-int	exit_parsing(t_cmd *cmd, t_exec *exec, t_map *env)
+int	exit_parsing(t_cmd *cmd, t_exec *exec, t_map *env, t_cmd *head)
 {
 	int	status;
 
@@ -92,10 +92,10 @@ int	exit_parsing(t_cmd *cmd, t_exec *exec, t_map *env)
 		write(2, cmd->args[1], ft_strlen(cmd->args[1]));
 		write(2, ": numeric argument required\n", 28);
 		exec->msg_printed = true;
-		ft_exit(2, exec, cmd);
+		ft_exit(2, exec, head);
 	}
 	status = ft_atoi(cmd->args[1]);
-	ft_exit(status, exec, cmd);
+	ft_exit(status, exec, head);
 	return (0);
 }
 

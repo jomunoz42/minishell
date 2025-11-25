@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:04 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/24 20:36:34 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/25 18:34:38 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	is_it_built_in(char *cmd)
 		return (0);
 }
 
-int	exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
+int	exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec, t_cmd *head)
 {
 	int	status;
 
@@ -58,9 +58,9 @@ int	exec_built_in(t_cmd *cmd, t_map *env, t_exec *exec)
 	else if (!ft_strncmp(cmd->args[0], "exit", 5))
 	{
 		if (cmd->args[1])
-			status = exit_parsing(cmd, exec, env);
+			status = exit_parsing(cmd, exec, env, head);
 		else
-			ft_exit(ft_atoi(env->get(env, "?")), exec, cmd);
+			ft_exit(ft_atoi(env->get(env, "?")), exec, head);
 	}
 	return (env->put(env, ft_strdup("?"), ft_itoa(status)), status);
 }
@@ -69,9 +69,10 @@ void	handle_built_in(t_cmd *head, t_cmd *temp, t_map *env, t_exec *exec)
 {
 	int	status;
 
+	(void)head;
 	if (is_it_built_in(temp->args[0]))
 	{
-		status = exec_built_in(temp, env, exec);
+		status = exec_built_in(temp, env, exec, head);
 		if (exec->in > 2)
 			close(exec->in);
 		if (exec->out > 2)
@@ -84,7 +85,7 @@ void	handle_built_in(t_cmd *head, t_cmd *temp, t_map *env, t_exec *exec)
 		temp->args[0] = get_absolute_path(env, temp->args[0]);
 }
 
-int	parent_built_in(t_cmd *temp, t_map *env, t_exec *exec)
+int	parent_built_in(t_cmd *temp, t_map *env, t_exec *exec, t_cmd *head)
 {
 	int	invalid;
 
@@ -97,7 +98,7 @@ int	parent_built_in(t_cmd *temp, t_map *env, t_exec *exec)
 		invalid = no_file_no_perm(temp, exec);
 		if (invalid)
 			return (1);
-		exec_built_in(temp, env, exec);
+		exec_built_in(temp, env, exec, head);
 		if (exec->in > 2)
 			close(exec->in);
 		if (exec->out > 2)

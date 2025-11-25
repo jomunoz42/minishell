@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:21:07 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/24 20:55:46 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/25 18:17:05 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	handling_errors(t_exec *exec, char *arg, int error_id, t_cmd *cmd)
 static void	error_messages(char *path, t_exec *exec, t_cmd *cmd)
 {
 	struct stat	buf;
-
+	
 	write(2, "bash: ", 6);
 	write(2, path, ft_strlen(path));
 	if (stat(path, &buf) != 0)
