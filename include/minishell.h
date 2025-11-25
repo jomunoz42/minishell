@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
+/*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 19:50:25 by jomunoz           #+#    #+#             */
-/*   Updated: 2025/11/24 21:55:58 by jomunoz          ###   ########.fr       */
+/*   Updated: 2025/11/25 18:01:04 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ t_map				*get_map_addr(t_map *env);
 t_cmd				*get_cmd_addr(t_cmd *src);
 t_exec				*get_exec_addr(t_exec *src);
 int					get_pid(t_exec *exec, t_cmd *cmd);
+void				free_list(t_cmd *all);
 
 //=========================LIBFT==========================
 

@@ -6,7 +6,7 @@
 /*   By: pbongiov <pbongiov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:05:12 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/24 22:17:08 by pbongiov         ###   ########.fr       */
+/*   Updated: 2025/11/25 18:00:54 by pbongiov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 char	*pseudo_quotes(char *splited);
 int		check_size(char *str);
 char	*expanded_arg(char *str, t_map *env, int n);
-void	free_list(t_cmd *all);
 void	expand_heredoc(char *str);
 
 char	**new_args_expanded(char **splited, t_cmd *node, int start)
