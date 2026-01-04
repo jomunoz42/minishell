@@ -1,0 +1,386 @@
+                                   < BUILT-INS >
+
+
+---------->   ECHO
+
+Todos os testes do echo teem  $? = 0
+
+echo "olá mundo"                -   olá mundo
+echo 'olá mundo'                -   olá mundo
+echo "olá 'mundo'"              -   olá 'mundo'
+echo 'olá "mundo"'              -   olá "mundo"
+
+echo "\"aspas duplas dentro de duplas\""      -   "aspas duplas dentro de duplas"
+
+export VAR="mundo"
+
+echo $VAR                       -    mundo
+echo "$VAR"                     -    mundo
+echo '$VAR'                     -    $VAR
+echo "olá $VAR"                 -    olá mundo
+echo 'olá $VAR'                 -    olá $VAR
+echo "$VAR!"'!!'                -    mundo!!!
+
+export VAR="palavra com espaço" -    palavra com espaço
+echo $VAR                       -    palavra com espaço
+echo "$VAR"                     -    palavra com espaço
+echo "$VAR e mais"              -    palavra com espaço e mais
+echo "$VAR\ e\ escape"          -       
+
+unset VAR
+echo "$VAR"                     -    \n
+
+export X=foo Y=bar           
+echo "$X$Y"                     -      foobar
+echo '$X$Y'                     -      $X$Y 
+echo "$X""$Y"                   -      foobar
+echo "$X"'$Y'                   -      foo$Y
+
+
+echo \"aqui\"                   -      "aqui"
+echo "aqui\"também\""           -      aqui"também"
+echo 'aqui\'não\''              -
+echo "barra invertida \\ dentro de aspas"    -    barra invertida \ dentro de aspas  
+
+echo "Resultado: `echo ola`"    -      Resultado: ola
+echo 'Resultado: `echo ola`'    -      Resultado: `echo ola`
+
+echo "abc'def"                  -      abc'def
+echo 'abc"def'                  -      abc"def
+echo "'"                        -      '
+echo '"'                        -      "
+echo "\"'"                      -      "'
+echo "'\""                      -      '"
+echo "a'b'c"d"e"                -      a'b'cde
+echo "a'b'c" 'd"e"f'            -      a'b'c d"e"f
+echo "  espaço no fim "                    -      |  espaço no fim |
+echo "   vários    espaços   no meio   "   -      |   vários    espaços   no meio   |
+echo "'   espaços dentro de aspas   '"     -      '   espaços dentro de aspas   '
+
+ls | echo hello world
+hello world
+
+ls | echo -nnnnnn -n hello -n > out.txt
+out.txt: hello -n
+
+ls | echo -nnnnnn -n hello -n < 2.txt | cat
+hello -nminishell$
+
+echo <"./test_files/infile" <missing <"./test_files/infile"
+bash: missing: No such file or directory
+$? = 1
+
+---------->   PWD
+
+unset PWD
+pwd
+/home/jomunoz/Common_Core_42/Milestone3/minishell
+$? = 0
+
+---------->   ENV
+
+Do the 3 variables that have 2 or more equals have them ?
+
+Is SHLVL = 3 ?
+
+env + export + env + export + env
+
+Confirmar se variaveis exportadas sem valor aparecem no env
+
+---------->   EXPORT
+
+Does export have   declare -x ?
+
+Is export sorted ?
+
+Does the value has "value" ?
+
+export VAR_1=123                        sim
+export _oculto="123"                    sim
+$? = 0
+
+export 1VAR=teste                      # começa com número ❌
+export meu-nome="a"                    # hífen ❌
+export nome.sobrenome="b"              # ponto ❌
+$? = 1
+
+export a=a 1=2 c=c d=d
+bash: export: `1=2': not a valid identifier
+Mas exporta as validas e devolve:
+$? = 1
+
+export a b= c=c
+declare -x a
+declare -x b=""
+declare -x c="c"
+$? = 0
+
+export c
+declare -x c="c"
+$? = 0
+
+export a=c b=a c=t   
+$a$b$c
+cat must happen
+
+export =
+bash: export: `=': not a valid identifier
+$? = 1
+
+---------->   CD 
+
+-> cd aaa aaa
+bash: cd: too many arguments
+$? = 1
+
+-> cd     e     cd ~
+Confirmar PWD e OLDPWD no env
+$? = 0
+Sem permissoes
+bash: cd: /home/jomunoz: Permission denied
+$? = 1
+
+-> cd -
+Confirmar PWD e OLDPWD no env
+$? = 0
+Sem permissoes
+bash: cd: /absolute_path: Permission denied
+$? = 1
+
+-> cd .     sem permissoes
+bash: cd: .: Permission denied
+cd .     depois de apagado
+bash: cd: .: No such file or directory
+$? = 1
+
+-> cd ..
+Confirmar PWD e OLDPWD no env
+Fazer cd .. ate ser so /
+$? = 0
+
+-> cd src      (Valid directory)
+Confirmar PWD e OLDPWD no env
+$? = 0
+Sem permissoes
+bash: cd: src: Permission denied
+$? = 1
+
+-> cd /absolute_path
+Confirmar PWD e OLDPWD no env
+$? = 0
+Sem permissoes
+bash: cd: /absolute_path: Permission denied
+$? = 1
+
+cd /src     (Valid directory and invalid input)
+bash: cd: /src: No such file or directory
+$? = 1
+
+cd test.txt    (Valid file)
+bash: cd: test.txt: Not a directory
+$? = 1
+
+cd / e pwd     correct = /
+$? = 0
+
+chmod -x zz
+ls | cd zz | cd ..
+bash: cd: zz: Permission denied
+echo $?
+$? = 0
+
+chmod +x zz
+cat < nofile | ls | cd zz
+bash: cd: zz: Permission denied
+bash: nofile: No such file or directory
+echo $?
+$? = 1
+
+unset OLDPWD
+cd -
+bash: cd: OLDPWD not set
+$? = 1                   leaks?
+
+---------->   EXIT
+
+exit
+$? = "last status"      do 2/3 tests
+
+exit 0
+$? = 0
+
+exit +42
+$? = 42
+
+exit 256
+$? = 0
+
+exit -1
+$? = 255
+
+exit -256
+$? = 0 
+
+exit 1 2
+exit
+bash: exit: too many arguments
+$? = 1
+
+exit 1 ff
+exit
+bash: exit: too many arguments
+$? = 1
+
+exit exit
+exit
+bash: exit: exit: numeric argument required
+$? = 2
+
+exit 1ff
+exit
+bash: exit: 1ff: numeric argument required
+$? = 2
+
+exit ff ff
+exit
+bash: exit: ff: numeric argument required
+$? = 2
+
+exit -
+exit
+bash: exit: -: numeric argument required
+$? = 2
+
+exit +
+exit
+bash: exit: +: numeric argument required
+$? = 2
+
+exit -+
+exit
+bash: exit: -+: numeric argument required
+$? = 2
+
+exit 9223372036854775807
+$? = 255
+
+exit 9223372036854775808
+exit
+bash: exit: 9223372036854775808: numeric argument required
+$? = 2
+
+exit -9223372036854775808
+exit
+$? = 0
+
+exit -9223372036854775809
+exit
+bash: exit: -9223372036854775809: numeric argument required
+$? = 2
+
+--------------------------------------------------------------------------------------
+
+SHLVL:
+
+Check if SHLVL is "3" at start.
+
+Test ./minishell several times and check if SHLVL is updated.
+
+Export SHLVL 999 and see if it resets to 1 with message.
+
+--------------------------------------------------------------------------------------
+
+                                   < Execucao >
+
+--> Absolute Paths, pastas e ficheiros no input.
+
+Invalid com ou sem absolute path (com barra):
+/home/jomunoz/aaaa   =   "bash: /home/jomunoz/aaaa: No such file or directory"
+/aaaaaaa             =   "bash: /aaaaaaa : No such file or directory"
+$? = 127
+
+Valid Directory com absolute path:
+/home/jomunoz   =   "bash: /home/jomunoz: Is a directory"
+$? = 126
+
+Valid File com absolute path:
+/home/.../minishell/ficheiro   =  "bash: /home/.../minishell/ficheiro: Permission denied"
+$? = 126
+
+Sem barra:
+test.txt     =    "test.txt: command not found"
+$? = 127
+
+---> Pipeline
+
+ls
+$? = 0
+
+ls | cat
+$? = 0
+
+ls | cat | cat | cat | cat | wc -l
+$? = 0
+
+cat < in.txt
+$? = 0
+
+cat < in.txt | cat > out.txt
+$? = 0
+
+cat < in.txt | cat >> out.txt
+$? = 0
+
+cat << aa | cat > out.txt
+$? = 0
+
+cat < nofile | cat > out.txt
+bash: nofile: No such file or directory         
+$? = 0
+
+
+cat < 123 cat < 234
+bash: 123: No such file or directory
+$? = 1
+
+
+cat < nofile | ls > nofile2            creates nofile2?
+$? = 0
+
+<< aa
+$? = 0
+
+wc < 2.txt cat < 3.txt                          wc < 2.txt aaa < 3.txt
+wc: cat: No such file or directory              wc: aaa: No such file or directory
+$? = 1                                          $? = 1
+
+cat << EOF | grep a | grep b      no a and b input
+$? = 1
+
+echo test > a > b > c
+cat a b c
+test
+$? = 0
+
+echo $HOME | cat > out.txt
+cat out.txt
+/home/jomunoz
+$? = 0
+
+env | grep PATH
+$? = 0
+
+ls | cat | grep 0
+$? = 1
+
+unset PATH
+ls | cat | grep 0
+bash: ls: No such file or directory
+bash: bash: cat: No such file or directory
+grep: No such file or directory
+$? = 127
+
+export var="echo hello > out.txt"
+$var
+hello > out.txt
+$? = 0

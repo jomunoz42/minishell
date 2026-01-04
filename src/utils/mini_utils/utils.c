@@ -6,7 +6,7 @@
 /*   By: jomunoz <jomunoz@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:09:45 by pbongiov          #+#    #+#             */
-/*   Updated: 2025/11/20 22:43:43 by jomunoz          ###   ########.fr       */
+/*   Updated: 2026/01/04 21:49:29 by jomunoz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*find_last_slash(char *current_pwd)
 {
 	char	*last_slash;
 
-	last_slash = strrchr(current_pwd, '/');
+	last_slash = ft_strrchr(current_pwd, '/');
 	if (last_slash)
 	{
 		if (last_slash == current_pwd)
